@@ -25,6 +25,8 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    modImplementation("net.conczin:immersive_aircraft:${immersive_aircraft_version}+forge")
 }
 
 processResources {
