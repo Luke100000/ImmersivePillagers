@@ -22,6 +22,7 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
     modImplementation("net.conczin:immersive_aircraft:${immersive_aircraft_version}+fabric")
+    modImplementation("net.conczin:immersive_melodies:${immersive_melodies_version}+fabric")
 }
 
 processResources {
