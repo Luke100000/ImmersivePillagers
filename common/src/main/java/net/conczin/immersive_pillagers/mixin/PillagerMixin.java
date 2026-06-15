@@ -1,6 +1,6 @@
 package net.conczin.immersive_pillagers.mixin;
 
-import immersive_aircraft.entity.VehicleEntity;
+import immersive_melodies.Common;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.world.entity.monster.AbstractIllager;
@@ -17,10 +17,13 @@ public abstract class PillagerMixin extends AbstractIllager {
         super(entityType, level);
     }
 
+    /**
+     * Give pillagers on vehicles more range.
+     */
     @Inject(method = "registerGoals", at = @At("HEAD"))
     private void registerGoals(CallbackInfo ci) {
         Pillager pillager = (Pillager) (Object) this;
-        if (pillager.getRootVehicle() instanceof VehicleEntity) {
+        if (pillager.getVehicle() != null && pillager.getTags().contains(Common.MOD_ID)) {
             this.goalSelector.addGoal(3, new RangedCrossbowAttackGoal<>(pillager, 1.0, 16.0f));
         }
     }

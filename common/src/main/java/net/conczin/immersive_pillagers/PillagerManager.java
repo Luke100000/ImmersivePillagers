@@ -1,7 +1,9 @@
 package net.conczin.immersive_pillagers;
 
 import immersive_aircraft.entity.VehicleEntity;
+import immersive_melodies.Common;
 import net.conczin.immersive_pillagers.hordes.AirborneRaiders;
+import net.conczin.immersive_pillagers.hordes.CamelRaiders;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -27,9 +29,10 @@ public class PillagerManager {
     }
 
     public static final String HORDE_GYRODYNE = registerHorde("gyrodyne", AirborneRaiders::spawn);
+    public static final String HORDE_CAMEL = registerHorde("camel", CamelRaiders::spawn);
 
     public static void spawnHorde(ServerPlayer player, String horde) {
-        if (player.level() instanceof ServerLevel level) {
+        if (player.level() instanceof ServerLevel level && HORDES.containsKey(horde)) {
             player.sendSystemMessage(Component.literal("Pillagers are closing in!"));
             HORDES.get(horde).accept(level, player.blockPosition());
         }
@@ -42,6 +45,7 @@ public class PillagerManager {
         assert pillager != null;
         pillager.setPos(pos);
         level.addFreshEntityWithPassengers(pillager);
+        pillager.addTag(Common.MOD_ID);
         return pillager;
     }
 

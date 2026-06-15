@@ -32,9 +32,7 @@ public class ImmersivePillagersCommands {
         sendMessage(context, "Summoning " + wave);
         ServerPlayer player = context.getSource().getPlayer();
         if (player != null) {
-            PillagerManager.spawnHorde(player, PillagerManager.HORDE_GYRODYNE);
-            PillagerManager.spawnHorde(player, PillagerManager.HORDE_GYRODYNE);
-            PillagerManager.spawnHorde(player, PillagerManager.HORDE_GYRODYNE);
+            PillagerManager.spawnHorde(player, wave);
         }
         return 0;
     }
