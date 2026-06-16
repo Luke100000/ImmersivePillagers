@@ -33,7 +33,7 @@ public class PillagerManager {
 
     public static void spawnHorde(ServerPlayer player, String horde) {
         if (player.level() instanceof ServerLevel level && HORDES.containsKey(horde)) {
-            player.sendSystemMessage(Component.literal("Pillagers are closing in!"));
+            player.sendSystemMessage(Component.literal("Pillagers are closing in!")); // TODO: Translatable + variation
             HORDES.get(horde).accept(level, player.blockPosition());
         }
     }

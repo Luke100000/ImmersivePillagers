@@ -1,9 +1,7 @@
 package net.conczin.immersive_pillagers.hordes;
 
-import immersive_aircraft.data.VehicleDataLoader;
-import immersive_aircraft.entity.GyrodyneEntity;
 import net.conczin.immersive_pillagers.PillagerManager;
-import net.conczin.immersive_pillagers.combat.ImmersiveMelodiesCombat;
+import net.conczin.immersive_pillagers.compat.ImmersiveMelodiesCompat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -34,9 +32,9 @@ public class CamelRaiders {
                 // Give the first pillager an instrument
                 // todo duplicate
                 if (i == 0) {
-                    ImmersiveMelodiesCombat.getInstrument(level)
+                    ImmersiveMelodiesCompat.getInstrument(level)
                             .ifPresent(stack -> {
-                                ImmersiveMelodiesCombat.playTrack(level, stack);
+                                ImmersiveMelodiesCompat.playTrack(level, stack);
                                 raider.setItemInHand(InteractionHand.MAIN_HAND, stack);
                             });
                 } else {

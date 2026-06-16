@@ -1,4 +1,4 @@
-package net.conczin.immersive_pillagers.combat;
+package net.conczin.immersive_pillagers.compat;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.Optional;
 
-public class ImmersiveMelodiesCombat {
+public class ImmersiveMelodiesCompat {
     public static final String TAG_PLAYING = "playing";
     public static final String TAG_MELODY = "melody";
     public static final String TAG_START_TIME = "start_time";
