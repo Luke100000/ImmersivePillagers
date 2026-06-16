@@ -28,8 +28,9 @@
     "immersive_pillagers-common.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.11",
-    "minecraft": ">=1.20.1",
-    "immersive_aircraft": ">=1.0.2"
+    "fabricloader": "${fabric_loader_version_range}",
+    "fabric-api": "*",
+    "minecraft": "${fabric_minecraft_version_range}",
+    "immersive_aircraft": "${fabric_immersive_aircraft_version_range}"
   }
 }

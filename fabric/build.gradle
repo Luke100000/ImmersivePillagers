@@ -17,6 +17,7 @@ configurations {
 
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
@@ -27,9 +28,17 @@ dependencies {
 
 processResources {
     inputs.property "version", project.version
+    inputs.property "fabric_loader_version_range", rootProject.fabric_loader_version_range
+    inputs.property "fabric_minecraft_version_range", rootProject.fabric_minecraft_version_range
+    inputs.property "fabric_immersive_aircraft_version_range", rootProject.fabric_immersive_aircraft_version_range
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand(
+                "version": project.version,
+                "fabric_loader_version_range": rootProject.fabric_loader_version_range,
+                "fabric_minecraft_version_range": rootProject.fabric_minecraft_version_range,
+                "fabric_immersive_aircraft_version_range": rootProject.fabric_immersive_aircraft_version_range
+        )
     }
 }
 
@@ -71,4 +80,3 @@ publishing {
         }
     }
 }
-
