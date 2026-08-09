@@ -2,6 +2,7 @@ package net.conczin.immersive_pillagers.hordes;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.compat.ImmersiveMelodiesCompat;
+import net.conczin.immersive_pillagers.controllers.PillagerCombat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -73,6 +74,7 @@ public class HordeSpawnUtil {
             pillager.setPos(vehicle.position());
             pillager.addTag(ImmersivePillagers.MOD_ID);
             markTransient(pillager);
+            PillagerCombat.setCrossbowAttackRange(pillager, 16.0f);
             level.addFreshEntity(pillager);
             pillager.startRiding(vehicle, true);
 
