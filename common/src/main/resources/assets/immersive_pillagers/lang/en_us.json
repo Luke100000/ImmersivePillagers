@@ -1,0 +1,11 @@
+{
+  "command.immersive_pillagers.summon.server_only": "Hordes can only spawn on the server.",
+  "command.immersive_pillagers.summon.unknown_horde": "Unknown horde '%s'. Available: %s",
+  "command.immersive_pillagers.summon.no_safe_position": "Could not find a safe spawn position for %s.",
+  "command.immersive_pillagers.summon.success": "Pillagers are closing in: %s (%s members).",
+  "command.immersive_pillagers.list.empty": "No active hordes.",
+  "command.immersive_pillagers.list.success": "Active hordes: %s",
+  "command.immersive_pillagers.clear.success": "Cleared %s active hordes.",
+  "horde.immersive_pillagers.gyrodyne_raiders": "Gyrodyne Raiders",
+  "horde.immersive_pillagers.camel_raiders": "Camel Raiders"
+}

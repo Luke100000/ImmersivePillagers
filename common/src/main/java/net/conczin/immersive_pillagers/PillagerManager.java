@@ -39,38 +39,38 @@ public class PillagerManager {
     public static int spawnHorde(CommandSourceStack source, String horde) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         if (!(player.level() instanceof ServerLevel level)) {
-            source.sendFailure(Component.literal("Hordes can only spawn on the server."));
+            source.sendFailure(Component.translatable("command.immersive_pillagers.summon.server_only"));
             return 0;
         }
 
         BiFunction<ServerLevel, BlockPos, Optional<ActiveHorde>> factory = HORDES.get(horde);
         if (factory == null) {
-            source.sendFailure(Component.literal("Unknown horde '" + horde + "'. Available: " + availableHordes()));
+            source.sendFailure(Component.translatable("command.immersive_pillagers.summon.unknown_horde", horde, availableHordes()));
             return 0;
         }
 
         Optional<ActiveHorde> activeHorde = factory.apply(level, player.blockPosition());
         if (activeHorde.isEmpty()) {
-            source.sendFailure(Component.literal("Could not find a safe spawn position for " + horde + "."));
+            source.sendFailure(Component.translatable("command.immersive_pillagers.summon.no_safe_position", horde));
             return 0;
         }
 
         ActiveHorde spawned = activeHorde.get();
         ACTIVE_HORDES.put(spawned.id(), spawned);
-        source.sendSuccess(() -> Component.literal("Pillagers are closing in: " + spawned.type() + " (" + spawned.memberCount() + " members)."), true);
+        source.sendSuccess(() -> Component.translatable("command.immersive_pillagers.summon.success", spawned.type(), spawned.memberCount()), true);
         return 1;
     }
 
     public static int listHordes(CommandSourceStack source) {
         if (ACTIVE_HORDES.isEmpty()) {
-            source.sendSuccess(() -> Component.literal("No active hordes."), false);
+            source.sendSuccess(() -> Component.translatable("command.immersive_pillagers.list.empty"), false);
             return 0;
         }
 
         String hordes = ACTIVE_HORDES.values().stream()
                 .map(horde -> horde.type() + " " + horde.id().toString().substring(0, 8) + " (" + horde.memberCount() + " members)")
                 .collect(Collectors.joining(", "));
-        source.sendSuccess(() -> Component.literal("Active hordes: " + hordes), false);
+        source.sendSuccess(() -> Component.translatable("command.immersive_pillagers.list.success", hordes), false);
         return ACTIVE_HORDES.size();
     }
 
@@ -80,7 +80,7 @@ public class PillagerManager {
             horde.discard();
         }
         ACTIVE_HORDES.clear();
-        source.sendSuccess(() -> Component.literal("Cleared " + hordes.size() + " active hordes."), true);
+        source.sendSuccess(() -> Component.translatable("command.immersive_pillagers.clear.success", hordes.size()), true);
         return hordes.size();
     }
 

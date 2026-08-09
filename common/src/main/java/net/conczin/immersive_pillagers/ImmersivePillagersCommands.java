@@ -3,9 +3,9 @@ package net.conczin.immersive_pillagers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 
 public class ImmersivePillagersCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -26,15 +26,7 @@ public class ImmersivePillagersCommands {
         );
     }
 
-    private static int summon(CommandContext<CommandSourceStack> context, String wave) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+    private static int summon(CommandContext<CommandSourceStack> context, String wave) throws CommandSyntaxException {
         return PillagerManager.spawnHorde(context.getSource(), wave);
-    }
-
-    private static void sendMessage(CommandContext<CommandSourceStack> context, String message) {
-        sendMessage(context, Component.literal(message));
-    }
-
-    private static void sendMessage(CommandContext<CommandSourceStack> context, Component message) {
-        context.getSource().sendSuccess(() -> message, false);
     }
 }

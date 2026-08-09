@@ -28,6 +28,6 @@ public class CamelRaiders {
         List<Entity> members = new ArrayList<>();
         members.add(entity);
         members.addAll(crew);
-        return Optional.of(new ActiveHorde("camel", Component.literal("Camel Raiders"), level, members));
+        return Optional.of(new ActiveHorde("camel", Component.translatable("horde.immersive_pillagers.camel_raiders"), level, members));
     }
 }

@@ -35,6 +35,6 @@ public class AirborneRaiders {
         List<Entity> members = new ArrayList<>();
         members.add(entity);
         members.addAll(crew);
-        return Optional.of(new ActiveHorde("gyrodyne", Component.literal("Gyrodyne Raiders"), level, members));
+        return Optional.of(new ActiveHorde("gyrodyne", Component.translatable("horde.immersive_pillagers.gyrodyne_raiders"), level, members));
     }
 }
