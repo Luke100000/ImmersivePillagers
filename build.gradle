@@ -12,6 +12,10 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
+
+        runs.configureEach {
+            vmArg "-Xmx2G"
+        }
     }
 
     dependencies {
