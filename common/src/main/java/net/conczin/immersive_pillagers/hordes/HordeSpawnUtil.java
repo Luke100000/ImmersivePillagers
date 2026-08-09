@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -30,10 +31,9 @@ public class HordeSpawnUtil {
 
     public static Optional<Vec3> findGroundSpawn(ServerLevel level, BlockPos origin, Entity entity) {
         for (int i = 0; i < ATTEMPTS; i++) {
-            double angle = level.random.nextDouble() * Math.PI * 2.0;
-            int distance = MIN_DISTANCE + level.random.nextInt(RANGE);
-            int x = origin.getX() + (int) Math.round(Math.cos(angle) * distance);
-            int z = origin.getZ() + (int) Math.round(Math.sin(angle) * distance);
+            Vec3 offset = randomHorizontalOffset(level);
+            int x = origin.getX() + (int) Math.round(offset.x);
+            int z = origin.getZ() + (int) Math.round(offset.z);
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             Vec3 pos = new Vec3(x + 0.5, y, z + 0.5);
             if (canFit(level, entity, pos)) {
@@ -45,14 +45,26 @@ public class HordeSpawnUtil {
 
     public static Optional<Vec3> findAirSpawn(ServerLevel level, BlockPos origin, Entity entity) {
         for (int i = 0; i < ATTEMPTS; i++) {
-            double angle = level.random.nextDouble() * Math.PI * 2.0;
-            int distance = MIN_DISTANCE + level.random.nextInt(RANGE);
-            double x = origin.getX() + 0.5 + Math.cos(angle) * distance;
-            double z = origin.getZ() + 0.5 + Math.sin(angle) * distance;
+            Vec3 offset = randomHorizontalOffset(level);
+            double x = origin.getX() + 0.5 + offset.x;
+            double z = origin.getZ() + 0.5 + offset.z;
             double y = origin.getY() + 8.0 + level.random.nextInt(12);
             Vec3 pos = new Vec3(x, y, z);
             if (canFit(level, entity, pos)) {
                 return Optional.of(pos);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<Vec3> findWaterSpawn(ServerLevel level, BlockPos origin) {
+        for (int i = 0; i < ATTEMPTS; i++) {
+            Vec3 offset = randomHorizontalOffset(level);
+            int x = origin.getX() + (int) Math.round(offset.x);
+            int z = origin.getZ() + (int) Math.round(offset.z);
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            if (level.getFluidState(new BlockPos(x, y - 1, z)).is(FluidTags.WATER)) {
+                return Optional.of(new Vec3(x + 0.5, y, z + 0.5));
             }
         }
         return Optional.empty();
@@ -105,6 +117,12 @@ public class HordeSpawnUtil {
         Camel camel = new Camel(EntityType.CAMEL, level);
         camel.equipSaddle(null);
         return camel;
+    }
+
+    private static Vec3 randomHorizontalOffset(ServerLevel level) {
+        double angle = level.random.nextDouble() * Math.PI * 2.0;
+        int distance = MIN_DISTANCE + level.random.nextInt(RANGE);
+        return new Vec3(Math.cos(angle) * distance, 0.0, Math.sin(angle) * distance);
     }
 
     private static boolean canFit(ServerLevel level, Entity entity, Vec3 pos) {

@@ -3,6 +3,7 @@ package net.conczin.immersive_pillagers;
 import immersive_aircraft.entity.VehicleEntity;
 import net.conczin.immersive_pillagers.hordes.ActiveHorde;
 import net.conczin.immersive_pillagers.hordes.AirborneRaiders;
+import net.conczin.immersive_pillagers.hordes.BoatRaiders;
 import net.conczin.immersive_pillagers.hordes.CamelRaiders;
 import net.conczin.immersive_pillagers.hordes.HordeSpawner;
 import net.minecraft.core.BlockPos;
@@ -31,6 +32,7 @@ public class PillagerManager {
 
     public static final String HORDE_GYRODYNE = registerHorde("gyrodyne", AirborneRaiders::spawn);
     public static final String HORDE_CAMEL = registerHorde("camel", CamelRaiders::spawn);
+    public static final String HORDE_BOAT = registerHorde("boat", BoatRaiders::spawn);
 
     public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target) {
         HordeSpawner spawner = HORDES.get(horde);

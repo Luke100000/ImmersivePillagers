@@ -7,5 +7,6 @@
   "command.immersive_pillagers.list.success": "Active hordes: %s",
   "command.immersive_pillagers.clear.success": "Cleared %s active hordes.",
   "horde.immersive_pillagers.gyrodyne_raiders": "Gyrodyne Raiders",
-  "horde.immersive_pillagers.camel_raiders": "Camel Raiders"
+  "horde.immersive_pillagers.camel_raiders": "Camel Raiders",
+  "horde.immersive_pillagers.boat_raiders": "Boat Raiders"
 }
