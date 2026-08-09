@@ -4,9 +4,10 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ImmersivePillagers {
     public static final String MOD_ID = "immersive_pillagers";
+    public static final String HORDE_ENTITY_TAG = "IsImmersivePillager";
 
     public static void init() {
-		// nop
+        // nop
     }
 
     public static ResourceLocation locate(String rideOfTheValkyries) {

@@ -22,6 +22,7 @@ public class CamelRaiders {
         }
 
         HordeSpawnUtil.placeRandomly(level, entity, spawnPos.get());
+        HordeSpawnUtil.markTransient(entity);
         level.addFreshEntity(entity);
 
         List<Raider> crew = HordeSpawnUtil.addPillagerCrew(level, entity, 2);

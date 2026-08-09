@@ -27,6 +27,7 @@ public class AirborneRaiders {
         }
 
         HordeSpawnUtil.placeRandomly(level, entity, spawnPos.get());
+        HordeSpawnUtil.markTransient(entity);
         entity.getInventory().setItem(0, new ItemStack(ROTARY_CANNON.get()));
         level.addFreshEntity(entity);
 

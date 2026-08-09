@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "net.conczin.immersive_pillagers.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["AbstractHorseMixin", "PillagerMixin", "VehicleEntityMixin"],
+  "mixins": ["AbstractHorseMixin", "EntityPersistenceMixin", "PillagerMixin", "VehicleEntityMixin"],
   "injectors": {
     "defaultRequire": 1
   }

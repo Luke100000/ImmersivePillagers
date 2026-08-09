@@ -70,6 +70,7 @@ public class HordeSpawnUtil {
 
             pillager.setPos(vehicle.position());
             pillager.addTag(ImmersivePillagers.MOD_ID);
+            markTransient(pillager);
             level.addFreshEntity(pillager);
             pillager.startRiding(vehicle, true);
 
@@ -87,7 +88,11 @@ public class HordeSpawnUtil {
     }
 
     public static void soundAlarm(Entity vehicle) {
-        vehicle.playSound(SoundEvents.RAID_HORN.value(), 2.0f, 1.0f);
+        vehicle.playSound(SoundEvents.RAID_HORN.value(), 5.0f, 1.0f);
+    }
+
+    public static void markTransient(Entity entity) {
+        entity.addTag(ImmersivePillagers.HORDE_ENTITY_TAG);
     }
 
     public static Camel createSaddledCamel(ServerLevel level) {
