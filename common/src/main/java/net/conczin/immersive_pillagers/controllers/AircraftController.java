@@ -43,7 +43,7 @@ public class AircraftController {
                 float diffYaw = -Mth.wrapDegrees(yaw - 90);
 
                 // Control
-                vehicle.setInputs(Math.min(Math.max(diffYaw / 90.0f, -1.0f), 1.0f), (float) dir.y, randomizeSpeed(vehicle)); // todo randomize speed to allow hordes
+                vehicle.setInputs(Math.min(Math.max(diffYaw / 90.0f, -1.0f), 1.0f), (float) dir.y, randomizeSpeed(vehicle));
 
                 // Shoot
                 if (vehicle instanceof InventoryVehicleEntity weaponizedVehicle && vehicle.level().getGameTime() % 20 == 0) {
