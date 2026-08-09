@@ -4,25 +4,27 @@ import immersive_aircraft.entity.VehicleEntity;
 import net.conczin.immersive_pillagers.hordes.ActiveHorde;
 import net.conczin.immersive_pillagers.hordes.AirborneRaiders;
 import net.conczin.immersive_pillagers.hordes.CamelRaiders;
+import net.conczin.immersive_pillagers.hordes.HordeSpawner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiFunction;
 
 public class PillagerManager {
-    private static final Map<String, BiFunction<ServerLevel, BlockPos, Optional<ActiveHorde>>> HORDES = new HashMap<>();
+    private static final Map<String, HordeSpawner> HORDES = new HashMap<>();
     private static final Map<UUID, ActiveHorde> ACTIVE_HORDES = new HashMap<>();
 
-    public static String registerHorde(String name, BiFunction<ServerLevel, BlockPos, Optional<ActiveHorde>> horde) {
+    public static String registerHorde(String name, HordeSpawner horde) {
         HORDES.put(name, horde);
         return name;
     }
@@ -30,9 +32,9 @@ public class PillagerManager {
     public static final String HORDE_GYRODYNE = registerHorde("gyrodyne", AirborneRaiders::spawn);
     public static final String HORDE_CAMEL = registerHorde("camel", CamelRaiders::spawn);
 
-    public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position) {
-        BiFunction<ServerLevel, BlockPos, Optional<ActiveHorde>> factory = HORDES.get(horde);
-        return factory == null ? Optional.empty() : factory.apply(level, position);
+    public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target) {
+        HordeSpawner spawner = HORDES.get(horde);
+        return spawner == null ? Optional.empty() : spawner.spawn(level, position, target);
     }
 
     public static boolean isHordeRegistered(String horde) {

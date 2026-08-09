@@ -6,6 +6,7 @@ import immersive_aircraft.entity.GyrodyneEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -13,11 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 import static immersive_aircraft.Items.ROTARY_CANNON;
 
 public class AirborneRaiders {
-    public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos) {
+    public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target) {
         GyrodyneEntity entity = new GyrodyneEntity(Entities.GYRODYNE.get(), level);
         var spawnPos = HordeSpawnUtil.findAirSpawn(level, pos, entity);
         if (spawnPos.isEmpty()) {

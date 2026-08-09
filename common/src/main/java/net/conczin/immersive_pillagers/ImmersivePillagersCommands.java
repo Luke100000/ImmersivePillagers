@@ -52,7 +52,7 @@ public class ImmersivePillagersCommands {
             return 0;
         }
 
-        Optional<ActiveHorde> activeHorde = PillagerManager.spawnHorde(wave, level, player.blockPosition());
+        Optional<ActiveHorde> activeHorde = PillagerManager.spawnHorde(wave, level, player.blockPosition(), player);
         if (activeHorde.isEmpty()) {
             source.sendFailure(Component.translatable("command.immersive_pillagers.summon.no_safe_position", wave));
             return 0;
