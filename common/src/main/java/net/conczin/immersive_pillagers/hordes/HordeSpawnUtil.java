@@ -4,7 +4,9 @@ import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.compat.ImmersiveMelodiesCompat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -87,8 +89,10 @@ public class HordeSpawnUtil {
         return crew;
     }
 
-    public static void soundAlarm(Entity vehicle) {
-        vehicle.playSound(SoundEvents.RAID_HORN.value(), 5.0f, 1.0f);
+    public static void soundAlarm(ServerLevel level) {
+        for (ServerPlayer player : level.players()) {
+            player.playNotifySound(SoundEvents.RAID_HORN.value(), SoundSource.NEUTRAL, 64, 1.0f);
+        }
     }
 
     public static void markTransient(Entity entity) {

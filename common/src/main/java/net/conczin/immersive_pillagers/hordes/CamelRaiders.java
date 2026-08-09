@@ -29,7 +29,7 @@ public class CamelRaiders {
         if (target != null) {
             crew.forEach(raider -> raider.setTarget(target));
         }
-        HordeSpawnUtil.soundAlarm(entity);
+        HordeSpawnUtil.soundAlarm(level);
 
         List<Entity> members = new ArrayList<>();
         members.add(entity);

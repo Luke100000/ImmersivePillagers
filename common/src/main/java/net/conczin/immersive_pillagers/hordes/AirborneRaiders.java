@@ -33,7 +33,7 @@ public class AirborneRaiders {
 
         int seats = VehicleDataLoader.get(entity.identifier).getPassengerPositions().size();
         List<Raider> crew = HordeSpawnUtil.addPillagerCrew(level, entity, seats);
-        HordeSpawnUtil.soundAlarm(entity);
+        HordeSpawnUtil.soundAlarm(level);
 
         List<Entity> members = new ArrayList<>();
         members.add(entity);
