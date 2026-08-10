@@ -18,7 +18,7 @@ public class ImmersiveMelodiesCompat {
     public static final String TAG_TRACKS = "enabled_tracks";
 
     public static void playTrack(Level level, ItemStack stack) {
-        playTrack(level, stack, ImmersivePillagers.locate("melodies/ride_of_the_valkyries"));
+        playTrack(level, stack, ImmersivePillagers.locate("melodies/ride_of_the_valkyries.mid"));
     }
 
     public static void playTrack(Level level, ItemStack stack, ResourceLocation name) {
