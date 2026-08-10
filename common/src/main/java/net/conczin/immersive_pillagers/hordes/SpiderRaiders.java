@@ -42,6 +42,6 @@ public class SpiderRaiders {
             return Optional.empty();
         }
         HordeSpawnUtil.soundAlarm(level);
-        return Optional.of(new ActiveHorde(PillagerManager.HORDE_SPIDER, level, members));
+        return Optional.of(new ActiveHorde(PillagerManager.HORDE_SPIDER, level, members, target));
     }
 }

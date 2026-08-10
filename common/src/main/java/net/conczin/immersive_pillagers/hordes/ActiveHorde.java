@@ -1,12 +1,15 @@
 package net.conczin.immersive_pillagers.hordes;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
+import net.conczin.immersive_pillagers.ImmersivePillagersStats;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,13 +19,17 @@ public class ActiveHorde {
     private final UUID id = UUID.randomUUID();
     private final String type;
     private final ServerLevel level;
+    @Nullable
+    private final UUID targetId;
     private final Set<UUID> members = new HashSet<>();
+    private boolean wasDefeated = true;
     private final int initialMembers;
     private final ServerBossEvent bossEvent;
 
-    public ActiveHorde(String type, ServerLevel level, Iterable<? extends Entity> members) {
+    public ActiveHorde(String type, ServerLevel level, Iterable<? extends Entity> members, @Nullable ServerPlayer target) {
         this.type = type;
         this.level = level;
+        this.targetId = target == null ? null : target.getUUID();
 
         for (Entity member : members) {
             this.members.add(member.getUUID());
@@ -51,10 +58,23 @@ public class ActiveHorde {
     public boolean tick() {
         members.removeIf(uuid -> {
             Entity entity = level.getEntity(uuid);
-            return entity == null || entity.isRemoved() || !entity.isAlive();
+            if (entity == null) {
+                wasDefeated = false;
+                return true;
+            }
+            if (!entity.isRemoved() && entity.isAlive()) {
+                return false;
+            }
+            if (entity.getRemovalReason() != Entity.RemovalReason.KILLED) {
+                wasDefeated = false;
+            }
+            return true;
         });
 
         if (members.isEmpty()) {
+            if (wasDefeated) {
+                awardWaveCompletion();
+            }
             bossEvent.removeAllPlayers();
             return false;
         }
@@ -77,5 +97,16 @@ public class ActiveHorde {
         }
         members.clear();
         bossEvent.removeAllPlayers();
+    }
+
+    private void awardWaveCompletion() {
+        if (targetId == null) {
+            return;
+        }
+
+        ServerPlayer target = level.getServer().getPlayerList().getPlayer(targetId);
+        if (target != null) {
+            ImmersivePillagersStats.awardWaveDefeated(target, type);
+        }
     }
 }

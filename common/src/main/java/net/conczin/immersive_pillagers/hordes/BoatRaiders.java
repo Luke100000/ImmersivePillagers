@@ -30,6 +30,6 @@ public class BoatRaiders {
             return Optional.empty();
         }
         HordeSpawnUtil.soundAlarm(level);
-        return Optional.of(new ActiveHorde(PillagerManager.HORDE_BOAT, level, members));
+        return Optional.of(new ActiveHorde(PillagerManager.HORDE_BOAT, level, members, target));
     }
 }

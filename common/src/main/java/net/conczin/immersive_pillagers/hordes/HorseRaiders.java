@@ -31,6 +31,6 @@ public class HorseRaiders {
             return Optional.empty();
         }
         HordeSpawnUtil.soundAlarm(level);
-        return Optional.of(new ActiveHorde(PillagerManager.HORDE_HORSE, level, members));
+        return Optional.of(new ActiveHorde(PillagerManager.HORDE_HORSE, level, members, target));
     }
 }

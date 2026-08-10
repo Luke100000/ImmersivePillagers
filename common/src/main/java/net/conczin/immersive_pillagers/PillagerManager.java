@@ -1,13 +1,8 @@
 package net.conczin.immersive_pillagers;
 
 import immersive_aircraft.entity.VehicleEntity;
-import net.conczin.immersive_pillagers.hordes.ActiveHorde;
-import net.conczin.immersive_pillagers.hordes.AirborneRaiders;
-import net.conczin.immersive_pillagers.hordes.BoatRaiders;
-import net.conczin.immersive_pillagers.hordes.CamelRaiders;
-import net.conczin.immersive_pillagers.hordes.HorseRaiders;
-import net.conczin.immersive_pillagers.hordes.HordeSpawner;
-import net.conczin.immersive_pillagers.hordes.SpiderRaiders;
+import net.conczin.immersive_pillagers.hordes.*;
+import net.conczin.immersive_pillagers.player.PlayerHordeData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -18,11 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class PillagerManager {
     private static final Map<String, HordeSpawner> HORDES = new HashMap<>();
@@ -41,7 +32,11 @@ public class PillagerManager {
 
     public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty) {
         HordeSpawner spawner = HORDES.get(horde);
-        return spawner == null ? Optional.empty() : spawner.spawn(level, position, target, difficulty);
+        Optional<ActiveHorde> spawned = spawner == null ? Optional.empty() : spawner.spawn(level, position, target, difficulty);
+        if (target != null && spawned.isPresent()) {
+            PlayerHordeData.get(target).markRaidStarted(horde, level.getGameTime());
+        }
+        return spawned;
     }
 
     public static boolean isHordeRegistered(String horde) {

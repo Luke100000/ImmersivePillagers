@@ -37,6 +37,6 @@ public class AirborneRaiders {
             return Optional.empty();
         }
         HordeSpawnUtil.soundAlarm(level);
-        return Optional.of(new ActiveHorde(PillagerManager.HORDE_GYRODYNE, level, members));
+        return Optional.of(new ActiveHorde(PillagerManager.HORDE_GYRODYNE, level, members, target));
     }
 }

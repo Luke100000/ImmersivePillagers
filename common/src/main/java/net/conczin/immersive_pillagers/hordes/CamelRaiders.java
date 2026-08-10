@@ -29,6 +29,6 @@ public class CamelRaiders {
             return Optional.empty();
         }
         HordeSpawnUtil.soundAlarm(level);
-        return Optional.of(new ActiveHorde(PillagerManager.HORDE_CAMEL, level, members));
+        return Optional.of(new ActiveHorde(PillagerManager.HORDE_CAMEL, level, members, target));
     }
 }
