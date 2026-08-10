@@ -34,7 +34,7 @@ public final class SpawnManager {
             return;
         }
 
-        int difficulty = level.getDifficulty().getId() + 2;
+        int difficulty = Math.max(1, (int) Math.round((level.getDifficulty().getId() + 2) * Config.getInstance().difficultyFactor));
         long gameTime = level.getGameTime();
 
         for (String waveType : PillagerManager.getHordeNames()) {
