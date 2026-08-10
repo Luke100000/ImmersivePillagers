@@ -15,28 +15,33 @@ import java.util.List;
 import java.util.Optional;
 
 public class SpiderRaiders {
-    public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target) {
-        Spider entity = new Spider(EntityType.SPIDER, level);
-        var spawnPos = HordeSpawnUtil.findGroundSpawn(level, pos, entity);
-        if (spawnPos.isEmpty()) {
+    public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target, int difficulty) {
+        List<Entity> members = new ArrayList<>();
+        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty);
+        for (int i = 0; i < groupCount; i++) {
+            Spider entity = new Spider(EntityType.SPIDER, level);
+            var spawnPos = HordeSpawnUtil.findGroundSpawn(level, pos, entity);
+            if (spawnPos.isEmpty()) {
+                continue;
+            }
+
+            HordeSpawnUtil.placeRandomly(level, entity, spawnPos.get());
+            HordeSpawnUtil.markTransient(entity);
+            level.addFreshEntity(entity);
+
+            List<Raider> crew = level.random.nextBoolean()
+                    ? HordeSpawnUtil.addPillagerCrew(level, entity, 1)
+                    : HordeSpawnUtil.addVindicatorCrew(level, entity, 1);
+            if (target != null) {
+                crew.forEach(raider -> raider.setTarget(target));
+            }
+            members.add(entity);
+            members.addAll(crew);
+        }
+        if (members.isEmpty()) {
             return Optional.empty();
         }
-
-        HordeSpawnUtil.placeRandomly(level, entity, spawnPos.get());
-        HordeSpawnUtil.markTransient(entity);
-        level.addFreshEntity(entity);
-
-        List<Raider> crew = level.random.nextBoolean()
-                ? HordeSpawnUtil.addPillagerCrew(level, entity, 1)
-                : HordeSpawnUtil.addVindicatorCrew(level, entity, 1);
-        if (target != null) {
-            crew.forEach(raider -> raider.setTarget(target));
-        }
         HordeSpawnUtil.soundAlarm(level);
-
-        List<Entity> members = new ArrayList<>();
-        members.add(entity);
-        members.addAll(crew);
         return Optional.of(new ActiveHorde(PillagerManager.HORDE_SPIDER, level, members));
     }
 }

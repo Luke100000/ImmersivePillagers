@@ -39,9 +39,9 @@ public class PillagerManager {
     public static final String HORDE_HORSE = registerHorde("horse", HorseRaiders::spawn);
     public static final String HORDE_SPIDER = registerHorde("spider", SpiderRaiders::spawn);
 
-    public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target) {
+    public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty) {
         HordeSpawner spawner = HORDES.get(horde);
-        return spawner == null ? Optional.empty() : spawner.spawn(level, position, target);
+        return spawner == null ? Optional.empty() : spawner.spawn(level, position, target, difficulty);
     }
 
     public static boolean isHordeRegistered(String horde) {

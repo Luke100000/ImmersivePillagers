@@ -131,6 +131,10 @@ public class HordeSpawnUtil {
         return camel;
     }
 
+    public static int getVehicleGroupCount(ServerLevel level, int difficulty) {
+        return (int) Math.ceil((level.random.nextDouble() + 0.5) * difficulty * 0.2 + level.random.nextDouble());
+    }
+
     private static Vec3 randomHorizontalOffset(ServerLevel level) {
         double angle = level.random.nextDouble() * Math.PI * 2.0;
         int distance = MIN_DISTANCE + level.random.nextInt(RANGE);

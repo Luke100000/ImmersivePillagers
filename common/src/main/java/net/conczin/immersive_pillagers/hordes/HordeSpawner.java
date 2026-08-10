@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface HordeSpawner {
-    Optional<ActiveHorde> spawn(ServerLevel level, BlockPos position, @Nullable ServerPlayer target);
+    Optional<ActiveHorde> spawn(ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty);
 }

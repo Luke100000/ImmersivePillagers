@@ -1,6 +1,7 @@
 package net.conczin.immersive_pillagers;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -20,6 +21,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class ImmersivePillagersCommands {
+    private static final int DEFAULT_DIFFICULTY = 5;
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal(ImmersivePillagers.MOD_ID)
                 .then(Commands.literal("list")
@@ -32,14 +35,15 @@ public class ImmersivePillagersCommands {
                         .requires(p -> p.hasPermission(2))
                         .then(Commands.argument("wave", StringArgumentType.word())
                                 .suggests(ImmersivePillagersCommands::suggestHordes)
-                                .executes(c -> ImmersivePillagersCommands.summon(c, c.getArgument("wave", String.class))
-                                )
+                                .executes(c -> ImmersivePillagersCommands.summon(c, c.getArgument("wave", String.class), DEFAULT_DIFFICULTY))
+                                .then(Commands.argument("difficulty", IntegerArgumentType.integer(1))
+                                        .executes(c -> ImmersivePillagersCommands.summon(c, c.getArgument("wave", String.class), IntegerArgumentType.getInteger(c, "difficulty"))))
                         )
                 )
         );
     }
 
-    private static int summon(CommandContext<CommandSourceStack> context, String wave) throws CommandSyntaxException {
+    private static int summon(CommandContext<CommandSourceStack> context, String wave, int difficulty) throws CommandSyntaxException {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayerOrException();
         if (!(player.level() instanceof ServerLevel level)) {
@@ -52,7 +56,7 @@ public class ImmersivePillagersCommands {
             return 0;
         }
 
-        Optional<ActiveHorde> activeHorde = PillagerManager.spawnHorde(wave, level, player.blockPosition(), player);
+        Optional<ActiveHorde> activeHorde = PillagerManager.spawnHorde(wave, level, player.blockPosition(), player, difficulty);
         if (activeHorde.isEmpty()) {
             source.sendFailure(Component.translatable("command.immersive_pillagers.summon.no_safe_position", wave));
             return 0;
