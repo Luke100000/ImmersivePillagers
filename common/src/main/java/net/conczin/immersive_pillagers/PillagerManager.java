@@ -65,6 +65,7 @@ public class PillagerManager {
     }
 
     public static void tick(MinecraftServer server) {
+        SpawnManager.tick(server);
         ACTIVE_HORDES.values().removeIf(horde -> !horde.tick());
     }
 
