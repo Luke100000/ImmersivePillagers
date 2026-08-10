@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -36,7 +37,7 @@ public class HordeSpawnUtil {
             int z = origin.getZ() + (int) Math.round(offset.z);
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             Vec3 pos = new Vec3(x + 0.5, y, z + 0.5);
-            if (canFit(level, entity, pos)) {
+            if (!level.getFluidState(new BlockPos(x, y - 1, z)).is(FluidTags.WATER) && canFit(level, entity, pos)) {
                 return Optional.of(pos);
             }
         }
@@ -83,14 +84,10 @@ public class HordeSpawnUtil {
                 continue;
             }
 
-            pillager.setPos(vehicle.position());
-            pillager.addTag(ImmersivePillagers.MOD_ID);
-            markTransient(pillager);
+            addRaiderToVehicle(level, vehicle, pillager);
             PillagerCombat.setCrossbowAttackRange(pillager, 16.0f);
-            level.addFreshEntity(pillager);
-            pillager.startRiding(vehicle, true);
 
-            if (i == 0) {
+            if (i == 1) {
                 ImmersiveMelodiesCompat.getInstrument(level).ifPresentOrElse(stack -> {
                     ImmersiveMelodiesCompat.playTrack(level, stack);
                     pillager.setItemInHand(InteractionHand.MAIN_HAND, stack);
@@ -99,6 +96,21 @@ public class HordeSpawnUtil {
                 pillager.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CROSSBOW));
             }
             crew.add(pillager);
+        }
+        return crew;
+    }
+
+    public static List<Raider> addVindicatorCrew(ServerLevel level, Entity vehicle, int seats) {
+        List<Raider> crew = new ArrayList<>();
+        for (int i = 0; i < seats; i++) {
+            Vindicator vindicator = EntityType.VINDICATOR.create(level);
+            if (vindicator == null) {
+                continue;
+            }
+
+            addRaiderToVehicle(level, vehicle, vindicator);
+            vindicator.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
+            crew.add(vindicator);
         }
         return crew;
     }
@@ -123,6 +135,14 @@ public class HordeSpawnUtil {
         double angle = level.random.nextDouble() * Math.PI * 2.0;
         int distance = MIN_DISTANCE + level.random.nextInt(RANGE);
         return new Vec3(Math.cos(angle) * distance, 0.0, Math.sin(angle) * distance);
+    }
+
+    private static void addRaiderToVehicle(ServerLevel level, Entity vehicle, Raider raider) {
+        raider.setPos(vehicle.position());
+        raider.addTag(ImmersivePillagers.MOD_ID);
+        markTransient(raider);
+        level.addFreshEntity(raider);
+        raider.startRiding(vehicle, true);
     }
 
     private static boolean canFit(ServerLevel level, Entity entity, Vec3 pos) {

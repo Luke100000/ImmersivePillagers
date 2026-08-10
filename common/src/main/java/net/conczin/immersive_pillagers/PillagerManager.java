@@ -5,11 +5,14 @@ import net.conczin.immersive_pillagers.hordes.ActiveHorde;
 import net.conczin.immersive_pillagers.hordes.AirborneRaiders;
 import net.conczin.immersive_pillagers.hordes.BoatRaiders;
 import net.conczin.immersive_pillagers.hordes.CamelRaiders;
+import net.conczin.immersive_pillagers.hordes.HorseRaiders;
 import net.conczin.immersive_pillagers.hordes.HordeSpawner;
+import net.conczin.immersive_pillagers.hordes.SpiderRaiders;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +36,8 @@ public class PillagerManager {
     public static final String HORDE_GYRODYNE = registerHorde("gyrodyne", AirborneRaiders::spawn);
     public static final String HORDE_CAMEL = registerHorde("camel", CamelRaiders::spawn);
     public static final String HORDE_BOAT = registerHorde("boat", BoatRaiders::spawn);
+    public static final String HORDE_HORSE = registerHorde("horse", HorseRaiders::spawn);
+    public static final String HORDE_SPIDER = registerHorde("spider", SpiderRaiders::spawn);
 
     public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target) {
         HordeSpawner spawner = HORDES.get(horde);
@@ -68,8 +73,8 @@ public class PillagerManager {
         ACTIVE_HORDES.values().removeIf(horde -> !horde.tick());
     }
 
-    public static @NotNull Optional<? extends Player> getClosestPlayer(Pillager pillager) {
-        return pillager.level().players().stream().min((a, b) -> (int) (a.distanceToSqr(pillager) - b.distanceToSqr(pillager)));
+    public static @NotNull Optional<? extends Player> getClosestPlayer(Entity entity) {
+        return entity.level().players().stream().min((a, b) -> (int) (a.distanceToSqr(entity) - b.distanceToSqr(entity)));
     }
 
     public static boolean canTurnOnEngine(VehicleEntity vehicleEntity) {
