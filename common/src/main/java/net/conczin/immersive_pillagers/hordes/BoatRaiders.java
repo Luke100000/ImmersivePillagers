@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.phys.Vec3;
 
@@ -25,16 +24,7 @@ public class BoatRaiders {
             }
 
             Boat entity = new Boat(level, spawnPos.get().x, spawnPos.get().y, spawnPos.get().z);
-            HordeSpawnUtil.placeRandomly(level, entity, spawnPos.get());
-            HordeSpawnUtil.markTransient(entity);
-            level.addFreshEntity(entity);
-
-            List<Raider> crew = HordeSpawnUtil.addPillagerCrew(level, entity, 2);
-            if (target != null) {
-                crew.forEach(raider -> raider.setTarget(target));
-            }
-            members.add(entity);
-            members.addAll(crew);
+            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 2, target));
         }
         if (members.isEmpty()) {
             return Optional.empty();

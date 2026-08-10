@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class HordeSpawnUtil {
     private static final int ATTEMPTS = 16;
@@ -98,6 +99,22 @@ public class HordeSpawnUtil {
             crew.add(pillager);
         }
         return crew;
+    }
+
+    public static List<Entity> spawnPillagerVehicleGroup(ServerLevel level, Entity vehicle, Vec3 spawnPos, int seats, @Nullable ServerPlayer target) {
+        placeRandomly(level, vehicle, spawnPos);
+        markTransient(vehicle);
+        level.addFreshEntity(vehicle);
+
+        List<Raider> crew = addPillagerCrew(level, vehicle, seats);
+        if (target != null) {
+            crew.forEach(raider -> raider.setTarget(target));
+        }
+
+        List<Entity> members = new ArrayList<>();
+        members.add(vehicle);
+        members.addAll(crew);
+        return members;
     }
 
     public static List<Raider> addVindicatorCrew(ServerLevel level, Entity vehicle, int seats) {

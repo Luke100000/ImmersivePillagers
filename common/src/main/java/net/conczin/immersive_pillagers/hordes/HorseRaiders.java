@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.horse.Horse;
-import net.minecraft.world.entity.raid.Raider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -26,16 +25,7 @@ public class HorseRaiders {
                 continue;
             }
 
-            HordeSpawnUtil.placeRandomly(level, entity, spawnPos.get());
-            HordeSpawnUtil.markTransient(entity);
-            level.addFreshEntity(entity);
-
-            List<Raider> crew = HordeSpawnUtil.addPillagerCrew(level, entity, 1);
-            if (target != null) {
-                crew.forEach(raider -> raider.setTarget(target));
-            }
-            members.add(entity);
-            members.addAll(crew);
+            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 1, target));
         }
         if (members.isEmpty()) {
             return Optional.empty();

@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -29,15 +28,10 @@ public class AirborneRaiders {
                 continue;
             }
 
-            HordeSpawnUtil.placeRandomly(level, entity, spawnPos.get());
-            HordeSpawnUtil.markTransient(entity);
             entity.getInventory().setItem(0, new ItemStack(ROTARY_CANNON.get()));
-            level.addFreshEntity(entity);
 
             int seats = VehicleDataLoader.get(entity.identifier).getPassengerPositions().size();
-            List<Raider> crew = HordeSpawnUtil.addPillagerCrew(level, entity, seats);
-            members.add(entity);
-            members.addAll(crew);
+            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), seats, target));
         }
         if (members.isEmpty()) {
             return Optional.empty();
