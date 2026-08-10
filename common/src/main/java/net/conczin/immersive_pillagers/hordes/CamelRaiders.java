@@ -23,7 +23,7 @@ public class CamelRaiders {
                 continue;
             }
 
-            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 2, target));
+            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 2, target, PillagerManager.HORDE_CAMEL));
         }
         if (members.isEmpty()) {
             return Optional.empty();

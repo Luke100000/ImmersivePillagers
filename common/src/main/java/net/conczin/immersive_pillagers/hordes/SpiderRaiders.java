@@ -30,7 +30,7 @@ public class SpiderRaiders {
             level.addFreshEntity(entity);
 
             List<Raider> crew = level.random.nextBoolean()
-                    ? HordeSpawnUtil.addPillagerCrew(level, entity, 1)
+                    ? HordeSpawnUtil.addPillagerCrew(level, entity, 1, PillagerManager.HORDE_SPIDER)
                     : HordeSpawnUtil.addVindicatorCrew(level, entity, 1);
             if (target != null) {
                 crew.forEach(raider -> raider.setTarget(target));

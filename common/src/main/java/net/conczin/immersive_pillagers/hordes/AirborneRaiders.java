@@ -31,7 +31,7 @@ public class AirborneRaiders {
             entity.getInventory().setItem(0, new ItemStack(ROTARY_CANNON.get()));
 
             int seats = VehicleDataLoader.get(entity.identifier).getPassengerPositions().size();
-            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), seats, target));
+            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), seats, target, PillagerManager.HORDE_GYRODYNE));
         }
         if (members.isEmpty()) {
             return Optional.empty();

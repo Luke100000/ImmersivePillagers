@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ImmersiveMelodiesCompat {
@@ -17,8 +18,21 @@ public class ImmersiveMelodiesCompat {
     public static final String TAG_START_TIME = "start_time";
     public static final String TAG_TRACKS = "enabled_tracks";
 
+    private static final ResourceLocation DEFAULT_MELODY = ImmersivePillagers.locate("melodies/ride_of_the_valkyries.mid");
+    private static final Map<String, ResourceLocation> HORDE_MELODIES = Map.of(
+            "gyrodyne", DEFAULT_MELODY,
+            "camel", ImmersivePillagers.locate("melodies/arabe_yaabud.mid"),
+            "boat", ImmersivePillagers.locate("melodies/drunken_sailor.mid"),
+            "horse", ImmersivePillagers.locate("melodies/william_tell_overture.mid"),
+            "spider", ImmersivePillagers.locate("melodies/in_the_hall_of_the_mountain_king.mid")
+    );
+
     public static void playTrack(Level level, ItemStack stack) {
-        playTrack(level, stack, ImmersivePillagers.locate("melodies/ride_of_the_valkyries.mid"));
+        playTrack(level, stack, DEFAULT_MELODY);
+    }
+
+    public static void playTrack(Level level, ItemStack stack, String hordeType) {
+        playTrack(level, stack, HORDE_MELODIES.getOrDefault(hordeType, DEFAULT_MELODY));
     }
 
     public static void playTrack(Level level, ItemStack stack, ResourceLocation name) {

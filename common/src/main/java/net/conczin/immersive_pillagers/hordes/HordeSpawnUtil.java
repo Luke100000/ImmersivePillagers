@@ -77,7 +77,7 @@ public class HordeSpawnUtil {
         entity.setYRot(level.random.nextFloat() * 360.0f);
     }
 
-    public static List<Raider> addPillagerCrew(ServerLevel level, Entity vehicle, int seats) {
+    public static List<Raider> addPillagerCrew(ServerLevel level, Entity vehicle, int seats, String hordeType) {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
             Pillager pillager = EntityType.PILLAGER.create(level);
@@ -90,7 +90,7 @@ public class HordeSpawnUtil {
 
             if (i == 1) {
                 ImmersiveMelodiesCompat.getInstrument(level).ifPresentOrElse(stack -> {
-                    ImmersiveMelodiesCompat.playTrack(level, stack);
+                    ImmersiveMelodiesCompat.playTrack(level, stack, hordeType);
                     pillager.setItemInHand(InteractionHand.MAIN_HAND, stack);
                 }, () -> pillager.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CROSSBOW)));
             } else {
@@ -101,12 +101,12 @@ public class HordeSpawnUtil {
         return crew;
     }
 
-    public static List<Entity> spawnPillagerVehicleGroup(ServerLevel level, Entity vehicle, Vec3 spawnPos, int seats, @Nullable ServerPlayer target) {
+    public static List<Entity> spawnPillagerVehicleGroup(ServerLevel level, Entity vehicle, Vec3 spawnPos, int seats, @Nullable ServerPlayer target, String hordeType) {
         placeRandomly(level, vehicle, spawnPos);
         markTransient(vehicle);
         level.addFreshEntity(vehicle);
 
-        List<Raider> crew = addPillagerCrew(level, vehicle, seats);
+        List<Raider> crew = addPillagerCrew(level, vehicle, seats, hordeType);
         if (target != null) {
             crew.forEach(raider -> raider.setTarget(target));
         }

@@ -25,7 +25,7 @@ public class HorseRaiders {
                 continue;
             }
 
-            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 1, target));
+            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 1, target, PillagerManager.HORDE_HORSE));
         }
         if (members.isEmpty()) {
             return Optional.empty();

@@ -24,7 +24,7 @@ public class BoatRaiders {
             }
 
             Boat entity = new Boat(level, spawnPos.get().x, spawnPos.get().y, spawnPos.get().z);
-            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 2, target));
+            members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 2, target, PillagerManager.HORDE_BOAT));
         }
         if (members.isEmpty()) {
             return Optional.empty();
