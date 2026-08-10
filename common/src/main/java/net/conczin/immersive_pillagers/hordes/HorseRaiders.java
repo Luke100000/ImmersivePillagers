@@ -1,7 +1,7 @@
 package net.conczin.immersive_pillagers.hordes;
 
+import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -36,6 +36,6 @@ public class HorseRaiders {
         List<Entity> members = new ArrayList<>();
         members.add(entity);
         members.addAll(crew);
-        return Optional.of(new ActiveHorde("horse", Component.translatable("horde.immersive_pillagers.horse_raiders"), level, members));
+        return Optional.of(new ActiveHorde(PillagerManager.HORDE_HORSE, level, members));
     }
 }

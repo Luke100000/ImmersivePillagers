@@ -3,8 +3,8 @@ package net.conczin.immersive_pillagers.hordes;
 import immersive_aircraft.Entities;
 import immersive_aircraft.data.VehicleDataLoader;
 import immersive_aircraft.entity.GyrodyneEntity;
+import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -38,6 +38,6 @@ public class AirborneRaiders {
         List<Entity> members = new ArrayList<>();
         members.add(entity);
         members.addAll(crew);
-        return Optional.of(new ActiveHorde("gyrodyne", Component.translatable("horde.immersive_pillagers.gyrodyne_raiders"), level, members));
+        return Optional.of(new ActiveHorde(PillagerManager.HORDE_GYRODYNE, level, members));
     }
 }

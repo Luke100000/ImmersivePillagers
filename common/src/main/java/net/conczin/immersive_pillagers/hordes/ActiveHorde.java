@@ -1,6 +1,8 @@
 package net.conczin.immersive_pillagers.hordes;
 
+import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.BossEvent;
@@ -18,7 +20,7 @@ public class ActiveHorde {
     private final int initialMembers;
     private final ServerBossEvent bossEvent;
 
-    public ActiveHorde(String type, Component name, ServerLevel level, Iterable<? extends Entity> members) {
+    public ActiveHorde(String type, ServerLevel level, Iterable<? extends Entity> members) {
         this.type = type;
         this.level = level;
 
@@ -27,6 +29,7 @@ public class ActiveHorde {
         }
         this.initialMembers = Math.max(1, this.members.size());
 
+        MutableComponent name = Component.translatable("horde." + ImmersivePillagers.MOD_ID + "." + type);
         this.bossEvent = new ServerBossEvent(name, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
         this.bossEvent.setDarkenScreen(false);
         this.bossEvent.setCreateWorldFog(false);
