@@ -9,18 +9,27 @@ import net.minecraft.stats.Stats;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public final class ImmersivePillagersStats {
     private static final Map<String, ResourceLocation> WAVES_DEFEATED = new HashMap<>();
 
     public static void init() {
-        PillagerManager.getHordeNames().forEach(ImmersivePillagersStats::registerWave);
+        init((id, value) -> Registry.register(BuiltInRegistries.CUSTOM_STAT, id, value));
+    }
+
+    public static void init(BiConsumer<ResourceLocation, ResourceLocation> registrar) {
+        PillagerManager.getHordeNames().forEach(waveType -> registerWave(waveType, registrar));
     }
 
     public static void registerWave(String waveType) {
+        registerWave(waveType, (id, value) -> Registry.register(BuiltInRegistries.CUSTOM_STAT, id, value));
+    }
+
+    private static void registerWave(String waveType, BiConsumer<ResourceLocation, ResourceLocation> registrar) {
         ResourceLocation id = ImmersivePillagers.locate("waves_defeated/" + waveType);
         WAVES_DEFEATED.put(waveType, id);
-        Registry.register(BuiltInRegistries.CUSTOM_STAT, id, id);
+        registrar.accept(id, id);
     }
 
     public static void awardWaveDefeated(ServerPlayer player, String waveType) {

@@ -2,6 +2,7 @@ package net.conczin.immersive_pillagers.fabric;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.ImmersivePillagersCommands;
+import net.conczin.immersive_pillagers.ImmersivePillagersStats;
 import net.conczin.immersive_pillagers.PillagerManager;
 import net.conczin.immersive_pillagers.player.PlayerHordeData;
 import net.fabricmc.api.ModInitializer;
@@ -15,6 +16,7 @@ public class ImmersivePillagersFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ImmersivePillagers.init();
+        ImmersivePillagersStats.init();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> ImmersivePillagersCommands.register(dispatcher));
         ServerTickEvents.END_SERVER_TICK.register(PillagerManager::tick);
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, killer, killedEntity) -> {

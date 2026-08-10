@@ -2,6 +2,7 @@
 *.ipr
 *.iws
 
+traces/
 out/
 build/
 run/

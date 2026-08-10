@@ -10,7 +10,6 @@ public class ImmersivePillagers {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static void init() {
-        ImmersivePillagersStats.init();
     }
 
     public static ResourceLocation locate(String rideOfTheValkyries) {
