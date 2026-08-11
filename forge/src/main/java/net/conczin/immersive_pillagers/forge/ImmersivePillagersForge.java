@@ -3,6 +3,7 @@ package net.conczin.immersive_pillagers.forge;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.ImmersivePillagersItems;
 import net.conczin.immersive_pillagers.ImmersivePillagersStats;
+import net.conczin.immersive_pillagers.network.Networking;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
@@ -14,8 +15,11 @@ import static net.minecraft.core.registries.Registries.ITEM;
 @Mod(ImmersivePillagers.MOD_ID)
 public class ImmersivePillagersForge {
     public ImmersivePillagersForge() {
+        new NetworkingImpl();
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ImmersivePillagersForge::register);
         ImmersivePillagers.init();
+        Networking.initialize();
     }
 
     private static void register(RegisterEvent event) {

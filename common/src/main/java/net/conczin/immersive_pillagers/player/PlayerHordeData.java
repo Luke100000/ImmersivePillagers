@@ -59,9 +59,18 @@ public final class PlayerHordeData extends SavedData {
         return hasKilledPillager;
     }
 
-    public void markPillagerKilled() {
+    public boolean markPillagerKilled() {
         if (!hasKilledPillager) {
             hasKilledPillager = true;
+            setDirty();
+            return true;
+        }
+        return false;
+    }
+
+    public void pardon() {
+        if (hasKilledPillager) {
+            hasKilledPillager = false;
             setDirty();
         }
     }

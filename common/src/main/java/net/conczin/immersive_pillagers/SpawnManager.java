@@ -30,6 +30,10 @@ public final class SpawnManager {
         ServerLevel level = player.serverLevel();
         BlockPos position = player.blockPosition();
 
+        if (!PlayerHordeData.get(player).hasKilledPillager()) {
+            return;
+        }
+
         if (level.getDifficulty() == Difficulty.PEACEFUL || level.isVillage(position)) {
             return;
         }

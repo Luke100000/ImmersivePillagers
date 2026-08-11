@@ -18,5 +18,21 @@
 
   "item.immersive_pillagers.rusty_key": "Rusty Key",
   "item.immersive_pillagers.wanted_poster": "Wanted Poster",
-  "item.immersive_pillagers.raiders_horn": "Raider's Horn"
+  "item.immersive_pillagers.wanted_poster.tooltip": "Send bounty hunters after another player—or buy yourself peace.",
+  "item.immersive_pillagers.raiders_horn": "Raider's Horn",
+
+  "gui.immersive_pillagers.wanted_poster": "Wanted Players",
+  "gui.immersive_pillagers.add_bounty": "Add Bounty",
+  "gui.immersive_pillagers.pardon": "Pardon",
+  "gui.immersive_pillagers.back": "Back",
+  "gui.immersive_pillagers.search": "Search",
+  "gui.immersive_pillagers.cancel": "Cancel",
+  "gui.immersive_pillagers.no_players": "No players online",
+
+  "message.immersive_pillagers.player_wanted": "You are now wanted.",
+  "message.immersive_pillagers.bounty_disabled": "Player bounties are disabled.",
+  "message.immersive_pillagers.bounty_protected": "That player is in a protected area.",
+  "message.immersive_pillagers.bounty_unavailable": "No suitable horde can reach that player.",
+  "message.immersive_pillagers.bounty_sent": "Bounty sent after %s.",
+  "message.immersive_pillagers.pardoned": "You have bought yourself peace."
 }
