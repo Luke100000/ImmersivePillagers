@@ -7,8 +7,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -22,7 +25,7 @@ public class ActiveHorde {
     @Nullable
     private final UUID targetId;
     private final Set<UUID> members = new HashSet<>();
-    private boolean wasDefeated = true;
+    private boolean hasPlayerKill;
     private final int initialMembers;
     private final ServerBossEvent bossEvent;
 
@@ -55,24 +58,32 @@ public class ActiveHorde {
         return members.size();
     }
 
+    public boolean shouldDespawnAfterTargetDeath() {
+        if (targetId == null) {
+            return false;
+        }
+
+        ServerPlayer target = level.getServer().getPlayerList().getPlayer(targetId);
+        if (target == null || target.isAlive()) {
+            return false;
+        }
+
+        double range = 128.0 * 128.0;
+        return level.players().stream()
+                .filter(player -> player != target && player.isAlive())
+                .noneMatch(player -> player.distanceToSqr(target) <= range);
+    }
+
     public boolean tick() {
-        members.removeIf(uuid -> {
-            Entity entity = level.getEntity(uuid);
-            if (entity == null) {
-                wasDefeated = false;
-                return true;
-            }
-            if (!entity.isRemoved() && entity.isAlive()) {
-                return false;
-            }
-            if (entity.getRemovalReason() != Entity.RemovalReason.KILLED) {
-                wasDefeated = false;
-            }
-            return true;
-        });
+        if (shouldDespawnAfterTargetDeath()) {
+            discard();
+            return false;
+        }
+
+        members.removeIf(this::removeInactiveMember);
 
         if (members.isEmpty()) {
-            if (wasDefeated) {
+            if (hasPlayerKill) {
                 awardWaveCompletion();
             }
             bossEvent.removeAllPlayers();
@@ -86,6 +97,24 @@ public class ActiveHorde {
         bossEvent.setProgress((float) members.size() / initialMembers);
 
         return true;
+    }
+
+    private boolean removeInactiveMember(UUID uuid) {
+        Entity entity = level.getEntity(uuid);
+        if (entity == null) {
+            return true;
+        }
+
+        if (entity instanceof LivingEntity living) {
+            if (!living.isDeadOrDying() && !living.isRemoved()) {
+                return false;
+            }
+
+            hasPlayerKill |= living.isDeadOrDying() && living.getKillCredit() instanceof ServerPlayer;
+            return true;
+        }
+
+        return entity.isRemoved() || !entity.isAlive();
     }
 
     public void discard() {
@@ -107,6 +136,7 @@ public class ActiveHorde {
         ServerPlayer target = level.getServer().getPlayerList().getPlayer(targetId);
         if (target != null) {
             ImmersivePillagersStats.awardWaveDefeated(target, type);
+            target.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.MASTER, 1.0f, 1.0f);
         }
     }
 }

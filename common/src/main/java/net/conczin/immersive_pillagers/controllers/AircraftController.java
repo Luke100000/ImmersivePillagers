@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class AircraftController {
     private static final Random RANDOM = new Random();
-    private static final float INACCURACY = 0.5f;
+    private static final float INACCURACY = 1.0f;
     public static final ResourceLocation WEAPON = new ResourceLocation("immersive_aircraft", "rotary_cannon");
 
     private static float random(float scale) {
@@ -68,6 +68,6 @@ public class AircraftController {
     }
 
     private static float randomizeHeight(VehicleEntity vehicle) {
-        return (float) ((vehicle.getId() * 0.7 % 1.0) * 4.0 + 2.0);
+        return (float) ((vehicle.getId() * 0.7 % 1.0) * 4.0 + 1.0);
     }
 }
