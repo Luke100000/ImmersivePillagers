@@ -12,5 +12,11 @@
   "horde.immersive_pillagers.camel": "Camel Raiders",
   "horde.immersive_pillagers.boat": "Boat Raiders",
   "horde.immersive_pillagers.horse": "Horse Raiders",
-  "horde.immersive_pillagers.spider": "Spider Raiders"
+  "horde.immersive_pillagers.spider": "Spider Raiders",
+
+  "itemGroup.immersive_pillagers": "Immersive Pillagers",
+
+  "item.immersive_pillagers.rusty_key": "Rusty Key",
+  "item.immersive_pillagers.wanted_poster": "Wanted Poster",
+  "item.immersive_pillagers.raiders_horn": "Raider's Horn"
 }
