@@ -121,7 +121,11 @@ public class ActiveHorde {
         for (UUID uuid : members) {
             Entity entity = level.getEntity(uuid);
             if (entity != null) {
+                Entity vehicle = entity.getVehicle();
                 entity.discard();
+                if (vehicle != null) {
+                    vehicle.discard();
+                }
             }
         }
         members.clear();

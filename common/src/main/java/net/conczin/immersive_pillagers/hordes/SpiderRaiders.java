@@ -35,7 +35,6 @@ public class SpiderRaiders {
             if (target != null) {
                 crew.forEach(raider -> raider.setTarget(target));
             }
-            members.add(entity);
             members.addAll(crew);
         }
         if (members.isEmpty()) {

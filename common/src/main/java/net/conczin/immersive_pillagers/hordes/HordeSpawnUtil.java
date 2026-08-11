@@ -101,7 +101,7 @@ public class HordeSpawnUtil {
         return crew;
     }
 
-    public static List<Entity> spawnPillagerVehicleGroup(ServerLevel level, Entity vehicle, Vec3 spawnPos, int seats, @Nullable ServerPlayer target, String hordeType) {
+    public static List<Raider> spawnPillagerVehicleGroup(ServerLevel level, Entity vehicle, Vec3 spawnPos, int seats, @Nullable ServerPlayer target, String hordeType) {
         placeRandomly(level, vehicle, spawnPos);
         markTransient(vehicle);
         level.addFreshEntity(vehicle);
@@ -111,10 +111,7 @@ public class HordeSpawnUtil {
             crew.forEach(raider -> raider.setTarget(target));
         }
 
-        List<Entity> members = new ArrayList<>();
-        members.add(vehicle);
-        members.addAll(crew);
-        return members;
+        return crew;
     }
 
     public static List<Raider> addVindicatorCrew(ServerLevel level, Entity vehicle, int seats) {
