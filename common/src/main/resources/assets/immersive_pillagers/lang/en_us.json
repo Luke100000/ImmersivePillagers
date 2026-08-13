@@ -13,6 +13,9 @@
   "horde.immersive_pillagers.boat": "Boat Raiders",
   "horde.immersive_pillagers.horse": "Horse Raiders",
   "horde.immersive_pillagers.spider": "Spider Raiders",
+  
+  "entity.immersive_pillagers.undead_pillager": "Undead Pillager",
+  "entity.immersive_pillagers.undead_evoker": "Undead Evoker",
 
   "itemGroup.immersive_pillagers": "Immersive Pillagers",
 

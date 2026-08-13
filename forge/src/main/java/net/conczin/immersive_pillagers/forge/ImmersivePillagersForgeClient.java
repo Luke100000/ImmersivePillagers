@@ -1,9 +1,13 @@
 package net.conczin.immersive_pillagers.forge;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
+import net.conczin.immersive_pillagers.ImmersivePillagersEntities;
 import net.conczin.immersive_pillagers.client.ClientHandlerImpl;
+import net.conczin.immersive_pillagers.client.UndeadEvokerRenderer;
+import net.conczin.immersive_pillagers.client.UndeadPillagerRenderer;
 import net.conczin.immersive_pillagers.network.ClientHandler;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -13,5 +17,11 @@ public final class ImmersivePillagersForgeClient {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         ClientHandler.setInstance(new ClientHandlerImpl());
+    }
+
+    @SubscribeEvent
+    public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ImmersivePillagersEntities.UNDEAD_PILLAGER.get(), UndeadPillagerRenderer::new);
+        event.registerEntityRenderer(ImmersivePillagersEntities.UNDEAD_EVOKER.get(), UndeadEvokerRenderer::new);
     }
 }

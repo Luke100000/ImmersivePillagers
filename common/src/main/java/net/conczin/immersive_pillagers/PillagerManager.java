@@ -2,6 +2,7 @@ package net.conczin.immersive_pillagers;
 
 import immersive_aircraft.entity.VehicleEntity;
 import net.conczin.immersive_pillagers.config.Config;
+import net.conczin.immersive_pillagers.entity.UndeadPillager;
 import net.conczin.immersive_pillagers.hordes.*;
 import net.conczin.immersive_pillagers.network.Handler;
 import net.conczin.immersive_pillagers.network.packet.OpenWantedPosterPacket;
@@ -16,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
@@ -163,5 +165,13 @@ public class PillagerManager {
 
     public static boolean canTurnOnEngine(VehicleEntity vehicleEntity) {
         return vehicleEntity.getControllingPassenger() instanceof Pillager;
+    }
+
+    public static void onPillagerKilled(LivingEntity killed, Entity killer) {
+        if (killer instanceof ServerPlayer player && killed instanceof Pillager && !(killed instanceof UndeadPillager)) {
+            if (PlayerHordeData.get(player).markPillagerKilled()) {
+                player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
+            }
+        }
     }
 }

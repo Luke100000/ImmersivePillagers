@@ -3,10 +3,6 @@ package net.conczin.immersive_pillagers.forge;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.ImmersivePillagersCommands;
 import net.conczin.immersive_pillagers.PillagerManager;
-import net.conczin.immersive_pillagers.player.PlayerHordeData;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.monster.Pillager;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -29,10 +25,6 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof Pillager && event.getSource().getEntity() instanceof ServerPlayer player) {
-            if (PlayerHordeData.get(player).markPillagerKilled()) {
-                player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
-            }
-        }
+        PillagerManager.onPillagerKilled(event.getEntity(), event.getSource().getEntity());
     }
 }
