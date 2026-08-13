@@ -39,6 +39,7 @@ public class PillagerManager {
     public static final String HORDE_BOAT = registerHorde("boat", BoatRaiders::spawn);
     public static final String HORDE_HORSE = registerHorde("horse", HorseRaiders::spawn);
     public static final String HORDE_SPIDER = registerHorde("spider", SpiderRaiders::spawn);
+    public static final String HORDE_UNDEAD = registerHorde("undead", UndeadRaiders::spawn);
 
     public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty) {
         HordeSpawner spawner = HORDES.get(horde);

@@ -1,6 +1,7 @@
 package net.conczin.immersive_pillagers.hordes;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
+import net.conczin.immersive_pillagers.ImmersivePillagersEntities;
 import net.conczin.immersive_pillagers.compat.ImmersiveMelodiesCompat;
 import net.conczin.immersive_pillagers.controllers.PillagerCombat;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.raid.Raider;
@@ -24,6 +26,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.jetbrains.annotations.Nullable;
 
 public class HordeSpawnUtil {
@@ -101,6 +104,30 @@ public class HordeSpawnUtil {
         return crew;
     }
 
+    public static List<Raider> addUndeadCrew(ServerLevel level, Entity vehicle, int seats) {
+        List<Raider> crew = new ArrayList<>();
+        for (int i = 0; i < seats; i++) {
+            Raider raider;
+            if (level.random.nextFloat() < 0.2f) {
+                raider = ImmersivePillagersEntities.UNDEAD_EVOKER.get().create(level);
+            } else {
+                raider = ImmersivePillagersEntities.UNDEAD_PILLAGER.get().create(level);
+            }
+
+            if (raider == null) {
+                continue;
+            }
+
+            addRaiderToVehicle(level, vehicle, raider);
+            if (raider instanceof Pillager pillager) {
+                PillagerCombat.setCrossbowAttackRange(pillager, 16.0f);
+                pillager.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CROSSBOW));
+            }
+            crew.add(raider);
+        }
+        return crew;
+    }
+
     public static List<Raider> spawnPillagerVehicleGroup(ServerLevel level, Entity vehicle, Vec3 spawnPos, int seats, @Nullable ServerPlayer target, String hordeType) {
         placeRandomly(level, vehicle, spawnPos);
         markTransient(vehicle);
@@ -143,6 +170,10 @@ public class HordeSpawnUtil {
         Camel camel = new Camel(EntityType.CAMEL, level);
         camel.equipSaddle(null);
         return camel;
+    }
+
+    public static SkeletonHorse createSkeletonHorse(ServerLevel level) {
+        return new SkeletonHorse(EntityType.SKELETON_HORSE, level);
     }
 
     public static int getVehicleGroupCount(ServerLevel level, int difficulty) {
