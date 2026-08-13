@@ -1,6 +1,7 @@
 package net.conczin.immersive_pillagers.fabric;
 
 import net.conczin.immersive_pillagers.*;
+import net.conczin.immersive_pillagers.compat.AircraftCompat;
 import net.conczin.immersive_pillagers.entity.UndeadEvoker;
 import net.conczin.immersive_pillagers.entity.UndeadPillager;
 import net.conczin.immersive_pillagers.entity.UndeadVindicator;
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -19,6 +21,9 @@ public class ImmersivePillagersFabric implements ModInitializer {
         new NetworkingImpl();
 
         ImmersivePillagers.init();
+        if (FabricLoader.getInstance().isModLoaded("immersive_aircraft")) {
+            AircraftCompat.register();
+        }
         Networking.initialize();
         ImmersivePillagersStats.init();
 

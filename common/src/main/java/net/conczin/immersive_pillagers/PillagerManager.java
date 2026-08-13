@@ -1,6 +1,5 @@
 package net.conczin.immersive_pillagers;
 
-import immersive_aircraft.entity.VehicleEntity;
 import net.conczin.immersive_pillagers.config.Config;
 import net.conczin.immersive_pillagers.entity.UndeadPillager;
 import net.conczin.immersive_pillagers.hordes.*;
@@ -34,7 +33,7 @@ public class PillagerManager {
         return name;
     }
 
-    public static final String HORDE_GYRODYNE = registerHorde("gyrodyne", AirborneRaiders::spawn);
+    public static final String HORDE_GYRODYNE = "gyrodyne";
     public static final String HORDE_CAMEL = registerHorde("camel", CamelRaiders::spawn);
     public static final String HORDE_BOAT = registerHorde("boat", BoatRaiders::spawn);
     public static final String HORDE_HORSE = registerHorde("horse", HorseRaiders::spawn);
@@ -162,10 +161,6 @@ public class PillagerManager {
 
     public static @NotNull Optional<? extends Player> getClosestPlayer(Entity entity) {
         return entity.level().players().stream().min((a, b) -> (int) (a.distanceToSqr(entity) - b.distanceToSqr(entity)));
-    }
-
-    public static boolean canTurnOnEngine(VehicleEntity vehicleEntity) {
-        return vehicleEntity.getControllingPassenger() instanceof Pillager;
     }
 
     public static void onPillagerKilled(LivingEntity killed, Entity killer) {

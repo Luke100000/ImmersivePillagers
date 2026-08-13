@@ -29,7 +29,14 @@ side = "BOTH"
 
 [[dependencies.immersive_pillagers]]
 modId = "immersive_aircraft"
-mandatory = true
+mandatory = false
 versionRange = "${immersive_aircraft_version_range}"
-ordering = "NONE"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.immersive_pillagers]]
+modId = "immersive_melodies"
+mandatory = false
+versionRange = "[0,)"
+ordering = "AFTER"
 side = "BOTH"

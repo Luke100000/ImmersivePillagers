@@ -1,11 +1,13 @@
 package net.conczin.immersive_pillagers.forge;
 
 import net.conczin.immersive_pillagers.*;
+import net.conczin.immersive_pillagers.compat.AircraftCompat;
 import net.conczin.immersive_pillagers.entity.UndeadEvoker;
 import net.conczin.immersive_pillagers.entity.UndeadPillager;
 import net.conczin.immersive_pillagers.entity.UndeadVindicator;
 import net.conczin.immersive_pillagers.network.Networking;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
@@ -20,6 +22,9 @@ public class ImmersivePillagersForge {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ImmersivePillagersForge::register);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ImmersivePillagersForge::registerAttributes);
         ImmersivePillagers.init();
+        if (ModList.get().isLoaded("immersive_aircraft")) {
+            AircraftCompat.register();
+        }
         Networking.initialize();
     }
 

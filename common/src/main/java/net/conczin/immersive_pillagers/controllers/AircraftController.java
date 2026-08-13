@@ -27,7 +27,8 @@ public class AircraftController {
         return (RANDOM.nextFloat() - 0.5f) * scale;
     }
 
-    public static void tickPilot(VehicleEntity vehicle) {
+    public static void tickPilot(Object vehicleObject) {
+        VehicleEntity vehicle = (VehicleEntity) vehicleObject;
         if (vehicle instanceof GyrodyneEntity gyrodyne) {
             gyrodyne.setEngineTarget(1.0f);
         }

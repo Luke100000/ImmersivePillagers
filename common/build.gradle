@@ -7,8 +7,7 @@ dependencies {
     // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
-    modImplementation("net.conczin:immersive_aircraft:${immersive_aircraft_version}+common")
-    modImplementation("net.conczin:immersive_melodies:${immersive_melodies_version}+common")
+    modCompileOnly("net.conczin:immersive_aircraft:${immersive_aircraft_version}+common")
 }
 
 publishing {
