@@ -2,9 +2,7 @@ package net.conczin.immersive_pillagers.forge;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.ImmersivePillagersEntities;
-import net.conczin.immersive_pillagers.client.ClientHandlerImpl;
-import net.conczin.immersive_pillagers.client.UndeadEvokerRenderer;
-import net.conczin.immersive_pillagers.client.UndeadPillagerRenderer;
+import net.conczin.immersive_pillagers.client.*;
 import net.conczin.immersive_pillagers.network.ClientHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -23,5 +21,10 @@ public final class ImmersivePillagersForgeClient {
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ImmersivePillagersEntities.UNDEAD_PILLAGER.get(), UndeadPillagerRenderer::new);
         event.registerEntityRenderer(ImmersivePillagersEntities.UNDEAD_EVOKER.get(), UndeadEvokerRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(UndeadModelLayers.UNDEAD_ILLAGER, UndeadIllagerModel::createBodyLayer);
     }
 }
