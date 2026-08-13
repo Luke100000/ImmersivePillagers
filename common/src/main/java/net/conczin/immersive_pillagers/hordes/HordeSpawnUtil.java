@@ -108,8 +108,11 @@ public class HordeSpawnUtil {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
             Raider raider;
-            if (level.random.nextFloat() < 0.2f) {
+            float rand = level.random.nextFloat();
+            if (rand < 0.2f) {
                 raider = ImmersivePillagersEntities.UNDEAD_EVOKER.get().create(level);
+            } else if (rand < 0.5f) {
+                raider = ImmersivePillagersEntities.UNDEAD_VINDICATOR.get().create(level);
             } else {
                 raider = ImmersivePillagersEntities.UNDEAD_PILLAGER.get().create(level);
             }
@@ -122,6 +125,9 @@ public class HordeSpawnUtil {
             if (raider instanceof Pillager pillager) {
                 PillagerCombat.setCrossbowAttackRange(pillager, 16.0f);
                 pillager.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CROSSBOW));
+            }
+            if (raider instanceof Vindicator vindicator) {
+                vindicator.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
             }
             crew.add(raider);
         }

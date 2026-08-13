@@ -3,17 +3,15 @@ package net.conczin.immersive_pillagers.fabric;
 import net.conczin.immersive_pillagers.*;
 import net.conczin.immersive_pillagers.entity.UndeadEvoker;
 import net.conczin.immersive_pillagers.entity.UndeadPillager;
+import net.conczin.immersive_pillagers.entity.UndeadVindicator;
 import net.conczin.immersive_pillagers.network.Networking;
-import net.conczin.immersive_pillagers.player.PlayerHordeData;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.monster.Pillager;
 
 public class ImmersivePillagersFabric implements ModInitializer {
     @Override
@@ -30,6 +28,7 @@ public class ImmersivePillagersFabric implements ModInitializer {
 
         FabricDefaultAttributeRegistry.register(ImmersivePillagersEntities.UNDEAD_PILLAGER.get(), UndeadPillager.createAttributes());
         FabricDefaultAttributeRegistry.register(ImmersivePillagersEntities.UNDEAD_EVOKER.get(), UndeadEvoker.createAttributes());
+        FabricDefaultAttributeRegistry.register(ImmersivePillagersEntities.UNDEAD_VINDICATOR.get(), UndeadVindicator.createAttributes());
 
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ImmersivePillagers.locate("main"), ImmersivePillagersItems.CREATIVE_TAB.get());
 

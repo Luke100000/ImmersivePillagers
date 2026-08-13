@@ -22,12 +22,12 @@ public class UndeadIllagerModel<T extends AbstractIllager> extends IllagerModel<
         arms.addOrReplaceChild("left_shoulder", CubeListBuilder.create().texOffs(44, 22).mirror().addBox(4.0f, -2.0f, -2.0f, 4.0f, 8.0f, 4.0f), PartPose.ZERO);
         partDefinition.addOrReplaceChild("right_leg", CubeListBuilder.create()
                         .texOffs(0, 22).addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f)
-                        .texOffs(46, 24).addBox(-1.0f, 0.0f, -1.0f, 2.0f, 12.0f, 2.0f),
+                        .texOffs(56, 0).addBox(-1.0f, 0.0f, -1.0f, 2.0f, 12.0f, 2.0f),
                 PartPose.offset(-2.0f, 12.0f, 0.0f));
 
         partDefinition.addOrReplaceChild("left_leg", CubeListBuilder.create()
                         .texOffs(0, 22).mirror().addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f)
-                        .texOffs(46, 24).addBox(-1.0f, 0.0f, -1.0f, 2.0f, 12.0f, 2.0f),
+                        .texOffs(56, 0).addBox(-1.0f, 0.0f, -1.0f, 2.0f, 12.0f, 2.0f),
                 PartPose.offset(2.0f, 12.0f, 0.0f));
 
         partDefinition.addOrReplaceChild("right_arm", CubeListBuilder.create()

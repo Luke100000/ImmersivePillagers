@@ -14,6 +14,7 @@ public final class ImmersivePillagersFabricClient implements ClientModInitialize
 
         EntityRendererRegistry.register(ImmersivePillagersEntities.UNDEAD_PILLAGER.get(), UndeadPillagerRenderer::new);
         EntityRendererRegistry.register(ImmersivePillagersEntities.UNDEAD_EVOKER.get(), UndeadEvokerRenderer::new);
+        EntityRendererRegistry.register(ImmersivePillagersEntities.UNDEAD_VINDICATOR.get(), UndeadVindicatorRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(UndeadModelLayers.UNDEAD_ILLAGER, UndeadIllagerModel::createBodyLayer);
     }

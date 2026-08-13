@@ -21,6 +21,7 @@ public final class ImmersivePillagersForgeClient {
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ImmersivePillagersEntities.UNDEAD_PILLAGER.get(), UndeadPillagerRenderer::new);
         event.registerEntityRenderer(ImmersivePillagersEntities.UNDEAD_EVOKER.get(), UndeadEvokerRenderer::new);
+        event.registerEntityRenderer(ImmersivePillagersEntities.UNDEAD_VINDICATOR.get(), UndeadVindicatorRenderer::new);
     }
 
     @SubscribeEvent

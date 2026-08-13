@@ -14,6 +14,10 @@ public class ImmersivePillagersSounds {
     public static final SoundEvent UNDEAD_EVOKER_HURT = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("entity.undead_evoker.hurt"));
     public static final SoundEvent UNDEAD_EVOKER_DEATH = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("entity.undead_evoker.death"));
 
+    public static final SoundEvent UNDEAD_VINDICATOR_AMBIENT = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("entity.undead_vindicator.ambient"));
+    public static final SoundEvent UNDEAD_VINDICATOR_HURT = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("entity.undead_vindicator.hurt"));
+    public static final SoundEvent UNDEAD_VINDICATOR_DEATH = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("entity.undead_vindicator.death"));
+
     public static void register(BiConsumer<ResourceLocation, SoundEvent> registrar) {
         registrar.accept(ImmersivePillagers.locate("entity.undead_pillager.ambient"), UNDEAD_PILLAGER_AMBIENT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_pillager.hurt"), UNDEAD_PILLAGER_HURT);
@@ -22,5 +26,9 @@ public class ImmersivePillagersSounds {
         registrar.accept(ImmersivePillagers.locate("entity.undead_evoker.ambient"), UNDEAD_EVOKER_AMBIENT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_evoker.hurt"), UNDEAD_EVOKER_HURT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_evoker.death"), UNDEAD_EVOKER_DEATH);
+
+        registrar.accept(ImmersivePillagers.locate("entity.undead_vindicator.ambient"), UNDEAD_VINDICATOR_AMBIENT);
+        registrar.accept(ImmersivePillagers.locate("entity.undead_vindicator.hurt"), UNDEAD_VINDICATOR_HURT);
+        registrar.accept(ImmersivePillagers.locate("entity.undead_vindicator.death"), UNDEAD_VINDICATOR_DEATH);
     }
 }
