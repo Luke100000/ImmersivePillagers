@@ -1,0 +1,7 @@
+{
+  "block.reinforced_chest.unlock": {
+    "sounds": [
+      "immersive_pillagers:block/reinforced_chest_unlock"
+    ]
+  }
+}

@@ -18,6 +18,8 @@ public class ImmersivePillagersSounds {
     public static final SoundEvent UNDEAD_VINDICATOR_HURT = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("entity.undead_vindicator.hurt"));
     public static final SoundEvent UNDEAD_VINDICATOR_DEATH = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("entity.undead_vindicator.death"));
 
+    public static final SoundEvent REINFORCED_CHEST_UNLOCK = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("block.reinforced_chest.unlock"));
+
     public static void register(BiConsumer<ResourceLocation, SoundEvent> registrar) {
         registrar.accept(ImmersivePillagers.locate("entity.undead_pillager.ambient"), UNDEAD_PILLAGER_AMBIENT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_pillager.hurt"), UNDEAD_PILLAGER_HURT);
@@ -30,5 +32,7 @@ public class ImmersivePillagersSounds {
         registrar.accept(ImmersivePillagers.locate("entity.undead_vindicator.ambient"), UNDEAD_VINDICATOR_AMBIENT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_vindicator.hurt"), UNDEAD_VINDICATOR_HURT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_vindicator.death"), UNDEAD_VINDICATOR_DEATH);
+
+        registrar.accept(ImmersivePillagers.locate("block.reinforced_chest.unlock"), REINFORCED_CHEST_UNLOCK);
     }
 }

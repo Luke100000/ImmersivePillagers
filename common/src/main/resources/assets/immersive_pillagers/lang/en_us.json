@@ -26,6 +26,8 @@
   "item.immersive_pillagers.wanted_poster.tooltip": "Send bounty hunters after another player—or buy yourself peace.",
   "item.immersive_pillagers.raiders_horn": "Raider's Horn",
 
+  "block.immersive_pillagers.reinforced_chest": "Reinforced Chest",
+
   "gui.immersive_pillagers.wanted_poster": "Wanted Players",
   "gui.immersive_pillagers.add_bounty": "Add Bounty",
   "gui.immersive_pillagers.pardon": "Pardon",

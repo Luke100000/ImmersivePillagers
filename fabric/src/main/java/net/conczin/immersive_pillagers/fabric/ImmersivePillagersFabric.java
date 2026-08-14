@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,6 +28,11 @@ public class ImmersivePillagersFabric implements ModInitializer {
         Networking.initialize();
         ImmersivePillagersStats.init();
 
+        ImmersivePillagersBlocks.register((id, block) -> Registry.register(BuiltInRegistries.BLOCK, id, block));
+        ImmersivePillagersBlockEntities.register(
+                (id, type) -> Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, type),
+                (factory, blocks) -> FabricBlockEntityTypeBuilder.create(factory::create, blocks).build()
+        );
         ImmersivePillagersItems.register((id, item) -> Registry.register(BuiltInRegistries.ITEM, id, item));
         ImmersivePillagersEntities.register((id, type) -> Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type));
         ImmersivePillagersSounds.register((id, sound) -> Registry.register(BuiltInRegistries.SOUND_EVENT, id, sound));

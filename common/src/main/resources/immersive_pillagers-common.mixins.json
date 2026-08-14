@@ -7,6 +7,9 @@
     "AbstractHorseMixin", "BoatControllerMixin", "EntityPersistenceMixin", "HorseControllerMixin", "PillagerMixin",
     "SpiderControllerMixin", "VehicleEntityMixin"
   ],
+  "client": [
+    "BlockEntityWithoutLevelRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

@@ -11,10 +11,11 @@ public class ImmersivePillagers {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static void init() {
+        //noinspection ResultOfMethodCallIgnored
         Config.getInstance();
     }
 
-    public static ResourceLocation locate(String rideOfTheValkyries) {
-        return new ResourceLocation(MOD_ID, rideOfTheValkyries);
+    public static ResourceLocation locate(String name) {
+        return new ResourceLocation(MOD_ID, name);
     }
 }
