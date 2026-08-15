@@ -1,6 +1,7 @@
 package net.conczin.immersive_pillagers;
 
 import com.google.common.base.Suppliers;
+import net.conczin.immersive_pillagers.item.RustyKeyItem;
 import net.conczin.immersive_pillagers.item.WantedPosterItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public final class ImmersivePillagersItems {
-    public static final Supplier<Item> RUSTY_KEY = item();
+    public static final Supplier<Item> RUSTY_KEY = Suppliers.memoize(() -> new RustyKeyItem(new Item.Properties()));
     public static final Supplier<Item> WANTED_POSTER = Suppliers.memoize(() -> new WantedPosterItem(new Item.Properties()));
     public static final Supplier<Item> RAIDERS_HORN = item();
     public static final Supplier<Item> REINFORCED_CHEST = Suppliers.memoize(() -> new BlockItem(ImmersivePillagersBlocks.REINFORCED_CHEST.get(), new Item.Properties()));

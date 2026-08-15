@@ -22,6 +22,7 @@
   "itemGroup.immersive_pillagers": "Immersive Pillagers",
 
   "item.immersive_pillagers.rusty_key": "Rusty Key",
+  "item.immersive_pillagers.rusty_key.tooltip": "Perhaps it still opens a raider's hidden cache?",
   "item.immersive_pillagers.wanted_poster": "Wanted Poster",
   "item.immersive_pillagers.wanted_poster.tooltip": "Send bounty hunters after another player—or buy yourself peace.",
   "item.immersive_pillagers.raiders_horn": "Raider's Horn",
