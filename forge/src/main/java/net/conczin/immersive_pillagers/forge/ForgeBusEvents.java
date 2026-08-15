@@ -25,6 +25,6 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-        PillagerManager.onPillagerKilled(event.getEntity(), event.getSource().getEntity());
+        PillagerManager.onLivingEntityKilled(event.getEntity(), event.getSource().getEntity());
     }
 }

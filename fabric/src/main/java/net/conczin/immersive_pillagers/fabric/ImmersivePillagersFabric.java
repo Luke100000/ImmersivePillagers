@@ -45,6 +45,6 @@ public class ImmersivePillagersFabric implements ModInitializer {
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> ImmersivePillagersCommands.register(dispatcher));
         ServerTickEvents.END_SERVER_TICK.register(PillagerManager::tick);
-        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, killer, killedEntity) -> PillagerManager.onPillagerKilled(killedEntity, killer));
+        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, killer, killedEntity) -> PillagerManager.onLivingEntityKilled(killedEntity, killer));
     }
 }

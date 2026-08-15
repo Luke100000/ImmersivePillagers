@@ -1,5 +1,10 @@
 {
   "parent": "minecraft:story/root",
+  "rewards": {
+    "recipes": [
+      "immersive_pillagers:crude_totem_of_undying"
+    ]
+  },
   "display": {
     "icon": {
       "item": "immersive_pillagers:research_note"

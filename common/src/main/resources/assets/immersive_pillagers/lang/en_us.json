@@ -26,6 +26,8 @@
   "item.immersive_pillagers.wanted_poster": "Wanted Poster",
   "item.immersive_pillagers.wanted_poster.tooltip": "Send bounty hunters after another player—or buy yourself peace.",
   "item.immersive_pillagers.research_note": "Illager Research Note",
+  "item.immersive_pillagers.crude_totem_of_undying": "Crude Totem of Undying",
+  "item.immersive_pillagers.crude_totem_of_undying.tooltip": "Kill a humanoid while offhanding the totem to charge it.",
   "item.immersive_pillagers.raiders_horn": "Raider's Horn",
 
   "advancement.immersive_pillagers.illager_literacy": "Illager Literacy",

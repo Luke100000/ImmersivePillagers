@@ -13,12 +13,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -163,10 +167,18 @@ public class PillagerManager {
         return entity.level().players().stream().min((a, b) -> (int) (a.distanceToSqr(entity) - b.distanceToSqr(entity)));
     }
 
-    public static void onPillagerKilled(LivingEntity killed, Entity killer) {
-        if (killer instanceof ServerPlayer player && killed instanceof Pillager && !(killed instanceof UndeadPillager)) {
-            if (PlayerHordeData.get(player).markPillagerKilled()) {
-                player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
+    public static void onLivingEntityKilled(LivingEntity killed, Entity killer) {
+        if (killer instanceof ServerPlayer player) {
+            if (killed instanceof Pillager && !(killed instanceof UndeadPillager)) {
+                if (PlayerHordeData.get(player).markPillagerKilled()) {
+                    player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
+                }
+            }
+
+            ItemStack offhand = player.getOffhandItem();
+            if (killed.getType().is(ImmersivePillagers.HUMANOID_ENTITY_TYPES) && offhand.is(ImmersivePillagersItems.CRUDE_TOTEM_OF_UNDYING.get())) {
+                player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(Items.TOTEM_OF_UNDYING));
+                killed.level().playSound(null, killed.getX(), killed.getY(), killed.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 0.8F);
             }
         }
     }
