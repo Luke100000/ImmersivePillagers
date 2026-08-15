@@ -1,0 +1,20 @@
+{
+  "parent": "immersive_pillagers:research/illager_literacy",
+  "display": {
+    "icon": {
+      "item": "minecraft:totem_of_undying"
+    },
+    "title": {
+      "translate": "advancement.immersive_pillagers.crude_totem_awakened"
+    },
+    "description": {
+      "translate": "advancement.immersive_pillagers.crude_totem_awakened.description"
+    },
+    "frame": "task"
+  },
+  "criteria": {
+    "charged": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

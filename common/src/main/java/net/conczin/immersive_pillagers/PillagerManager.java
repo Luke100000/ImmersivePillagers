@@ -7,9 +7,11 @@ import net.conczin.immersive_pillagers.network.Handler;
 import net.conczin.immersive_pillagers.network.packet.OpenWantedPosterPacket;
 import net.conczin.immersive_pillagers.network.packet.WantedPosterActionPacket;
 import net.conczin.immersive_pillagers.player.PlayerHordeData;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,6 +33,8 @@ import java.util.*;
 public class PillagerManager {
     private static final Map<String, HordeSpawner> HORDES = new HashMap<>();
     private static final Map<UUID, ActiveHorde> ACTIVE_HORDES = new HashMap<>();
+
+    private static final ResourceLocation CRUDE_TOTEM_AWAKENED_ADVANCEMENT = ImmersivePillagers.locate("research/crude_totem_awakened");
 
     public static String registerHorde(String name, HordeSpawner horde) {
         HORDES.put(name, horde);
@@ -179,7 +183,19 @@ public class PillagerManager {
             if (killed.getType().is(ImmersivePillagers.HUMANOID_ENTITY_TYPES) && offhand.is(ImmersivePillagersItems.CRUDE_TOTEM_OF_UNDYING.get())) {
                 player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(Items.TOTEM_OF_UNDYING));
                 killed.level().playSound(null, killed.getX(), killed.getY(), killed.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 0.8F);
+                awardCrudeTotemAwakened(player);
             }
+        }
+    }
+
+    private static void awardCrudeTotemAwakened(ServerPlayer player) {
+        MinecraftServer server = player.getServer();
+        if (server == null) {
+            return;
+        }
+        Advancement advancement = server.getAdvancements().getAdvancement(CRUDE_TOTEM_AWAKENED_ADVANCEMENT);
+        if (advancement != null) {
+            player.getAdvancements().award(advancement, "charged");
         }
     }
 }

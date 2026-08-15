@@ -32,6 +32,8 @@
 
   "advancement.immersive_pillagers.illager_literacy": "Illager Literacy",
   "advancement.immersive_pillagers.illager_literacy.description": "Collect all illager research documents to obtain illager literacy.",
+  "advancement.immersive_pillagers.crude_totem_awakened": "Soulbound",
+  "advancement.immersive_pillagers.crude_totem_awakened.description": "Awaken a crude totem with a humanoid soul.",
 
   "block.immersive_pillagers.reinforced_chest": "Reinforced Chest",
 
