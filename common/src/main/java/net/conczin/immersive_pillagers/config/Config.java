@@ -12,5 +12,6 @@ public final class Config extends JsonConfig {
 
     public long ticksBetweenWaves = 24000L * 10L;
     public double baseDifficultyFactor = 2.0;
+    public double warHordeDifficultyMultiplier = 5.0;
     public boolean allowPlayerBounties = true;
 }

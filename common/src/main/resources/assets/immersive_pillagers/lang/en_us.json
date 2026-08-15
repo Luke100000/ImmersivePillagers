@@ -29,6 +29,7 @@
   "item.immersive_pillagers.crude_totem_of_undying": "Crude Totem of Undying",
   "item.immersive_pillagers.crude_totem_of_undying.tooltip": "Kill a humanoid while offhanding the totem to charge it.",
   "item.immersive_pillagers.raiders_horn": "Raider's Horn",
+  "item.immersive_pillagers.raiders_horn.tooltip": "Call a devastating war horde to cleanse this region once and for all.",
 
   "advancement.immersive_pillagers.illager_literacy": "Illager Literacy",
   "advancement.immersive_pillagers.illager_literacy.description": "Collect all illager research documents to obtain illager literacy.",

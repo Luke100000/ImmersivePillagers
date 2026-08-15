@@ -2,6 +2,7 @@ package net.conczin.immersive_pillagers;
 
 import com.google.common.base.Suppliers;
 import net.conczin.immersive_pillagers.item.ResearchNoteItem;
+import net.conczin.immersive_pillagers.item.RaidersHornItem;
 import net.conczin.immersive_pillagers.item.TooltippedItem;
 import net.conczin.immersive_pillagers.item.WantedPosterItem;
 import net.minecraft.network.chat.Component;
@@ -19,7 +20,7 @@ public final class ImmersivePillagersItems {
     public static final Supplier<Item> WANTED_POSTER = Suppliers.memoize(() -> new WantedPosterItem(new Item.Properties()));
     public static final Supplier<Item> RESEARCH_NOTE = Suppliers.memoize(() -> new ResearchNoteItem(new Item.Properties().stacksTo(1)));
     public static final Supplier<Item> CRUDE_TOTEM_OF_UNDYING = Suppliers.memoize(() -> new TooltippedItem(new Item.Properties().stacksTo(1), "item.immersive_pillagers.crude_totem_of_undying.tooltip"));
-    public static final Supplier<Item> RAIDERS_HORN = item();
+    public static final Supplier<Item> RAIDERS_HORN = Suppliers.memoize(() -> new RaidersHornItem(new Item.Properties().stacksTo(1).durability(3)));
     public static final Supplier<Item> REINFORCED_CHEST = Suppliers.memoize(() -> new BlockItem(ImmersivePillagersBlocks.REINFORCED_CHEST.get(), new Item.Properties()));
 
     public static final Supplier<CreativeModeTab> CREATIVE_TAB = Suppliers.memoize(() -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
@@ -42,9 +43,5 @@ public final class ImmersivePillagersItems {
         registrar.accept(ImmersivePillagers.locate("crude_totem_of_undying"), CRUDE_TOTEM_OF_UNDYING.get());
         registrar.accept(ImmersivePillagers.locate("raiders_horn"), RAIDERS_HORN.get());
         registrar.accept(ImmersivePillagers.locate("reinforced_chest"), REINFORCED_CHEST.get());
-    }
-
-    private static Supplier<Item> item() {
-        return Suppliers.memoize(() -> new Item(new Item.Properties()));
     }
 }

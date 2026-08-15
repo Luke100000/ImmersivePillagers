@@ -38,8 +38,7 @@ public final class SpawnManager {
             return;
         }
 
-        float localDifficulty = level.getCurrentDifficultyAt(position).getEffectiveDifficulty();
-        int difficulty = Math.max(1, Math.round(localDifficulty * (float) Config.getInstance().baseDifficultyFactor));
+        int difficulty = waveDifficulty(level, position);
         long gameTime = level.getGameTime();
 
         for (String waveType : PillagerManager.getHordeNames()) {
@@ -67,5 +66,10 @@ public final class SpawnManager {
 
     private static TagKey<Biome> biomeTag(String waveType) {
         return TagKey.create(Registries.BIOME, ImmersivePillagers.locate(waveType));
+    }
+
+    public static int waveDifficulty(ServerLevel level, BlockPos position) {
+        float localDifficulty = level.getCurrentDifficultyAt(position).getEffectiveDifficulty();
+        return Math.max(1, Math.round(localDifficulty * (float) Config.getInstance().baseDifficultyFactor));
     }
 }

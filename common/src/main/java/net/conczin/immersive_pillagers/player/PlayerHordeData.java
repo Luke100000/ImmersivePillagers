@@ -2,42 +2,35 @@ package net.conczin.immersive_pillagers.player;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.OptionalLong;
 
 public final class PlayerHordeData extends SavedData {
-    public static final int SPAWN_REGION_SIZE = 256;
-
-    private static final Codec<LongSet> LONG_SET_CODEC = Codec.LONG.listOf().xmap(LongOpenHashSet::new, ArrayList::new);
     private static final String DATA_NAME_PREFIX = ImmersivePillagers.MOD_ID + "_player_horde_";
 
     public static final Codec<PlayerHordeData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("has_killed_pillager", false).forGetter(PlayerHordeData::hasKilledPillager),
-            LONG_SET_CODEC.optionalFieldOf("enabled_spawn_regions", new LongOpenHashSet()).forGetter(PlayerHordeData::enabledSpawnRegions),
             Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("last_raid_times", Map.of()).forGetter(PlayerHordeData::lastRaidTimes)
     ).apply(instance, PlayerHordeData::new));
 
     private boolean hasKilledPillager;
-    private final LongSet enabledSpawnRegions;
     private final Map<String, Long> lastRaidTimes;
 
     public PlayerHordeData() {
-        this(false, new LongOpenHashSet(), Map.of());
+        this(false, Map.of());
     }
 
-    private PlayerHordeData(boolean hasKilledPillager, LongSet enabledSpawnRegions, Map<String, Long> lastRaidTimes) {
+    private PlayerHordeData(boolean hasKilledPillager, Map<String, Long> lastRaidTimes) {
         this.hasKilledPillager = hasKilledPillager;
-        this.enabledSpawnRegions = new LongOpenHashSet(enabledSpawnRegions);
         this.lastRaidTimes = new HashMap<>(lastRaidTimes);
     }
 
@@ -73,24 +66,6 @@ public final class PlayerHordeData extends SavedData {
             hasKilledPillager = false;
             setDirty();
         }
-    }
-
-    public static long spawnRegionKey(BlockPos position) {
-        return ChunkPos.asLong(Math.floorDiv(position.getX(), SPAWN_REGION_SIZE), Math.floorDiv(position.getZ(), SPAWN_REGION_SIZE));
-    }
-
-    public void enableSpawningAt(BlockPos position) {
-        if (enabledSpawnRegions.add(spawnRegionKey(position))) {
-            setDirty();
-        }
-    }
-
-    public boolean isSpawningEnabledAt(BlockPos position) {
-        return enabledSpawnRegions.contains(spawnRegionKey(position));
-    }
-
-    public LongSet enabledSpawnRegions() {
-        return new LongOpenHashSet(enabledSpawnRegions);
     }
 
     public void markRaidStarted(String waveType, long gameTime) {

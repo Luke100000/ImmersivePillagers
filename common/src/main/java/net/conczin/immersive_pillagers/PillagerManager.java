@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -89,6 +90,26 @@ public class PillagerManager {
             addActiveHorde(spawned);
             return true;
         }).orElse(false);
+    }
+
+    public static boolean summonWarHorde(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        if ( level.getDifficulty() == Difficulty.PEACEFUL) {
+            return false;
+        }
+
+        int casualDifficulty = SpawnManager.waveDifficulty(level, player.blockPosition());
+        int difficulty = Math.max(1, Math.round(casualDifficulty * (float) Config.getInstance().warHordeDifficultyMultiplier));
+        List<String> hordeTypes = new ArrayList<>(getHordeNames());
+        while (!hordeTypes.isEmpty()) {
+            String hordeType = hordeTypes.remove(level.random.nextInt(hordeTypes.size()));
+            Optional<ActiveHorde> horde = spawnHorde(hordeType, level, player.blockPosition(), player, difficulty);
+            if (horde.isPresent()) {
+                addActiveHorde(horde.get());
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void openWantedPoster(ServerPlayer viewer, InteractionHand hand) {
