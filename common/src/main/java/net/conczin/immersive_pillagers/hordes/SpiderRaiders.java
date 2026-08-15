@@ -17,7 +17,7 @@ import java.util.Optional;
 public class SpiderRaiders {
     public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target, int difficulty) {
         List<Entity> members = new ArrayList<>();
-        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty);
+        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, HordeSpawnUtil.SINGLE_RIDER_GROUP_FACTOR);
         for (int i = 0; i < groupCount; i++) {
             Spider entity = new Spider(EntityType.SPIDER, level);
             var spawnPos = HordeSpawnUtil.findGroundSpawn(level, pos, entity);

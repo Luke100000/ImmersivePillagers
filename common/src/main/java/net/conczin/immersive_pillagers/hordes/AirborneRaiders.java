@@ -4,6 +4,7 @@ import immersive_aircraft.Entities;
 import immersive_aircraft.data.VehicleDataLoader;
 import immersive_aircraft.entity.GyrodyneEntity;
 import net.conczin.immersive_pillagers.PillagerManager;
+import net.conczin.immersive_pillagers.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +21,7 @@ import static immersive_aircraft.Items.ROTARY_CANNON;
 public class AirborneRaiders {
     public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target, int difficulty) {
         List<Entity> members = new ArrayList<>();
-        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty);
+        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, 0.05);
         for (int i = 0; i < groupCount; i++) {
             GyrodyneEntity entity = new GyrodyneEntity(Entities.GYRODYNE.get(), level);
             var spawnPos = HordeSpawnUtil.findAirSpawn(level, pos, entity);
@@ -28,7 +29,9 @@ public class AirborneRaiders {
                 continue;
             }
 
-            entity.getInventory().setItem(0, new ItemStack(ROTARY_CANNON.get()));
+            if (level.random.nextDouble() < Config.getInstance().rotaryCannonChance) {
+                entity.getInventory().setItem(0, new ItemStack(ROTARY_CANNON.get()));
+            }
 
             int seats = VehicleDataLoader.get(entity.identifier).getPassengerPositions().size();
             members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), seats, target, PillagerManager.HORDE_GYRODYNE));

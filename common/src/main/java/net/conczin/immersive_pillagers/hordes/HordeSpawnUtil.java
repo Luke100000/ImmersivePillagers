@@ -3,6 +3,7 @@ package net.conczin.immersive_pillagers.hordes;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.ImmersivePillagersEntities;
 import net.conczin.immersive_pillagers.compat.ImmersiveMelodiesCompat;
+import net.conczin.immersive_pillagers.config.Config;
 import net.conczin.immersive_pillagers.controllers.PillagerCombat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -22,17 +23,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.jetbrains.annotations.Nullable;
-
 public class HordeSpawnUtil {
     private static final int ATTEMPTS = 16;
     private static final int MIN_DISTANCE = 16;
     private static final int RANGE = 24;
+
+    public static final double SINGLE_RIDER_GROUP_FACTOR = 0.2;
+    public static final double TWO_RIDER_GROUP_FACTOR = 0.1;
 
     public static Optional<Vec3> findGroundSpawn(ServerLevel level, BlockPos origin, Entity entity) {
         for (int i = 0; i < ATTEMPTS; i++) {
@@ -91,7 +94,7 @@ public class HordeSpawnUtil {
             addRaiderToVehicle(level, vehicle, pillager);
             PillagerCombat.setCrossbowAttackRange(pillager, 16.0f);
 
-            if (i == 1) {
+            if (i == 1 && level.random.nextDouble() < Config.getInstance().instrumentChance) {
                 ImmersiveMelodiesCompat.getInstrument(level).ifPresentOrElse(stack -> {
                     ImmersiveMelodiesCompat.playTrack(level, stack, hordeType);
                     pillager.setItemInHand(InteractionHand.MAIN_HAND, stack);
@@ -182,8 +185,8 @@ public class HordeSpawnUtil {
         return new SkeletonHorse(EntityType.SKELETON_HORSE, level);
     }
 
-    public static int getVehicleGroupCount(ServerLevel level, int difficulty) {
-        return (int) Math.ceil((level.random.nextDouble() + 0.5) * difficulty * 0.2 + level.random.nextDouble());
+    public static int getVehicleGroupCount(ServerLevel level, int difficulty, double groupFactor) {
+        return (int) Math.ceil((level.random.nextDouble() + 0.5) * difficulty * groupFactor + level.random.nextDouble());
     }
 
     private static Vec3 randomHorizontalOffset(ServerLevel level) {

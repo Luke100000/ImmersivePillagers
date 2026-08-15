@@ -16,7 +16,7 @@ import java.util.Optional;
 public class HorseRaiders {
     public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target, int difficulty) {
         List<Entity> members = new ArrayList<>();
-        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty);
+        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, HordeSpawnUtil.SINGLE_RIDER_GROUP_FACTOR);
         for (int i = 0; i < groupCount; i++) {
             Horse entity = new Horse(EntityType.HORSE, level);
             entity.equipSaddle(null);

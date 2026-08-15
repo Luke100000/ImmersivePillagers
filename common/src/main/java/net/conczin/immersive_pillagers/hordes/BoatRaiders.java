@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class BoatRaiders {
     public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target, int difficulty) {
         List<Entity> members = new ArrayList<>();
-        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty);
+        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, HordeSpawnUtil.TWO_RIDER_GROUP_FACTOR);
         for (int i = 0; i < groupCount; i++) {
             Optional<Vec3> spawnPos = HordeSpawnUtil.findWaterSpawn(level, pos);
             if (spawnPos.isEmpty()) {
