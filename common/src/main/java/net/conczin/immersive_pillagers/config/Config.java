@@ -10,7 +10,7 @@ public final class Config extends JsonConfig {
     @SuppressWarnings("unused")
     public String README = "https://github.com/Luke100000/ImmersivePillagers/wiki/Config";
 
-    public long ticksBetweenWaves = 20L * 60L * 10L;
-    public double difficultyFactor = 1.0;
+    public long ticksBetweenWaves = 24000L * 10L;
+    public double baseDifficultyFactor = 2.0;
     public boolean allowPlayerBounties = true;
 }
