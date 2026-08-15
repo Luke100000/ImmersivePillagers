@@ -1,22 +1,16 @@
 package net.conczin.immersive_pillagers.item;
 
 import net.conczin.immersive_pillagers.PillagerManager;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class WantedPosterItem extends Item {
+public class WantedPosterItem extends TooltippedItem {
     public WantedPosterItem(Properties properties) {
-        super(properties);
+        super(properties, "item.immersive_pillagers.wanted_poster.tooltip");
     }
 
     @Override
@@ -25,10 +19,5 @@ public class WantedPosterItem extends Item {
             PillagerManager.openWantedPoster(serverPlayer, hand);
         }
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.immersive_pillagers.wanted_poster.tooltip"));
     }
 }

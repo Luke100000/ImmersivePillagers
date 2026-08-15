@@ -1,9 +1,8 @@
 package net.conczin.immersive_pillagers;
 
 import com.google.common.base.Suppliers;
-import net.conczin.immersive_pillagers.item.CrudeTotemOfUndyingItem;
 import net.conczin.immersive_pillagers.item.ResearchNoteItem;
-import net.conczin.immersive_pillagers.item.RustyKeyItem;
+import net.conczin.immersive_pillagers.item.TooltippedItem;
 import net.conczin.immersive_pillagers.item.WantedPosterItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,10 +15,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public final class ImmersivePillagersItems {
-    public static final Supplier<Item> RUSTY_KEY = Suppliers.memoize(() -> new RustyKeyItem(new Item.Properties()));
+    public static final Supplier<Item> RUSTY_KEY = Suppliers.memoize(() -> new TooltippedItem(new Item.Properties(), "item.immersive_pillagers.rusty_key.tooltip"));
     public static final Supplier<Item> WANTED_POSTER = Suppliers.memoize(() -> new WantedPosterItem(new Item.Properties()));
     public static final Supplier<Item> RESEARCH_NOTE = Suppliers.memoize(() -> new ResearchNoteItem(new Item.Properties().stacksTo(1)));
-    public static final Supplier<Item> CRUDE_TOTEM_OF_UNDYING = Suppliers.memoize(() -> new CrudeTotemOfUndyingItem(new Item.Properties().stacksTo(1)));
+    public static final Supplier<Item> CRUDE_TOTEM_OF_UNDYING = Suppliers.memoize(() -> new TooltippedItem(new Item.Properties().stacksTo(1), "item.immersive_pillagers.crude_totem_of_undying.tooltip"));
     public static final Supplier<Item> RAIDERS_HORN = item();
     public static final Supplier<Item> REINFORCED_CHEST = Suppliers.memoize(() -> new BlockItem(ImmersivePillagersBlocks.REINFORCED_CHEST.get(), new Item.Properties()));
 

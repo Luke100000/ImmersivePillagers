@@ -10,14 +10,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public final class CrudeTotemOfUndyingItem extends Item {
-    public CrudeTotemOfUndyingItem(Properties properties) {
+public class TooltippedItem extends Item {
+    private final String tooltipKey;
+
+    public TooltippedItem(Properties properties, String tooltipKey) {
         super(properties);
+        this.tooltipKey = tooltipKey;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.immersive_pillagers.crude_totem_of_undying.tooltip")
-                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        tooltip.add(Component.translatable(tooltipKey).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 }
