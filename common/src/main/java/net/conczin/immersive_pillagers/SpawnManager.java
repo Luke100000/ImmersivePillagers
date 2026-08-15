@@ -1,6 +1,7 @@
 package net.conczin.immersive_pillagers;
 
 import net.conczin.immersive_pillagers.config.Config;
+import net.conczin.immersive_pillagers.player.HordeRegionData;
 import net.conczin.immersive_pillagers.player.PlayerHordeData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -29,6 +30,10 @@ public final class SpawnManager {
     private static void trySpawnWaves(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         BlockPos position = player.blockPosition();
+
+        if (!HordeRegionData.get(level).isSpawningEnabledAt(position)) {
+            return;
+        }
 
         if (!PlayerHordeData.get(player).hasKilledPillager()) {
             return;

@@ -51,5 +51,6 @@
   "message.immersive_pillagers.bounty_protected": "That player is in a protected area.",
   "message.immersive_pillagers.bounty_unavailable": "No suitable horde can reach that player.",
   "message.immersive_pillagers.bounty_sent": "Bounty sent after %s.",
-  "message.immersive_pillagers.pardoned": "You have bought yourself peace."
+  "message.immersive_pillagers.pardoned": "You have bought yourself peace.",
+  "message.immersive_pillagers.region_liberated": "This region has been liberated."
 }

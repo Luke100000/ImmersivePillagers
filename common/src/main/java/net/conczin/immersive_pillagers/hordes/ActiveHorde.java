@@ -2,6 +2,8 @@ package net.conczin.immersive_pillagers.hordes;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.ImmersivePillagersStats;
+import net.conczin.immersive_pillagers.player.HordeRegionData;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerBossEvent;
@@ -12,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -24,6 +27,8 @@ public class ActiveHorde {
     private final ServerLevel level;
     @Nullable
     private final UUID targetId;
+    @Nullable
+    private BlockPos regionToLiberate;
     private final Set<UUID> members = new HashSet<>();
     private boolean hasPlayerKill;
     private final int initialMembers;
@@ -56,6 +61,10 @@ public class ActiveHorde {
 
     public int memberCount() {
         return members.size();
+    }
+
+    public void setRegionToLiberate(BlockPos position) {
+        regionToLiberate = position.immutable();
     }
 
     public boolean shouldDespawnAfterTargetDeath() {
@@ -141,6 +150,16 @@ public class ActiveHorde {
         if (target != null) {
             ImmersivePillagersStats.awardWaveDefeated(target, type);
             target.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.MASTER, 1.0f, 1.0f);
+        }
+
+        if (regionToLiberate != null) {
+            HordeRegionData.get(level).enableSpawningAt(regionToLiberate);
+            Component message = Component.translatable("message.immersive_pillagers.region_liberated");
+            Vec3 center = regionToLiberate.getCenter();
+            double range = 128.0 * 128.0;
+            level.players().stream()
+                    .filter(player -> player.distanceToSqr(center) <= range)
+                    .forEach(player -> player.displayClientMessage(message, true));
         }
     }
 }

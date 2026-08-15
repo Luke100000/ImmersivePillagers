@@ -105,6 +105,7 @@ public class PillagerManager {
             String hordeType = hordeTypes.remove(level.random.nextInt(hordeTypes.size()));
             Optional<ActiveHorde> horde = spawnHorde(hordeType, level, player.blockPosition(), player, difficulty);
             if (horde.isPresent()) {
+                horde.get().setRegionToLiberate(player.blockPosition());
                 addActiveHorde(horde.get());
                 return true;
             }
