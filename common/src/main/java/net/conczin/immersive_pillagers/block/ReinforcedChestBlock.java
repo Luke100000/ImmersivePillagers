@@ -3,9 +3,11 @@ package net.conczin.immersive_pillagers.block;
 import net.conczin.immersive_pillagers.ImmersivePillagersBlockEntities;
 import net.conczin.immersive_pillagers.ImmersivePillagersItems;
 import net.conczin.immersive_pillagers.ImmersivePillagersSounds;
+import net.conczin.immersive_pillagers.PillagerManager;
 import net.conczin.immersive_pillagers.block.entity.ReinforcedChestBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -72,6 +74,10 @@ public class ReinforcedChestBlock extends ChestBlock {
             BlockState unlockedState = state.setValue(LOCKED, false);
             level.setBlock(pos, unlockedState, 3);
             level.playSound(null, pos, ImmersivePillagersSounds.REINFORCED_CHEST_UNLOCK, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+            if (player instanceof ServerPlayer serverPlayer) {
+                PillagerManager.markForReinforcedChestRaid(serverPlayer);
+            }
 
             return super.use(unlockedState, level, pos, player, hand, hitResult);
         }

@@ -92,9 +92,17 @@ public class PillagerManager {
         }).orElse(false);
     }
 
+    public static void markForReinforcedChestRaid(ServerPlayer player) {
+        PlayerHordeData data = PlayerHordeData.get(player);
+        if (data.markPillagerKilled()) {
+            player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
+        }
+        data.scheduleRaid(player.serverLevel().getGameTime() + 20L * 60L);
+    }
+
     public static boolean summonWarHorde(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
-        if ( level.getDifficulty() == Difficulty.PEACEFUL) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         }
 

@@ -19,19 +19,22 @@ public final class PlayerHordeData extends SavedData {
 
     public static final Codec<PlayerHordeData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("has_killed_pillager", false).forGetter(PlayerHordeData::hasKilledPillager),
-            Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("last_raid_times", Map.of()).forGetter(PlayerHordeData::lastRaidTimes)
+            Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("last_raid_times", Map.of()).forGetter(PlayerHordeData::lastRaidTimes),
+            Codec.LONG.optionalFieldOf("scheduled_raid_time", -1L).forGetter(PlayerHordeData::scheduledRaidTime)
     ).apply(instance, PlayerHordeData::new));
 
     private boolean hasKilledPillager;
     private final Map<String, Long> lastRaidTimes;
+    private long scheduledRaidTime;
 
     public PlayerHordeData() {
-        this(false, Map.of());
+        this(false, Map.of(), -1L);
     }
 
-    private PlayerHordeData(boolean hasKilledPillager, Map<String, Long> lastRaidTimes) {
+    private PlayerHordeData(boolean hasKilledPillager, Map<String, Long> lastRaidTimes, long scheduledRaidTime) {
         this.hasKilledPillager = hasKilledPillager;
         this.lastRaidTimes = new HashMap<>(lastRaidTimes);
+        this.scheduledRaidTime = scheduledRaidTime;
     }
 
     public static PlayerHordeData get(ServerPlayer player) {
@@ -64,6 +67,23 @@ public final class PlayerHordeData extends SavedData {
     public void pardon() {
         if (hasKilledPillager) {
             hasKilledPillager = false;
+            scheduledRaidTime = -1L;
+            setDirty();
+        }
+    }
+
+    public void scheduleRaid(long gameTime) {
+        scheduledRaidTime = gameTime;
+        setDirty();
+    }
+
+    public boolean hasScheduledRaidDue(long gameTime) {
+        return scheduledRaidTime >= 0 && gameTime >= scheduledRaidTime;
+    }
+
+    public void clearScheduledRaid() {
+        if (scheduledRaidTime >= 0) {
+            scheduledRaidTime = -1L;
             setDirty();
         }
     }
@@ -85,6 +105,10 @@ public final class PlayerHordeData extends SavedData {
 
     public Map<String, Long> lastRaidTimes() {
         return Map.copyOf(lastRaidTimes);
+    }
+
+    private long scheduledRaidTime() {
+        return scheduledRaidTime;
     }
 
     @Override

@@ -12,6 +12,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.biome.Biome;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class SpawnManager {
     private static final int SPAWN_CHECK_INTERVAL = 20;
 
@@ -30,6 +33,11 @@ public final class SpawnManager {
     private static void trySpawnWaves(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         BlockPos position = player.blockPosition();
+        long gameTime = level.getGameTime();
+
+        if (trySpawnScheduledWave(player, level, position, gameTime)) {
+            return;
+        }
 
         if (!HordeRegionData.get(level).isSpawningEnabledAt(position)) {
             return;
@@ -44,8 +52,6 @@ public final class SpawnManager {
         }
 
         int difficulty = waveDifficulty(level, position);
-        long gameTime = level.getGameTime();
-
         for (String waveType : PillagerManager.getHordeNames()) {
             if (!level.getBiome(position).is(biomeTag(waveType)) || !shouldSpawn(player, waveType, gameTime)) {
                 continue;
@@ -54,6 +60,29 @@ public final class SpawnManager {
             PillagerManager.spawnHorde(waveType, level, position, player, difficulty)
                     .ifPresent(PillagerManager::addActiveHorde);
         }
+    }
+
+    private static boolean trySpawnScheduledWave(ServerPlayer player, ServerLevel level, BlockPos position, long gameTime) {
+        PlayerHordeData data = PlayerHordeData.get(player);
+        if (!data.hasScheduledRaidDue(gameTime) || level.getDifficulty() == Difficulty.PEACEFUL || level.isVillage(position)) {
+            return false;
+        }
+
+        List<String> hordeTypes = new ArrayList<>(PillagerManager.getHordeNames());
+        while (!hordeTypes.isEmpty()) {
+            String hordeType = hordeTypes.remove(level.random.nextInt(hordeTypes.size()));
+            if (!level.getBiome(position).is(biomeTag(hordeType))) {
+                continue;
+            }
+            if (PillagerManager.spawnHorde(hordeType, level, position, player, waveDifficulty(level, position)).map(horde -> {
+                PillagerManager.addActiveHorde(horde);
+                return true;
+            }).orElse(false)) {
+                data.clearScheduledRaid();
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean shouldSpawn(ServerPlayer player, String waveType, long gameTime) {
