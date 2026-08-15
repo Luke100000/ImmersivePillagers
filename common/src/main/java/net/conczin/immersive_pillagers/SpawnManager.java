@@ -12,9 +12,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.biome.Biome;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class SpawnManager {
     private static final int SPAWN_CHECK_INTERVAL = 20;
 
@@ -68,19 +65,12 @@ public final class SpawnManager {
             return false;
         }
 
-        List<String> hordeTypes = new ArrayList<>(PillagerManager.getHordeNames());
-        while (!hordeTypes.isEmpty()) {
-            String hordeType = hordeTypes.remove(level.random.nextInt(hordeTypes.size()));
-            if (!level.getBiome(position).is(biomeTag(hordeType))) {
-                continue;
-            }
-            if (PillagerManager.spawnHorde(hordeType, level, position, player, waveDifficulty(level, position)).map(horde -> {
-                PillagerManager.addActiveHorde(horde);
-                return true;
-            }).orElse(false)) {
-                data.clearScheduledRaid();
-                return true;
-            }
+        if (PillagerManager.spawnRandomHorde(level, position, player, waveDifficulty(level, position)).map(horde -> {
+            PillagerManager.addActiveHorde(horde);
+            return true;
+        }).orElse(false)) {
+            data.clearScheduledRaid();
+            return true;
         }
         return false;
     }

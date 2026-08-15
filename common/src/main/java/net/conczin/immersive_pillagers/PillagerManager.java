@@ -66,6 +66,21 @@ public class PillagerManager {
         return List.copyOf(HORDES.keySet());
     }
 
+    public static Optional<ActiveHorde> spawnRandomHorde(ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty) {
+        List<String> hordeTypes = new ArrayList<>(getHordeNames());
+        while (!hordeTypes.isEmpty()) {
+            String hordeType = hordeTypes.remove(level.random.nextInt(hordeTypes.size()));
+            if (!level.getBiome(position).is(TagKey.create(Registries.BIOME, ImmersivePillagers.locate(hordeType)))) {
+                continue;
+            }
+            Optional<ActiveHorde> horde = spawnHorde(hordeType, level, position, target, difficulty);
+            if (horde.isPresent()) {
+                return horde;
+            }
+        }
+        return Optional.empty();
+    }
+
     public static boolean canReceiveBounty(ServerPlayer target) {
         return Config.getInstance().allowPlayerBounties
                && target.serverLevel().getDifficulty().getId() > 0
@@ -78,16 +93,8 @@ public class PillagerManager {
         }
         ServerLevel level = target.serverLevel();
         BlockPos position = target.blockPosition();
-        List<String> eligible = getHordeNames().stream()
-                .filter(horde -> level.getBiome(position).is(TagKey.create(Registries.BIOME, ImmersivePillagers.locate(horde))))
-                .toList();
-        if (eligible.isEmpty()) {
-            return false;
-        }
-
-        String horde = eligible.get(target.getRandom().nextInt(eligible.size()));
-        return spawnHorde(horde, level, position, target, 10).map(spawned -> {
-            addActiveHorde(spawned);
+        return spawnRandomHorde(level, position, target, 10).map(horde -> {
+            addActiveHorde(horde);
             return true;
         }).orElse(false);
     }
@@ -108,17 +115,11 @@ public class PillagerManager {
 
         int casualDifficulty = SpawnManager.waveDifficulty(level, player.blockPosition());
         int difficulty = Math.max(1, Math.round(casualDifficulty * (float) Config.getInstance().warHordeDifficultyMultiplier));
-        List<String> hordeTypes = new ArrayList<>(getHordeNames());
-        while (!hordeTypes.isEmpty()) {
-            String hordeType = hordeTypes.remove(level.random.nextInt(hordeTypes.size()));
-            Optional<ActiveHorde> horde = spawnHorde(hordeType, level, player.blockPosition(), player, difficulty);
-            if (horde.isPresent()) {
-                horde.get().setRegionToLiberate(player.blockPosition());
-                addActiveHorde(horde.get());
-                return true;
-            }
-        }
-        return false;
+        return spawnRandomHorde(level, player.blockPosition(), player, difficulty).map(horde -> {
+            horde.setRegionToLiberate(player.blockPosition());
+            addActiveHorde(horde);
+            return true;
+        }).orElse(false);
     }
 
     public static void openWantedPoster(ServerPlayer viewer, InteractionHand hand) {
