@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:story/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:crossbow"
+    },
+    "title": {
+      "translate": "advancement.immersive_pillagers.horde_conqueror"
+    },
+    "description": {
+      "translate": "advancement.immersive_pillagers.horde_conqueror.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "camel": {
+      "trigger": "minecraft:impossible"
+    },
+    "boat": {
+      "trigger": "minecraft:impossible"
+    },
+    "horse": {
+      "trigger": "minecraft:impossible"
+    },
+    "spider": {
+      "trigger": "minecraft:impossible"
+    },
+    "undead": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

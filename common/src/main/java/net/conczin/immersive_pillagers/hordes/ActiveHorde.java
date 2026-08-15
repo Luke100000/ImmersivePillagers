@@ -2,6 +2,7 @@ package net.conczin.immersive_pillagers.hordes;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.ImmersivePillagersStats;
+import net.conczin.immersive_pillagers.PillagerManager;
 import net.conczin.immersive_pillagers.player.HordeRegionData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -149,6 +150,7 @@ public class ActiveHorde {
         ServerPlayer target = level.getServer().getPlayerList().getPlayer(targetId);
         if (target != null) {
             ImmersivePillagersStats.awardWaveDefeated(target, type);
+            PillagerManager.awardHordeConquerorProgress(target, type);
             target.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.MASTER, 1.0f, 1.0f);
         }
 

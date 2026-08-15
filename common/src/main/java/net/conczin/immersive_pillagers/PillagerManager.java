@@ -36,6 +36,7 @@ public class PillagerManager {
     private static final Map<UUID, ActiveHorde> ACTIVE_HORDES = new HashMap<>();
 
     private static final ResourceLocation CRUDE_TOTEM_AWAKENED_ADVANCEMENT = ImmersivePillagers.locate("research/crude_totem_awakened");
+    private static final ResourceLocation HORDE_CONQUEROR_ADVANCEMENT = ImmersivePillagers.locate("horde_conqueror");
 
     public static String registerHorde(String name, HordeSpawner horde) {
         HORDES.put(name, horde);
@@ -48,6 +49,8 @@ public class PillagerManager {
     public static final String HORDE_HORSE = registerHorde("horse", HorseRaiders::spawn);
     public static final String HORDE_SPIDER = registerHorde("spider", SpiderRaiders::spawn);
     public static final String HORDE_UNDEAD = registerHorde("undead", UndeadRaiders::spawn);
+
+    private static final Set<String> BUILTIN_HORDE_TYPES = Set.of(HORDE_CAMEL, HORDE_BOAT, HORDE_HORSE, HORDE_SPIDER, HORDE_UNDEAD);
 
     public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty) {
         HordeSpawner spawner = HORDES.get(horde);
@@ -216,6 +219,22 @@ public class PillagerManager {
                 killed.level().playSound(null, killed.getX(), killed.getY(), killed.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 0.8F);
                 awardCrudeTotemAwakened(player);
             }
+        }
+    }
+
+    public static void awardHordeConquerorProgress(ServerPlayer player, String hordeType) {
+        if (!BUILTIN_HORDE_TYPES.contains(hordeType)) {
+            return;
+        }
+
+        MinecraftServer server = player.getServer();
+        if (server == null) {
+            return;
+        }
+
+        Advancement advancement = server.getAdvancements().getAdvancement(HORDE_CONQUEROR_ADVANCEMENT);
+        if (advancement != null) {
+            player.getAdvancements().award(advancement, hordeType);
         }
     }
 
