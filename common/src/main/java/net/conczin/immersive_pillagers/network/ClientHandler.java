@@ -1,9 +1,13 @@
 package net.conczin.immersive_pillagers.network;
 
+import net.conczin.immersive_pillagers.network.packet.OpenResearchNotePacket;
 import net.conczin.immersive_pillagers.network.packet.OpenWantedPosterPacket;
 
 public interface ClientHandler {
     default void openWantedPoster(OpenWantedPosterPacket packet) {
+    }
+
+    default void openResearchNote(OpenResearchNotePacket packet) {
     }
 
     static void setInstance(ClientHandler handler) {
