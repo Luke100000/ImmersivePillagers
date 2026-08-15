@@ -28,6 +28,9 @@
   "item.immersive_pillagers.research_note": "Illager Research Note",
   "item.immersive_pillagers.raiders_horn": "Raider's Horn",
 
+  "advancement.immersive_pillagers.illager_literacy": "Illager Literacy",
+  "advancement.immersive_pillagers.illager_literacy.description": "Collect all illager research documents to obtain illager literacy.",
+
   "block.immersive_pillagers.reinforced_chest": "Reinforced Chest",
 
   "gui.immersive_pillagers.wanted_poster": "Wanted Players",

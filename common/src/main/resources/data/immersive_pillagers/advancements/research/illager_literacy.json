@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:story/root",
+  "display": {
+    "icon": {
+      "item": "immersive_pillagers:research_note"
+    },
+    "title": {
+      "translate": "advancement.immersive_pillagers.illager_literacy"
+    },
+    "description": {
+      "translate": "advancement.immersive_pillagers.illager_literacy.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "military": {"trigger": "minecraft:impossible"},
+    "death": {"trigger": "minecraft:impossible"},
+    "preservation": {"trigger": "minecraft:impossible"},
+    "binding": {"trigger": "minecraft:impossible"},
+    "guardians": {"trigger": "minecraft:impossible"},
+    "emeralds": {"trigger": "minecraft:impossible"},
+    "experimentation": {"trigger": "minecraft:impossible"},
+    "undeath": {"trigger": "minecraft:impossible"},
+    "totem": {"trigger": "minecraft:impossible"}
+  }
+}

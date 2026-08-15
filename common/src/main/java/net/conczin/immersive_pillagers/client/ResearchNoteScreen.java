@@ -7,8 +7,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
 import java.util.Locale;
@@ -26,13 +26,15 @@ public final class ResearchNoteScreen extends Screen {
     private static final int HEIGHT = 180;
 
     private final ResearchNoteItem.NoteContents contents;
+    private final int translationPercent;
     private int left;
     private int top;
     private List<FormattedCharSequence> translatedLines = List.of();
 
-    public ResearchNoteScreen(ResearchNoteItem.NoteContents contents) {
+    public ResearchNoteScreen(ResearchNoteItem.NoteContents contents, int translationPercent) {
         super(Component.literal(contents.title()));
         this.contents = contents;
+        this.translationPercent = translationPercent;
     }
 
     @Override
@@ -66,7 +68,7 @@ public final class ResearchNoteScreen extends Screen {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
-    private static String translate(String text) {
+    private String translate(String text) {
         Matcher matcher = WORD_PATTERN.matcher(text);
         StringBuilder translated = new StringBuilder(text.length());
         int cursor = 0;
@@ -79,9 +81,8 @@ public final class ResearchNoteScreen extends Screen {
         return translated.append(text, cursor, text.length()).toString();
     }
 
-    private static boolean isKnown(String word) {
-        float progress = 0.5f;
-        return Math.floorMod(word.toLowerCase(Locale.ROOT).hashCode(), 100) < progress;
+    private boolean isKnown(String word) {
+        return Math.floorMod(word.toLowerCase(Locale.ROOT).hashCode(), 100) < translationPercent;
     }
 
     private static String toIllager(String word) {

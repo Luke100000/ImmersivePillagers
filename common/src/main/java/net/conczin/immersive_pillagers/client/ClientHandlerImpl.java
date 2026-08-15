@@ -13,6 +13,6 @@ public final class ClientHandlerImpl implements ClientHandler {
 
     @Override
     public void openResearchNote(OpenResearchNotePacket packet) {
-        Minecraft.getInstance().setScreen(new ResearchNoteScreen(packet.contents()));
+        Minecraft.getInstance().setScreen(new ResearchNoteScreen(packet.contents(), packet.translationPercent()));
     }
 }
