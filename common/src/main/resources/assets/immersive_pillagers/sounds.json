@@ -1,4 +1,71 @@
 {
+  "entity.undead_pillager.ambient": {
+    "sounds": [
+      "immersive_pillagers:pillager/idle1",
+      "immersive_pillagers:pillager/idle2",
+      "immersive_pillagers:pillager/idle3",
+      "immersive_pillagers:pillager/idle4"
+    ]
+  },
+  "entity.undead_pillager.hurt": {
+    "sounds": [
+      "immersive_pillagers:pillager/hurt1",
+      "immersive_pillagers:pillager/hurt2",
+      "immersive_pillagers:pillager/hurt3",
+      "immersive_pillagers:pillager/hurt4"
+    ]
+  },
+  "entity.undead_pillager.death": {
+    "sounds": [
+      "immersive_pillagers:pillager/death1",
+      "immersive_pillagers:pillager/death2"
+    ]
+  },
+  "entity.undead_evoker.ambient": {
+    "sounds": [
+      "immersive_pillagers:evoker/idle1",
+      "immersive_pillagers:evoker/idle2",
+      "immersive_pillagers:evoker/idle3",
+      "immersive_pillagers:evoker/idle4"
+    ]
+  },
+  "entity.undead_evoker.hurt": {
+    "sounds": [
+      "immersive_pillagers:evoker/hurt1",
+      "immersive_pillagers:evoker/hurt2",
+      "immersive_pillagers:evoker/hurt3",
+      "immersive_pillagers:evoker/hurt4"
+    ]
+  },
+  "entity.undead_evoker.death": {
+    "sounds": [
+      "immersive_pillagers:evoker/death1",
+      "immersive_pillagers:evoker/death2"
+    ]
+  },
+  "entity.undead_vindicator.ambient": {
+    "sounds": [
+      "immersive_pillagers:vindicator/idle1",
+      "immersive_pillagers:vindicator/idle2",
+      "immersive_pillagers:vindicator/idle3",
+      "immersive_pillagers:vindicator/idle4",
+      "immersive_pillagers:vindicator/idle5"
+    ]
+  },
+  "entity.undead_vindicator.hurt": {
+    "sounds": [
+      "immersive_pillagers:vindicator/hurt1",
+      "immersive_pillagers:vindicator/hurt2",
+      "immersive_pillagers:vindicator/hurt3",
+      "immersive_pillagers:vindicator/hurt4"
+    ]
+  },
+  "entity.undead_vindicator.death": {
+    "sounds": [
+      "immersive_pillagers:vindicator/death1",
+      "immersive_pillagers:vindicator/death2"
+    ]
+  },
   "block.reinforced_chest.unlock": {
     "sounds": [
       "immersive_pillagers:block/reinforced_chest_unlock"
