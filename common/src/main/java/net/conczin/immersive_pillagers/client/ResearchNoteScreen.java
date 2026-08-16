@@ -32,7 +32,7 @@ public final class ResearchNoteScreen extends Screen {
     private List<FormattedCharSequence> translatedLines = List.of();
 
     public ResearchNoteScreen(ResearchNoteItem.NoteContents contents, int translationPercent) {
-        super(Component.literal(contents.title()));
+        super(localized(contents.title()));
         this.contents = contents;
         this.translationPercent = translationPercent;
     }
@@ -42,7 +42,7 @@ public final class ResearchNoteScreen extends Screen {
         left = (width - WIDTH) / 2;
         top = (height - HEIGHT) / 2;
 
-        translatedLines = font.split(Component.literal(translate(contents.text())), WIDTH - 36);
+        translatedLines = font.split(Component.literal(translate(localized(contents.text()).getString())), WIDTH - 36);
 
         addRenderableWidget(Button.builder(Component.translatable("gui.immersive_pillagers.back"), button -> onClose()).bounds(left + 38, top + 180, 74, 20).build());
     }
@@ -55,7 +55,7 @@ public final class ResearchNoteScreen extends Screen {
         guiGraphics.blit(contents.scribbleImage(), left + 11, top + 25, 0, 0, 128, 128, 128, 128);
 
         // Title
-        Component title = Component.literal(contents.title()).withStyle(ChatFormatting.BOLD);
+        Component title = localized(contents.title()).copy().withStyle(ChatFormatting.BOLD);
         guiGraphics.drawString(font, title, left + WIDTH / 2 - font.width(title) / 2, top + 15, 0xFF38291F, false);
 
         // Text
@@ -92,5 +92,9 @@ public final class ResearchNoteScreen extends Screen {
             result.append(index >= 0 ? ILLAGER_ALPHABET.charAt(index) : character);
         }
         return result.toString();
+    }
+
+    private static Component localized(String keyOrText) {
+        return Component.translatableWithFallback(keyOrText, keyOrText);
     }
 }

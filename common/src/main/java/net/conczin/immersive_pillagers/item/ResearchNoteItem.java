@@ -51,7 +51,7 @@ public final class ResearchNoteItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
-        return Component.literal(contents(stack).title());
+        return Component.translatableWithFallback(contents(stack).title(), contents(stack).title());
     }
 
     public static NoteContents contents(ItemStack stack) {
