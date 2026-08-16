@@ -1,0 +1,4 @@
+{
+  "structures": [{"structure": "immersive_pillagers:remains_desert", "weight": 1}],
+  "placement": {"type": "minecraft:random_spread", "spacing": 12, "separation": 4, "salt": 18798436}
+}

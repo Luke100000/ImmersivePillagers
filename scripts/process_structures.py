@@ -1,3 +1,4 @@
+import gzip
 from pathlib import Path
 from random import Random
 
@@ -19,6 +20,16 @@ STRUCTURE_LOOT_TABLES = {
         "minecraft:barrel": "immersive_pillagers:chests/lab_barrel",
         "immersive_pillagers:reinforced_chest": "immersive_pillagers:chests/lab_reinforced",
     },
+    "desert_lab": {
+        "minecraft:chest": "immersive_pillagers:chests/desert_lab_chest",
+        "minecraft:barrel": "immersive_pillagers:chests/desert_lab_barrel",
+        "immersive_pillagers:reinforced_chest": "immersive_pillagers:chests/desert_lab_reinforced",
+    },
+    "snow_lab": {
+        "minecraft:chest": "immersive_pillagers:chests/snow_lab_chest",
+        "minecraft:barrel": "immersive_pillagers:chests/snow_lab_barrel",
+        "immersive_pillagers:reinforced_chest": "immersive_pillagers:chests/snow_lab_reinforced",
+    },
 }
 
 REMAINS_LOOT_TABLES = {
@@ -38,11 +49,27 @@ RANDOM_ENTITY_SPAWNS = {
     "lab": {
         "air": {
             "immersive_pillagers:undead_pillager": 10,
+            "immersive_pillagers:undead_vindicator": 5,
+            "immersive_pillagers:undead_evoker": 2,
         },
         "water": {
             "minecraft:elder_guardian": 1,
         },
-    }
+    },
+    "desert_lab": {
+        "interior_air": {
+            "immersive_pillagers:undead_pillager": 5,
+            "immersive_pillagers:undead_vindicator": 2,
+            "immersive_pillagers:undead_evoker": 1,
+        },
+    },
+    "snow_lab": {
+        "air": {
+            "immersive_pillagers:undead_pillager": 10,
+            "immersive_pillagers:undead_vindicator": 5,
+            "immersive_pillagers:undead_evoker": 2,
+        },
+    },
 }
 
 STRUCTURE_BLOCK_ID = "minecraft:structure_block"
@@ -85,12 +112,11 @@ def palette_index(palette: List[Compound], block_id: str) -> int:
     return len(palette) - 1
 
 
-def randomize_lab_bricks(structure: Compound) -> None:
+def randomize_lab_bricks(structure: Compound, random: Random) -> None:
     palette = structure["palette"]
     normal_indices = {index for index, entry in enumerate(palette) if str(entry.get("Name", "")) == STONE_BRICKS_ID}
     cracked_index = palette_index(palette, CRACKED_STONE_BRICKS_ID)
     mossy_index = palette_index(palette, MOSSY_STONE_BRICKS_ID)
-    random = Random()
     for block in structure["blocks"]:
         if int(block["state"]) not in normal_indices:
             continue
@@ -131,6 +157,15 @@ def spawn_entity(structure: Compound, entity_id: str, x: float, y: float, z: flo
     )
 
 
+def save_structure(structure: Compound, destination: Path) -> None:
+    with destination.open("wb") as raw_file:
+        if structure.gzipped:
+            with gzip.GzipFile(fileobj=raw_file, mode="wb", mtime=0) as file:
+                structure.write(file)
+        else:
+            structure.write(raw_file)
+
+
 def block_states(structure: Compound) -> dict[tuple[int, int, int], str]:
     palette = structure["palette"]
     return {
@@ -139,13 +174,18 @@ def block_states(structure: Compound) -> dict[tuple[int, int, int], str]:
     }
 
 
-def spawn_random_entities(structure: Compound, entity_counts: dict[str, int], positions: list[tuple[float, float, float]]) -> None:
+def spawn_random_entities(
+        structure: Compound,
+        entity_counts: dict[str, int],
+        positions: list[tuple[float, float, float]],
+        random: Random,
+) -> None:
     count = sum(entity_counts.values())
     if len(positions) < count:
         raise ValueError(f"Structure has only {len(positions)} valid positions for {count} entities")
 
     entity_ids = (entity_id for entity_id, amount in entity_counts.items() for _ in range(amount))
-    for (x, y, z), entity_id in zip(Random().sample(positions, count), entity_ids):
+    for (x, y, z), entity_id in zip(random.sample(positions, count), entity_ids):
         spawn_entity(structure, entity_id, x, y, z)
 
 
@@ -160,6 +200,19 @@ def air_spawn_positions(states: dict[tuple[int, int, int], str]) -> list[tuple[f
     ]
 
 
+def interior_air_spawn_positions(states: dict[tuple[int, int, int], str]) -> list[tuple[float, float, float]]:
+    def is_enclosed(position: tuple[int, int, int]) -> bool:
+        x, y, z = position
+        has_ceiling = any(states.get((x, y + distance, z), AIR_BLOCK_ID) not in AIR_BLOCK_IDS for distance in range(2, 7))
+        has_walls = all(
+            any(states.get((x + dx * distance, y, z + dz * distance), AIR_BLOCK_ID) not in AIR_BLOCK_IDS for distance in range(1, 7))
+            for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1))
+        )
+        return has_ceiling and has_walls
+
+    return [position for position in air_spawn_positions(states) if is_enclosed((int(position[0] - 0.5), int(position[1]), int(position[2] - 0.5)))]
+
+
 def water_spawn_positions(states: dict[tuple[int, int, int], str]) -> list[tuple[float, float, float]]:
     return [
         (x + 0.5, float(y), z + 0.5)
@@ -171,9 +224,10 @@ def water_spawn_positions(states: dict[tuple[int, int, int], str]) -> list[tuple
 
 def transform_file(source_path: Path, dest_path: Path) -> None:
     structure = nbtlib.load(source_path)
+    random = Random(source_path.stem)
     remove_structure_blocks(structure)
     if source_path.stem == "lab":
-        randomize_lab_bricks(structure)
+        randomize_lab_bricks(structure, random)
         carve_lab_air(structure)
     loot_tables = REMAINS_LOOT_TABLES if source_path.stem.startswith("remains_") else STRUCTURE_LOOT_TABLES.get(source_path.stem)
     if loot_tables is not None:
@@ -181,10 +235,11 @@ def transform_file(source_path: Path, dest_path: Path) -> None:
     entity_spawns = RANDOM_ENTITY_SPAWNS.get(source_path.stem)
     if entity_spawns is not None:
         states = block_states(structure)
-        spawn_random_entities(structure, entity_spawns.get("air", {}), air_spawn_positions(states))
-        spawn_random_entities(structure, entity_spawns.get("water", {}), water_spawn_positions(states))
+        spawn_random_entities(structure, entity_spawns.get("air", {}), air_spawn_positions(states), random)
+        spawn_random_entities(structure, entity_spawns.get("interior_air", {}), interior_air_spawn_positions(states), random)
+        spawn_random_entities(structure, entity_spawns.get("water", {}), water_spawn_positions(states), random)
     dest_path.parent.mkdir(parents=True, exist_ok=True)
-    structure.save(dest_path)
+    save_structure(structure, dest_path)
 
 
 @app.command()

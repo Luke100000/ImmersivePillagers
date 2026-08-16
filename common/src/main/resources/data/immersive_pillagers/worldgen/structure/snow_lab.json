@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:jigsaw",
+  "biomes": "#immersive_pillagers:has_structure/snow_lab",
+  "step": "surface_structures",
+  "start_pool": "immersive_pillagers:snow_lab/start",
+  "size": 1,
+  "start_height": {"absolute": 0},
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "max_distance_from_center": 48,
+  "use_expansion_hack": false,
+  "terrain_adaptation": "none",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {"type": "immersive_pillagers:undead_pillager", "weight": 6, "minCount": 1, "maxCount": 2},
+        {"type": "immersive_pillagers:undead_vindicator", "weight": 3, "minCount": 1, "maxCount": 1},
+        {"type": "immersive_pillagers:undead_evoker", "weight": 1, "minCount": 1, "maxCount": 1}
+      ]
+    }
+  }
+}
