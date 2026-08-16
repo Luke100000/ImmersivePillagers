@@ -150,10 +150,11 @@ public class PillagerManager {
         }
 
         if (packet.action() == WantedPosterActionPacket.PARDON) {
-            if (!sender.getUUID().equals(packet.target())) {
+            if (!sender.getUUID().equals(packet.target()) || !PlayerHordeData.get(sender).hasKilledPillager()) {
                 return;
             }
             PlayerHordeData.get(sender).pardon();
+            consumeWantedPoster(sender, packet.hand());
             sender.displayClientMessage(Component.translatable("message.immersive_pillagers.pardoned"), true);
             return;
         }
@@ -175,7 +176,14 @@ public class PillagerManager {
             return;
         }
 
+        consumeWantedPoster(sender, packet.hand());
         sender.displayClientMessage(Component.translatable("message.immersive_pillagers.bounty_sent", target.getGameProfile().getName()), true);
+    }
+
+    private static void consumeWantedPoster(ServerPlayer player, InteractionHand hand) {
+        if (!player.getAbilities().instabuild) {
+            player.getItemInHand(hand).shrink(1);
+        }
     }
 
     public static void addActiveHorde(ActiveHorde horde) {
