@@ -16,8 +16,7 @@
       "bounding_box": "full",
       "spawns": [
         {"type": "immersive_pillagers:undead_pillager", "weight": 6, "minCount": 1, "maxCount": 2},
-        {"type": "immersive_pillagers:undead_vindicator", "weight": 3, "minCount": 1, "maxCount": 1},
-        {"type": "immersive_pillagers:undead_evoker", "weight": 1, "minCount": 1, "maxCount": 1}
+        {"type": "immersive_pillagers:undead_vindicator", "weight": 3, "minCount": 1, "maxCount": 1}
       ]
     }
   }
