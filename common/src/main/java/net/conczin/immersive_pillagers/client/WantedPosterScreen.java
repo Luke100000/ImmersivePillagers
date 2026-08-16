@@ -91,7 +91,6 @@ public final class WantedPosterScreen extends Screen {
     }
 
     private boolean isSelectedPlayerSelf() {
-        if (true) return false;
         if (selectedPlayer == null) return false;
         assert minecraft != null;
         return minecraft.player != null && selectedPlayer.id().equals(minecraft.player.getUUID());

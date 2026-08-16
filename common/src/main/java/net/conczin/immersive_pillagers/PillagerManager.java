@@ -26,7 +26,6 @@ import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -201,8 +200,8 @@ public class PillagerManager {
         ACTIVE_HORDES.values().removeIf(horde -> !horde.tick());
     }
 
-    public static @NotNull Optional<? extends Player> getClosestPlayer(Entity entity) {
-        return entity.level().players().stream().min((a, b) -> (int) (a.distanceToSqr(entity) - b.distanceToSqr(entity)));
+    public static Optional<? extends Player> getClosestPlayer(Entity entity) {
+        return entity.level().players().stream().min(Comparator.comparingDouble(player -> player.distanceToSqr(entity)));
     }
 
     public static void onLivingEntityKilled(LivingEntity killed, Entity killer) {
