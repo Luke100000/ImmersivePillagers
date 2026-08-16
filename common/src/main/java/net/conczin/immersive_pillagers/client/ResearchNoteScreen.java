@@ -52,7 +52,7 @@ public final class ResearchNoteScreen extends Screen {
         renderBackground(guiGraphics);
 
         guiGraphics.blit(PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
-        guiGraphics.blit(contents.scribbleImage(), left + 11, top + 25, 0, 0, 128, 128, 128, 128);
+        contents.scribbleImage().ifPresent(image -> guiGraphics.blit(image, left + 11, top + 25, 0, 0, 128, 128, 128, 128));
 
         // Title
         Component title = localized(contents.title()).copy().withStyle(ChatFormatting.BOLD);
@@ -60,7 +60,9 @@ public final class ResearchNoteScreen extends Screen {
 
         // Text
         int neededSpace = translatedLines.size() * 11;
-        int y = top + HEIGHT - neededSpace - 10;
+        int y = contents.scribbleImage().isPresent()
+                ? top + HEIGHT - neededSpace - 10
+                : top + 35 + (HEIGHT - 45 - neededSpace) / 2;
         for (int line = 0; line < translatedLines.size(); line++) {
             guiGraphics.drawString(font, translatedLines.get(line), left + 18, y + line * 11, 0xFF38291F, false);
         }

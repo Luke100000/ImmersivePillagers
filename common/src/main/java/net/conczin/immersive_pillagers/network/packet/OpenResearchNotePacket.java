@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 public final class OpenResearchNotePacket extends ClientboundPacket {
     private static final Codec<ResourceLocation> RESOURCE_LOCATION_CODEC = Codec.STRING.xmap(ResourceLocation::new, ResourceLocation::toString);
     public static final Codec<OpenResearchNotePacket> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RESOURCE_LOCATION_CODEC.fieldOf("scribble_image").forGetter(packet -> packet.contents.scribbleImage()),
+            RESOURCE_LOCATION_CODEC.optionalFieldOf("scribble_image").forGetter(packet -> packet.contents.scribbleImage()),
             Codec.STRING.fieldOf("title").forGetter(packet -> packet.contents.title()),
             Codec.STRING.fieldOf("text").forGetter(packet -> packet.contents.text()),
             Codec.INT.fieldOf("translation_percent").forGetter(OpenResearchNotePacket::translationPercent)

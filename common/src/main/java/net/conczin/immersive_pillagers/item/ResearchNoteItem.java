@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
 import java.util.Set;
 
 public final class ResearchNoteItem extends Item {
@@ -31,7 +32,6 @@ public final class ResearchNoteItem extends Item {
             "death", "military", "experimentation", "undeath", "totem"
     );
 
-    private static final ResourceLocation DEFAULT_SCRIBBLE_IMAGE = ImmersivePillagers.locate("textures/gui/scribbles/default.png");
     private static final String DEFAULT_TITLE = "Illager Research Note";
     private static final String DEFAULT_TEXT = "The ink has faded beyond recognition.";
 
@@ -55,10 +55,8 @@ public final class ResearchNoteItem extends Item {
 
     public static NoteContents contents(ItemStack stack) {
         CompoundTag tag = stack.getTag();
-        String imagePath = string(tag, SCRIBBLE_IMAGE_TAG, DEFAULT_SCRIBBLE_IMAGE.toString());
-        ResourceLocation image = ResourceLocation.tryParse(imagePath);
         return new NoteContents(
-                image == null ? DEFAULT_SCRIBBLE_IMAGE : image,
+                resourceLocation(tag, SCRIBBLE_IMAGE_TAG),
                 string(tag, TITLE_TAG, DEFAULT_TITLE),
                 string(tag, TEXT_TAG, DEFAULT_TEXT)
         );
@@ -97,6 +95,13 @@ public final class ResearchNoteItem extends Item {
         return value.isBlank() ? fallback : value;
     }
 
-    public record NoteContents(ResourceLocation scribbleImage, String title, String text) {
+    private static Optional<ResourceLocation> resourceLocation(CompoundTag tag, String key) {
+        if (tag == null || !tag.contains(key, Tag.TAG_STRING)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(ResourceLocation.tryParse(tag.getString(key)));
+    }
+
+    public record NoteContents(Optional<ResourceLocation> scribbleImage, String title, String text) {
     }
 }
