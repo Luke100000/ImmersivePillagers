@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "immersive_pillagers:research_note",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{ResearchId:\"death\",ScribbleImage:\"immersive_pillagers:textures/gui/scribbles/death.png\",Title:\"document.immersive_pillagers.death.title\",Text:\"document.immersive_pillagers.death.text\"}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "name": "immersive_pillagers:chests/remains_container"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "immersive_pillagers:chests/remains_research"
+}

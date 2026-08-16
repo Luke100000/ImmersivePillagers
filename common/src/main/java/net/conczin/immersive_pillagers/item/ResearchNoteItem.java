@@ -28,8 +28,7 @@ public final class ResearchNoteItem extends Item {
 
     private static final ResourceLocation RESEARCH_ADVANCEMENT = ImmersivePillagers.locate("research/illager_literacy");
     private static final Set<String> RESEARCH_IDS = Set.of(
-            "military", "death", "preservation", "binding", "guardians",
-            "emeralds", "experimentation", "undeath", "totem"
+            "death", "military", "experimentation", "undeath", "totem"
     );
 
     private static final ResourceLocation DEFAULT_SCRIBBLE_IMAGE = ImmersivePillagers.locate("textures/gui/scribbles/default.png");

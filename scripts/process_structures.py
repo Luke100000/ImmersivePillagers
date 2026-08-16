@@ -37,6 +37,7 @@ REMAINS_LOOT_TABLES = {
     "minecraft:barrel": "immersive_pillagers:chests/remains_container",
     "minecraft:brushable_block": "immersive_pillagers:archaeology/remains",
 }
+REMAINS_RESEARCH_LOOT_TABLE = "immersive_pillagers:chests/remains_research"
 
 RANDOM_ENTITY_SPAWNS = {
     "camp": {
@@ -93,6 +94,15 @@ def add_loot_tables(structure: Compound, loot_tables: dict[str, str]) -> None:
         if loot_table is not None:
             nbt["LootTable"] = String(loot_table)
             nbt.pop("Items", None)
+
+
+def add_remains_research_note(structure: Compound) -> None:
+    for block in structure.get("blocks", []):
+        nbt = block.get("nbt")
+        if isinstance(nbt, Compound) and str(nbt.get("id", "")) in {"minecraft:chest", "minecraft:barrel"}:
+            nbt["LootTable"] = String(REMAINS_RESEARCH_LOOT_TABLE)
+            nbt.pop("Items", None)
+            return
 
 
 def remove_structure_blocks(structure: Compound) -> None:
@@ -232,6 +242,8 @@ def transform_file(source_path: Path, dest_path: Path) -> None:
     loot_tables = REMAINS_LOOT_TABLES if source_path.stem.startswith("remains_") else STRUCTURE_LOOT_TABLES.get(source_path.stem)
     if loot_tables is not None:
         add_loot_tables(structure, loot_tables)
+    if source_path.stem.startswith("remains_"):
+        add_remains_research_note(structure)
     entity_spawns = RANDOM_ENTITY_SPAWNS.get(source_path.stem)
     if entity_spawns is not None:
         states = block_states(structure)
