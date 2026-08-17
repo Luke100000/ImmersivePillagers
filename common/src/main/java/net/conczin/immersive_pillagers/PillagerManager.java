@@ -31,6 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class PillagerManager {
+    public static final double ACTIVE_HORDE_RADIUS = 128.0;
+
     private static final Map<String, HordeSpawner> HORDES = new HashMap<>();
     private static final Map<UUID, ActiveHorde> ACTIVE_HORDES = new HashMap<>();
 
@@ -192,6 +194,10 @@ public class PillagerManager {
 
     public static List<ActiveHorde> getActiveHordes() {
         return List.copyOf(ACTIVE_HORDES.values());
+    }
+
+    public static boolean hasActiveHordeNearby(ServerLevel level, BlockPos position) {
+        return ACTIVE_HORDES.values().stream().anyMatch(horde -> horde.isNearby(level, position, ACTIVE_HORDE_RADIUS));
     }
 
     public static int clearHordes() {

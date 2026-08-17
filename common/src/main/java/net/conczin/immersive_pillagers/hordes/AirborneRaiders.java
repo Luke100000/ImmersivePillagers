@@ -21,7 +21,7 @@ import static immersive_aircraft.Items.ROTARY_CANNON;
 public class AirborneRaiders {
     public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target, int difficulty) {
         List<Entity> members = new ArrayList<>();
-        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, 0.05);
+        int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, 0.2);
         for (int i = 0; i < groupCount; i++) {
             GyrodyneEntity entity = new GyrodyneEntity(Entities.GYRODYNE.get(), level);
             var spawnPos = HordeSpawnUtil.findAirSpawn(level, pos, entity);
