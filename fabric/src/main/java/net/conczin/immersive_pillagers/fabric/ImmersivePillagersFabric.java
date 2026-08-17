@@ -10,6 +10,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -41,10 +42,12 @@ public class ImmersivePillagersFabric implements ModInitializer {
         FabricDefaultAttributeRegistry.register(ImmersivePillagersEntities.UNDEAD_EVOKER.get(), UndeadEvoker.createAttributes());
         FabricDefaultAttributeRegistry.register(ImmersivePillagersEntities.UNDEAD_VINDICATOR.get(), UndeadVindicator.createAttributes());
 
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ImmersivePillagers.locate("main"), ImmersivePillagersItems.CREATIVE_TAB.get());
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ImmersivePillagersItems.CREATIVE_TAB_KEY, ImmersivePillagersItems.CREATIVE_TAB.get());
+        CreativeModeTabEvents.modifyOutputEvent(ImmersivePillagersItems.CREATIVE_TAB_KEY)
+                .register(output -> ImmersivePillagersItems.addCreativeTabItems(output::accept));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> ImmersivePillagersCommands.register(dispatcher));
         ServerTickEvents.END_SERVER_TICK.register(PillagerManager::tick);
-        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, killer, killedEntity) -> PillagerManager.onLivingEntityKilled(killedEntity, killer));
+        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, killer, killedEntity, damageSource) -> PillagerManager.onLivingEntityKilled(killedEntity, killer));
     }
 }

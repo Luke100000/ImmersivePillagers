@@ -1,19 +1,21 @@
 package net.conczin.immersive_pillagers.client;
 
-import net.minecraft.client.model.IllagerModel;
+import net.minecraft.client.model.monster.illager.IllagerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.monster.AbstractIllager;
 
-public class UndeadIllagerModel<T extends AbstractIllager> extends IllagerModel<T> {
+public class UndeadIllagerModel extends IllagerModel<UndeadIllagerRenderState> {
     public UndeadIllagerModel(ModelPart root) {
         super(root);
     }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        super.setupAnim(entity, limbSwing, limbSwingAmount * 2.5f, ageInTicks, netHeadYaw, headPitch);
+    public void setupAnim(UndeadIllagerRenderState state) {
+        float speed = state.walkAnimationSpeed;
+        state.walkAnimationSpeed *= 2.5F;
+        super.setupAnim(state);
+        state.walkAnimationSpeed = speed;
     }
 
     public static LayerDefinition createBodyLayer() {

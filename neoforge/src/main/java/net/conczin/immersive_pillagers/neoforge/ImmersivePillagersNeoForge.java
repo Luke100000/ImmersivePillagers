@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -23,6 +24,7 @@ public final class ImmersivePillagersNeoForge {
     public ImmersivePillagersNeoForge(IEventBus modEventBus) {
         modEventBus.addListener(ImmersivePillagersNeoForge::register);
         modEventBus.addListener(ImmersivePillagersNeoForge::registerAttributes);
+        modEventBus.addListener(ImmersivePillagersNeoForge::buildCreativeTabContents);
         modEventBus.addListener(ImmersivePillagersNeoForge::registerPayloadHandlers);
         ImmersivePillagers.init();
         if (ModList.get().isLoaded("immersive_aircraft")) {
@@ -43,7 +45,7 @@ public final class ImmersivePillagersNeoForge {
         } else if (event.getRegistryKey().equals(BLOCK_ENTITY_TYPE)) {
             event.register(BLOCK_ENTITY_TYPE, helper -> ImmersivePillagersBlockEntities.register(
                     helper::register,
-                    (factory, blocks) -> BlockEntityType.Builder.of(factory::create, blocks).build(null)
+                    (factory, blocks) -> new BlockEntityType<>(factory::create, blocks)
             ));
         } else if (event.getRegistryKey().equals(ITEM)) {
             event.register(ITEM, helper -> ImmersivePillagersItems.register(helper::register));
@@ -53,7 +55,7 @@ public final class ImmersivePillagersNeoForge {
             event.register(SOUND_EVENT, helper -> ImmersivePillagersSounds.register(helper::register));
         } else if (event.getRegistryKey().equals(CREATIVE_MODE_TAB)) {
             event.register(CREATIVE_MODE_TAB, helper -> helper.register(
-                    ImmersivePillagers.locate("main"), ImmersivePillagersItems.CREATIVE_TAB.get()
+                    ImmersivePillagersItems.CREATIVE_TAB_KEY, ImmersivePillagersItems.CREATIVE_TAB.get()
             ));
         }
     }
@@ -62,5 +64,11 @@ public final class ImmersivePillagersNeoForge {
         event.put(ImmersivePillagersEntities.UNDEAD_PILLAGER.get(), UndeadPillager.createAttributes().build());
         event.put(ImmersivePillagersEntities.UNDEAD_EVOKER.get(), UndeadEvoker.createAttributes().build());
         event.put(ImmersivePillagersEntities.UNDEAD_VINDICATOR.get(), UndeadVindicator.createAttributes().build());
+    }
+
+    private static void buildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey().equals(ImmersivePillagersItems.CREATIVE_TAB_KEY)) {
+            ImmersivePillagersItems.addCreativeTabItems(event::accept);
+        }
     }
 }

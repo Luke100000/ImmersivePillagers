@@ -29,7 +29,7 @@ side = "BOTH"
 [[dependencies.immersive_pillagers]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1,)"
+versionRange = "${neoforge_loader_version_range}"
 ordering = "NONE"
 side = "BOTH"
 

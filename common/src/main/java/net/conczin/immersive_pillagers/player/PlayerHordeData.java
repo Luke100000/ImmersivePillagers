@@ -3,22 +3,17 @@ package net.conczin.immersive_pillagers.player;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.OptionalLong;
 
 public final class PlayerHordeData extends SavedData {
-    private static final String DATA_NAME_PREFIX = ImmersivePillagers.MOD_ID + "_player_horde_";
-
     public static final Codec<PlayerHordeData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("has_killed_pillager", false).forGetter(PlayerHordeData::hasKilledPillager),
             Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("last_raid_times", Map.of()).forGetter(PlayerHordeData::lastRaidTimes),
@@ -40,16 +35,9 @@ public final class PlayerHordeData extends SavedData {
     }
 
     public static PlayerHordeData get(ServerPlayer player) {
-        return Objects.requireNonNull(player.getServer()).overworld().getDataStorage().computeIfAbsent(
-                new SavedData.Factory<>(PlayerHordeData::new, PlayerHordeData::load, DataFixTypes.SAVED_DATA_MAP_DATA),
-                DATA_NAME_PREFIX + player.getUUID()
-        );
-    }
-
-    public static PlayerHordeData load(CompoundTag tag, HolderLookup.Provider provider) {
-        return CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not load player horde data: {}", error))
-                .orElseGet(PlayerHordeData::new);
+        Identifier id = ImmersivePillagers.locate("player_horde_" + player.getUUID());
+        SavedDataType<PlayerHordeData> type = new SavedDataType<>(id, PlayerHordeData::new, CODEC, DataFixTypes.SAVED_DATA_MAP_DATA);
+        return player.level().getServer().overworld().getDataStorage().computeIfAbsent(type);
     }
 
     public boolean hasKilledPillager() {
@@ -112,13 +100,4 @@ public final class PlayerHordeData extends SavedData {
         return scheduledRaidTime;
     }
 
-    @Override
-    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-        CODEC.encodeStart(NbtOps.INSTANCE, this)
-                .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not save player horde data: {}", error))
-                .filter(CompoundTag.class::isInstance)
-                .map(CompoundTag.class::cast)
-                .ifPresent(tag::merge);
-        return tag;
-    }
 }

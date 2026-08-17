@@ -46,7 +46,7 @@ public class ActiveHorde {
         this.initialMembers = Math.max(1, this.members.size());
 
         MutableComponent name = Component.translatable("horde." + ImmersivePillagers.MOD_ID + "." + type);
-        this.bossEvent = new ServerBossEvent(name, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
+        this.bossEvent = new ServerBossEvent(UUID.randomUUID(), name, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
         this.bossEvent.setDarkenScreen(false);
         this.bossEvent.setCreateWorldFog(false);
         this.bossEvent.setPlayBossMusic(false);
@@ -151,7 +151,7 @@ public class ActiveHorde {
         if (target != null) {
             ImmersivePillagersStats.awardWaveDefeated(target, type);
             PillagerManager.awardHordeConquerorProgress(target, type);
-            target.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.MASTER, 1.0f, 1.0f);
+            target.playSound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
         }
 
         if (regionToLiberate != null) {
@@ -161,7 +161,7 @@ public class ActiveHorde {
             double range = 128.0 * 128.0;
             level.players().stream()
                     .filter(player -> player.distanceToSqr(center) <= range)
-                    .forEach(player -> player.displayClientMessage(message, true));
+                    .forEach(player -> player.sendSystemMessage(message, true));
         }
     }
 }

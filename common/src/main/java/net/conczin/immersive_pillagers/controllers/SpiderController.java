@@ -2,8 +2,8 @@ package net.conczin.immersive_pillagers.controllers;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.PillagerManager;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.raid.Raider;
 
 public class SpiderController {
@@ -13,7 +13,7 @@ public class SpiderController {
     private static final double ORBIT_SPEED = 0.01;
 
     public static void tick(Spider spider) {
-        if (spider.level().isClientSide() || !spider.getTags().contains(ImmersivePillagers.HORDE_ENTITY_TAG) || !(spider.getControllingPassenger() instanceof Raider rider)) {
+        if (spider.level().isClientSide() || !spider.entityTags().contains(ImmersivePillagers.HORDE_ENTITY_TAG) || !(spider.getControllingPassenger() instanceof Raider rider)) {
             return;
         }
 

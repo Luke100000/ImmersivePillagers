@@ -5,13 +5,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.Nullable;
 
 public class BoatRaiders {
     public static Optional<ActiveHorde> spawn(ServerLevel level, BlockPos pos, @Nullable ServerPlayer target, int difficulty) {
@@ -23,7 +25,7 @@ public class BoatRaiders {
                 continue;
             }
 
-            Boat entity = new Boat(level, spawnPos.get().x, spawnPos.get().y, spawnPos.get().z);
+            Boat entity = new Boat(EntityType.OAK_BOAT, level, () -> Items.OAK_BOAT);
             members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 2, target, PillagerManager.HORDE_BOAT));
         }
         if (members.isEmpty()) {

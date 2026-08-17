@@ -1,16 +1,16 @@
 package net.conczin.immersive_pillagers.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.item.ResearchNoteItem;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Util;
 
 import java.util.List;
 import java.util.Locale;
@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class ResearchNoteScreen extends Screen {
-    private static final ResourceLocation PAPER_TEXTURE = ImmersivePillagers.locate("textures/gui/poster.png");
+    private static final Identifier PAPER_TEXTURE = ImmersivePillagers.locate("textures/gui/poster.png");
 
     private static final Pattern WORD_PATTERN = Pattern.compile("[\\p{L}\\p{N}]+");
     private static final String LATIN_ALPHABET = "abcdefghijklmnopqrstuvwxyz";
@@ -54,36 +54,25 @@ public final class ResearchNoteScreen extends Screen {
         unreadableLines = font.split(Component.literal(translate(text, 0)), WIDTH - 34);
         translatedLines = font.split(Component.literal(translate(text, translationPercent)), WIDTH - 34);
 
-        backButton = addRenderableWidget(Button.builder(Component.translatable("gui.immersive_pillagers.back"), button -> onClose()).bounds(left + 38, top + 180, 74, 20).build());
+        backButton = addRenderableWidget(Button.builder(Component.translatable("gui.immersive_pillagers.back"), _ -> onClose()).bounds(left + 38, top + 180, 74, 20).build());
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-
-        guiGraphics.blit(PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
-        contents.scribbleImage().ifPresent(image -> {
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            guiGraphics.blit(image, left + 11, top + 25, 0, 0, 128, 128, 128, 128);
-            RenderSystem.disableBlend();
-        });
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, 256, 256);
+        contents.scribbleImage().ifPresent(image -> guiGraphics.blit(RenderPipelines.GUI_TEXTURED, image, left + 11, top + 25, 0, 0, 128, 128, 128, 128));
 
         // Title
         Component title = localized(contents.title()).copy().withStyle(ChatFormatting.BOLD);
-        guiGraphics.drawString(font, title, left + WIDTH / 2 - font.width(title) / 2, top + 15, 0xFF38291F, false);
+        guiGraphics.text(font, title, left + WIDTH / 2 - font.width(title) / 2, top + 15, 0xFF38291F, false);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
         float fadeProgress = translationFadeProgress();
         if (fadeProgress < 1.0f) renderText(guiGraphics, unreadableLines, 1.0F - fadeProgress);
         if (fadeProgress > 0.0f) renderText(guiGraphics, translatedLines, fadeProgress);
-        RenderSystem.disableBlend();
-
-        backButton.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
     }
 
-    private void renderText(GuiGraphics guiGraphics, List<FormattedCharSequence> lines, float opacity) {
+    private void renderText(GuiGraphicsExtractor guiGraphics, List<FormattedCharSequence> lines, float opacity) {
         int alpha = Math.round(255.0F * opacity);
         if (alpha < MINIMUM_VISIBLE_ALPHA) {
             return;
@@ -94,13 +83,12 @@ public final class ResearchNoteScreen extends Screen {
                 : top + 35 + (HEIGHT - 45 - neededSpace) / 2;
         int color = (alpha << 24) | 0x38291F;
         for (int line = 0; line < lines.size(); line++) {
-            guiGraphics.drawString(font, lines.get(line), left + 18, y + line * 9, color, false);
+            guiGraphics.text(font, lines.get(line), left + 18, y + line * 9, color, false);
         }
-        guiGraphics.flush();
     }
 
     private float translationFadeProgress() {
-        return Math.min(1.0f, Math.max(0.0f, (Util.getMillis() - openedAt) / (float) TRANSLATION_FADE_MILLIS));
+        return Math.clamp((Util.getMillis() - openedAt) / (float) TRANSLATION_FADE_MILLIS, 0.0f, 1.0f);
     }
 
     private String translate(String text, int currentTranslationPercent) {

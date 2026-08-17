@@ -5,14 +5,11 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
 import java.util.ArrayList;
 
@@ -25,6 +22,9 @@ public final class HordeRegionData extends SavedData {
     private static final Codec<HordeRegionData> CODEC = LONG_SET_CODEC.optionalFieldOf("enabled_spawn_regions", new LongOpenHashSet())
             .xmap(HordeRegionData::new, HordeRegionData::enabledSpawnRegions)
             .codec();
+    private static final SavedDataType<HordeRegionData> DATA_TYPE = new SavedDataType<>(
+            ImmersivePillagers.locate(DATA_NAME), HordeRegionData::new, CODEC, DataFixTypes.SAVED_DATA_MAP_DATA
+    );
 
     private final LongSet enabledSpawnRegions;
 
@@ -37,20 +37,11 @@ public final class HordeRegionData extends SavedData {
     }
 
     public static HordeRegionData get(ServerLevel level) {
-        return level.getServer().overworld().getDataStorage().computeIfAbsent(
-                new SavedData.Factory<>(HordeRegionData::new, HordeRegionData::load, DataFixTypes.SAVED_DATA_MAP_DATA),
-                DATA_NAME
-        );
-    }
-
-    public static HordeRegionData load(CompoundTag tag, HolderLookup.Provider provider) {
-        return CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not load horde region data: {}", error))
-                .orElseGet(HordeRegionData::new);
+        return level.getServer().overworld().getDataStorage().computeIfAbsent(DATA_TYPE);
     }
 
     public static long spawnRegionKey(BlockPos position) {
-        return ChunkPos.asLong(Math.floorDiv(position.getX(), SPAWN_REGION_SIZE), Math.floorDiv(position.getZ(), SPAWN_REGION_SIZE));
+        return ChunkPos.pack(Math.floorDiv(position.getX(), SPAWN_REGION_SIZE), Math.floorDiv(position.getZ(), SPAWN_REGION_SIZE));
     }
 
     public void enableSpawningAt(BlockPos position) {
@@ -67,13 +58,4 @@ public final class HordeRegionData extends SavedData {
         return new LongOpenHashSet(enabledSpawnRegions);
     }
 
-    @Override
-    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-        CODEC.encodeStart(NbtOps.INSTANCE, this)
-                .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not save horde region data: {}", error))
-                .filter(CompoundTag.class::isInstance)
-                .map(CompoundTag.class::cast)
-                .ifPresent(tag::merge);
-        return tag;
-    }
 }

@@ -12,8 +12,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +26,13 @@ public class ImmersivePillagersCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal(ImmersivePillagers.MOD_ID)
                 .then(Commands.literal("list")
-                        .requires(p -> p.hasPermission(2))
+                        .requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(c -> listHordes(c.getSource())))
                 .then(Commands.literal("clear")
-                        .requires(p -> p.hasPermission(2))
+                        .requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(c -> clearHordes(c.getSource())))
                 .then(Commands.literal("summon")
-                        .requires(p -> p.hasPermission(2))
+                        .requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .then(Commands.argument("wave", StringArgumentType.word())
                                 .suggests(ImmersivePillagersCommands::suggestHordes)
                                 .executes(c -> ImmersivePillagersCommands.summon(c, c.getArgument("wave", String.class), DEFAULT_DIFFICULTY))
@@ -46,17 +46,13 @@ public class ImmersivePillagersCommands {
     private static int summon(CommandContext<CommandSourceStack> context, String wave, int difficulty) throws CommandSyntaxException {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayerOrException();
-        if (!(player.level() instanceof ServerLevel level)) {
-            source.sendFailure(Component.translatable("command.immersive_pillagers.summon.server_only"));
-            return 0;
-        }
 
         if (!PillagerManager.isHordeRegistered(wave)) {
             source.sendFailure(Component.translatable("command.immersive_pillagers.summon.unknown_horde", wave, availableHordes()));
             return 0;
         }
 
-        Optional<ActiveHorde> activeHorde = PillagerManager.spawnHorde(wave, level, player.blockPosition(), player, difficulty);
+        Optional<ActiveHorde> activeHorde = PillagerManager.spawnHorde(wave, player.level(), player.blockPosition(), player, difficulty);
         if (activeHorde.isEmpty()) {
             source.sendFailure(Component.translatable("command.immersive_pillagers.summon.no_safe_position", wave));
             return 0;

@@ -1,82 +1,52 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
-}
-
-architectury {
-    platformSetupLoomIde()
-    fabric()
-}
-
-configurations {
-    common
-    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentFabric.extendsFrom common
+    id "multiloader-loader"
+    id "net.fabricmc.fabric-loom"
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+}
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+loom {
+    runs {
+        client {
+            client()
+            runDir("runs/client")
+        }
+        server {
+            server()
+            runDir("runs/server")
+        }
+    }
+}
 
-    modRuntimeOnly("net.conczin:immersive_aircraft:${immersive_aircraft_version}+fabric")
-    modRuntimeOnly("net.conczin:immersive_melodies:${immersive_melodies_version}+fabric")
+def loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String)
+["apiElements", "runtimeElements", "sourcesElements", "includeInternal", "modCompileClasspath"].each { variant ->
+    configurations.named(variant) {
+        attributes {
+            attribute(loaderAttribute, "fabric")
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+        configurations.named(variant) {
+            attributes {
+                attribute(loaderAttribute, "fabric")
+            }
+        }
+    }
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "fabric_loader_version_range", rootProject.fabric_loader_version_range
-    inputs.property "fabric_minecraft_version_range", rootProject.fabric_minecraft_version_range
-    inputs.property "fabric_immersive_aircraft_version_range", rootProject.fabric_immersive_aircraft_version_range
-
+    inputs.properties(version: project.version, fabric_loader_version_range: fabric_loader_version_range,
+            fabric_minecraft_version_range: fabric_minecraft_version_range,
+            fabric_immersive_aircraft_version_range: fabric_immersive_aircraft_version_range)
     filesMatching("fabric.mod.json") {
-        expand(
-                "version": project.version,
-                "fabric_loader_version_range": rootProject.fabric_loader_version_range,
-                "fabric_minecraft_version_range": rootProject.fabric_minecraft_version_range,
-                "fabric_immersive_aircraft_version_range": rootProject.fabric_immersive_aircraft_version_range
-        )
-    }
-}
-
-shadowJar {
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
-}
-
-remapJar {
-    injectAccessWidener = true
-    inputFile.set(shadowJar.archiveFile)
-    dependsOn shadowJar
-    archiveClassifier = null
-}
-
-jar {
-    archiveClassifier.set("dev")
-}
-
-sourcesJar {
-    def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
-            groupId = rootProject.group_id
-            version = version + "+fabric"
-            from components.java
-        }
+        expand(version: project.version, fabric_loader_version_range: fabric_loader_version_range,
+                fabric_minecraft_version_range: fabric_minecraft_version_range,
+                fabric_immersive_aircraft_version_range: fabric_immersive_aircraft_version_range)
     }
 }

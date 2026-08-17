@@ -13,13 +13,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -27,13 +27,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class ReinforcedChestBlock extends ChestBlock {
     public static final BooleanProperty LOCKED = BooleanProperty.create("locked");
 
     public ReinforcedChestBlock(BlockBehaviour.Properties properties) {
-        super(properties, () -> ImmersivePillagersBlockEntities.REINFORCED_CHEST);
+        super(() -> ImmersivePillagersBlockEntities.REINFORCED_CHEST, SoundEvents.CHEST_OPEN, SoundEvents.CHEST_CLOSE, properties);
         registerDefaultState(defaultBlockState().setValue(LOCKED, true));
     }
 
@@ -42,7 +43,7 @@ public class ReinforcedChestBlock extends ChestBlock {
         return defaultBlockState()
                 .setValue(FACING, context.getHorizontalDirection().getOpposite())
                 .setValue(TYPE, ChestType.SINGLE)
-                .setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == net.minecraft.world.level.material.Fluids.WATER);
+                .setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
     }
 
     @Override
@@ -56,17 +57,17 @@ public class ReinforcedChestBlock extends ChestBlock {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (state.getValue(LOCKED)) {
             if (!stack.is(ImmersivePillagersItems.RUSTY_KEY.get())) {
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.6F, 1.1F);
                 }
-                return ItemInteractionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
 
-            if (level.isClientSide) {
-                return ItemInteractionResult.SUCCESS;
+            if (level.isClientSide()) {
+                return InteractionResult.SUCCESS;
             }
 
             if (!player.getAbilities().instabuild) {
@@ -81,7 +82,7 @@ public class ReinforcedChestBlock extends ChestBlock {
                 PillagerManager.markForReinforcedChestRaid(serverPlayer);
             }
 
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS_SERVER;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
@@ -107,7 +108,7 @@ public class ReinforcedChestBlock extends ChestBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(LOCKED);
     }

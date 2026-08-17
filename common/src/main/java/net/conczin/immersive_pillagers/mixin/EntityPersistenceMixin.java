@@ -12,7 +12,7 @@ public abstract class EntityPersistenceMixin {
     @Inject(method = "shouldBeSaved", at = @At("HEAD"), cancellable = true)
     private void immersivePillagers$preventHordeEntitySaving(CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (Entity) (Object) this;
-        if (entity.getTags().contains(ImmersivePillagers.HORDE_ENTITY_TAG)) {
+        if (entity.entityTags().contains(ImmersivePillagers.HORDE_ENTITY_TAG)) {
             cir.setReturnValue(false);
         }
     }

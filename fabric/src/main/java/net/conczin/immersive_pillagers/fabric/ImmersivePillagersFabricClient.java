@@ -5,7 +5,7 @@ import net.conczin.immersive_pillagers.ImmersivePillagersEntities;
 import net.conczin.immersive_pillagers.client.*;
 import net.conczin.immersive_pillagers.network.ClientHandler;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 
@@ -19,6 +19,6 @@ public final class ImmersivePillagersFabricClient implements ClientModInitialize
         EntityRendererRegistry.register(ImmersivePillagersEntities.UNDEAD_VINDICATOR.get(), UndeadVindicatorRenderer::new);
         BlockEntityRenderers.register(ImmersivePillagersBlockEntities.REINFORCED_CHEST, ReinforcedChestRenderer::new);
 
-        EntityModelLayerRegistry.registerModelLayer(UndeadModelLayers.UNDEAD_ILLAGER, UndeadIllagerModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(UndeadModelLayers.UNDEAD_ILLAGER, UndeadIllagerModel::createBodyLayer);
     }
 }

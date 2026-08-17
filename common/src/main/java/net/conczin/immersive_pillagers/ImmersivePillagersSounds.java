@@ -1,6 +1,6 @@
 package net.conczin.immersive_pillagers;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 
 import java.util.function.BiConsumer;
@@ -20,7 +20,7 @@ public class ImmersivePillagersSounds {
 
     public static final SoundEvent REINFORCED_CHEST_UNLOCK = SoundEvent.createVariableRangeEvent(ImmersivePillagers.locate("block.reinforced_chest.unlock"));
 
-    public static void register(BiConsumer<ResourceLocation, SoundEvent> registrar) {
+    public static void register(BiConsumer<Identifier, SoundEvent> registrar) {
         registrar.accept(ImmersivePillagers.locate("entity.undead_pillager.ambient"), UNDEAD_PILLAGER_AMBIENT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_pillager.hurt"), UNDEAD_PILLAGER_HURT);
         registrar.accept(ImmersivePillagers.locate("entity.undead_pillager.death"), UNDEAD_PILLAGER_DEATH);

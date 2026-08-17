@@ -1,0 +1,23 @@
+plugins {
+    id "java-library"
+    id "maven-publish"
+}
+
+base {
+    archivesName = "${archives_base_name}-${project.name}-${minecraft_version}"
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+    exclusiveContent {
+        forRepository {
+            maven { url = uri("https://repo.spongepowered.org/repository/maven-public") }
+        }
+        filter { includeGroupAndSubgroups("org.spongepowered") }
+    }
+}

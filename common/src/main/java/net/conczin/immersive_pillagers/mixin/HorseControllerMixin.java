@@ -2,7 +2,7 @@ package net.conczin.immersive_pillagers.mixin;
 
 import net.conczin.immersive_pillagers.controllers.HorseController;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

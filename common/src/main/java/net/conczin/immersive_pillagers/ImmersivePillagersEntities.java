@@ -4,7 +4,9 @@ import com.google.common.base.Suppliers;
 import net.conczin.immersive_pillagers.entity.UndeadEvoker;
 import net.conczin.immersive_pillagers.entity.UndeadPillager;
 import net.conczin.immersive_pillagers.entity.UndeadVindicator;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
@@ -17,23 +19,23 @@ public class ImmersivePillagersEntities {
                     .sized(0.6F, 1.95F)
                     .ridingOffset(-0.6F)
                     .clientTrackingRange(8)
-                    .build("undead_pillager"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, ImmersivePillagers.locate("undead_pillager"))));
 
     public static final Supplier<EntityType<UndeadEvoker>> UNDEAD_EVOKER = Suppliers.memoize(() ->
             EntityType.Builder.of(UndeadEvoker::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
                     .ridingOffset(-0.6F)
                     .clientTrackingRange(8)
-                    .build("undead_evoker"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, ImmersivePillagers.locate("undead_evoker"))));
 
     public static final Supplier<EntityType<UndeadVindicator>> UNDEAD_VINDICATOR = Suppliers.memoize(() ->
             EntityType.Builder.of(UndeadVindicator::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
                     .ridingOffset(-0.6F)
                     .clientTrackingRange(8)
-                    .build("undead_vindicator"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, ImmersivePillagers.locate("undead_vindicator"))));
 
-    public static void register(BiConsumer<ResourceLocation, EntityType<?>> registrar) {
+    public static void register(BiConsumer<Identifier, EntityType<?>> registrar) {
         registrar.accept(ImmersivePillagers.locate("undead_pillager"), UNDEAD_PILLAGER.get());
         registrar.accept(ImmersivePillagers.locate("undead_evoker"), UNDEAD_EVOKER.get());
         registrar.accept(ImmersivePillagers.locate("undead_vindicator"), UNDEAD_VINDICATOR.get());

@@ -11,7 +11,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +22,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,8 +34,8 @@ public class PillagerManager {
     private static final Map<String, HordeSpawner> HORDES = new HashMap<>();
     private static final Map<UUID, ActiveHorde> ACTIVE_HORDES = new HashMap<>();
 
-    private static final ResourceLocation CRUDE_TOTEM_AWAKENED_ADVANCEMENT = ImmersivePillagers.locate("research/crude_totem_awakened");
-    private static final ResourceLocation HORDE_CONQUEROR_ADVANCEMENT = ImmersivePillagers.locate("horde_conqueror");
+    private static final Identifier CRUDE_TOTEM_AWAKENED_ADVANCEMENT = ImmersivePillagers.locate("research/crude_totem_awakened");
+    private static final Identifier HORDE_CONQUEROR_ADVANCEMENT = ImmersivePillagers.locate("horde_conqueror");
 
     public static String registerHorde(String name, HordeSpawner horde) {
         HORDES.put(name, horde);
@@ -71,7 +71,7 @@ public class PillagerManager {
     public static Optional<ActiveHorde> spawnRandomHorde(ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty) {
         List<String> hordeTypes = new ArrayList<>(getHordeNames());
         while (!hordeTypes.isEmpty()) {
-            String hordeType = hordeTypes.remove(level.random.nextInt(hordeTypes.size()));
+            String hordeType = hordeTypes.remove(level.getRandom().nextInt(hordeTypes.size()));
             if (!level.getBiome(position).is(TagKey.create(Registries.BIOME, ImmersivePillagers.locate(hordeType)))) {
                 continue;
             }
@@ -85,15 +85,15 @@ public class PillagerManager {
 
     public static boolean canReceiveBounty(ServerPlayer target) {
         return Config.getInstance().allowPlayerBounties
-               && target.serverLevel().getDifficulty().getId() > 0
-               && !target.serverLevel().isVillage(target.blockPosition());
+               && target.level().getDifficulty().getId() > 0
+               && !target.level().isVillage(target.blockPosition());
     }
 
     public static boolean spawnBounty(ServerPlayer target) {
         if (!canReceiveBounty(target)) {
             return false;
         }
-        ServerLevel level = target.serverLevel();
+        ServerLevel level = target.level();
         BlockPos position = target.blockPosition();
         return spawnRandomHorde(level, position, target, 10).map(horde -> {
             addActiveHorde(horde);
@@ -104,13 +104,13 @@ public class PillagerManager {
     public static void markForReinforcedChestRaid(ServerPlayer player) {
         PlayerHordeData data = PlayerHordeData.get(player);
         if (data.markPillagerKilled()) {
-            player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
+            player.sendSystemMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
         }
-        data.scheduleRaid(player.serverLevel().getGameTime() + 20L * 60L);
+        data.scheduleRaid(player.level().getGameTime() + 20L * 60L);
     }
 
     public static boolean summonWarHorde(ServerPlayer player) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (level.getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         }
@@ -125,17 +125,14 @@ public class PillagerManager {
     }
 
     public static void openWantedPoster(ServerPlayer viewer, InteractionHand hand) {
-        MinecraftServer server = viewer.getServer();
-        if (server == null) {
-            return;
-        }
+        MinecraftServer server = viewer.level().getServer();
         List<OpenWantedPosterPacket.Entry> players = server.getPlayerList().getPlayers().stream()
                 .sorted(Comparator
                         .comparing((ServerPlayer player) -> !player.getUUID().equals(viewer.getUUID()))
-                        .thenComparing(player -> player.getGameProfile().getName(), String.CASE_INSENSITIVE_ORDER))
+                        .thenComparing(player -> player.getGameProfile().name(), String.CASE_INSENSITIVE_ORDER))
                 .map(player -> new OpenWantedPosterPacket.Entry(
                         player.getUUID(),
-                        player.getGameProfile().getName(),
+                        player.getGameProfile().name(),
                         PlayerHordeData.get(player).hasKilledPillager(),
                         canReceiveBounty(player)
                 ))
@@ -144,8 +141,8 @@ public class PillagerManager {
     }
 
     public static void handleWantedPosterAction(ServerPlayer sender, WantedPosterActionPacket packet) {
-        MinecraftServer server = sender.getServer();
-        if (server == null || !sender.getItemInHand(packet.hand()).is(ImmersivePillagersItems.WANTED_POSTER.get())) {
+        MinecraftServer server = sender.level().getServer();
+        if (!sender.getItemInHand(packet.hand()).is(ImmersivePillagersItems.WANTED_POSTER.get())) {
             return;
         }
 
@@ -155,7 +152,7 @@ public class PillagerManager {
             }
             PlayerHordeData.get(sender).pardon();
             consumeWantedPoster(sender, packet.hand());
-            sender.displayClientMessage(Component.translatable("message.immersive_pillagers.pardoned"), true);
+            sender.sendSystemMessage(Component.translatable("message.immersive_pillagers.pardoned"), true);
             return;
         }
 
@@ -164,20 +161,20 @@ public class PillagerManager {
             return;
         }
         if (!Config.getInstance().allowPlayerBounties) {
-            sender.displayClientMessage(Component.translatable("message.immersive_pillagers.bounty_disabled"), true);
+            sender.sendSystemMessage(Component.translatable("message.immersive_pillagers.bounty_disabled"), true);
             return;
         }
         if (!canReceiveBounty(target)) {
-            sender.displayClientMessage(Component.translatable("message.immersive_pillagers.bounty_protected"), true);
+            sender.sendSystemMessage(Component.translatable("message.immersive_pillagers.bounty_protected"), true);
             return;
         }
         if (!spawnBounty(target)) {
-            sender.displayClientMessage(Component.translatable("message.immersive_pillagers.bounty_unavailable"), true);
+            sender.sendSystemMessage(Component.translatable("message.immersive_pillagers.bounty_unavailable"), true);
             return;
         }
 
         consumeWantedPoster(sender, packet.hand());
-        sender.displayClientMessage(Component.translatable("message.immersive_pillagers.bounty_sent", target.getGameProfile().getName()), true);
+        sender.sendSystemMessage(Component.translatable("message.immersive_pillagers.bounty_sent", target.getGameProfile().name()), true);
     }
 
     private static void consumeWantedPoster(ServerPlayer player, InteractionHand hand) {
@@ -216,12 +213,12 @@ public class PillagerManager {
         if (killer instanceof ServerPlayer player) {
             if (killed instanceof Pillager && !(killed instanceof UndeadPillager)) {
                 if (PlayerHordeData.get(player).markPillagerKilled()) {
-                    player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
+                    player.sendSystemMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
                 }
             }
 
             ItemStack offhand = player.getOffhandItem();
-            if (killed.getType().is(ImmersivePillagers.HUMANOID_ENTITY_TYPES) && offhand.is(ImmersivePillagersItems.CRUDE_TOTEM_OF_UNDYING.get())) {
+            if (killed.typeHolder().is(ImmersivePillagers.HUMANOID_ENTITY_TYPES) && offhand.is(ImmersivePillagersItems.CRUDE_TOTEM_OF_UNDYING.get())) {
                 player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(Items.TOTEM_OF_UNDYING));
                 killed.level().playSound(null, killed.getX(), killed.getY(), killed.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 0.8F);
                 awardCrudeTotemAwakened(player);
@@ -234,11 +231,7 @@ public class PillagerManager {
             return;
         }
 
-        MinecraftServer server = player.getServer();
-        if (server == null) {
-            return;
-        }
-
+        MinecraftServer server = player.level().getServer();
         AdvancementHolder advancement = server.getAdvancements().get(HORDE_CONQUEROR_ADVANCEMENT);
         if (advancement != null) {
             player.getAdvancements().award(advancement, hordeType);
@@ -246,10 +239,7 @@ public class PillagerManager {
     }
 
     private static void awardCrudeTotemAwakened(ServerPlayer player) {
-        MinecraftServer server = player.getServer();
-        if (server == null) {
-            return;
-        }
+        MinecraftServer server = player.level().getServer();
         AdvancementHolder advancement = server.getAdvancements().get(CRUDE_TOTEM_AWAKENED_ADVANCEMENT);
         if (advancement != null) {
             player.getAdvancements().award(advancement, "charged");

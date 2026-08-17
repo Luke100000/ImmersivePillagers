@@ -9,15 +9,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.camel.Camel;
-import net.minecraft.world.entity.animal.horse.SkeletonHorse;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.animal.equine.SkeletonHorse;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.illager.Vindicator;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -56,7 +57,7 @@ public class HordeSpawnUtil {
             Vec3 offset = randomHorizontalOffset(level);
             double x = origin.getX() + 0.5 + offset.x;
             double z = origin.getZ() + 0.5 + offset.z;
-            double y = origin.getY() + 8.0 + level.random.nextInt(12);
+            double y = origin.getY() + 8.0 + level.getRandom().nextInt(12);
             Vec3 pos = new Vec3(x, y, z);
             if (canFit(level, entity, pos)) {
                 return Optional.of(pos);
@@ -80,13 +81,13 @@ public class HordeSpawnUtil {
 
     public static void placeRandomly(ServerLevel level, Entity entity, Vec3 pos) {
         entity.setPos(pos);
-        entity.setYRot(level.random.nextFloat() * 360.0f);
+        entity.setYRot(level.getRandom().nextFloat() * 360.0f);
     }
 
     public static List<Raider> addPillagerCrew(ServerLevel level, Entity vehicle, int seats, String hordeType) {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
-            Pillager pillager = EntityType.PILLAGER.create(level);
+            Pillager pillager = EntityType.PILLAGER.create(level, EntitySpawnReason.EVENT);
             if (pillager == null) {
                 continue;
             }
@@ -94,7 +95,7 @@ public class HordeSpawnUtil {
             addRaiderToVehicle(level, vehicle, pillager);
             PillagerCombat.setCrossbowAttackRange(pillager, 16.0f);
 
-            if (i == 1 && level.random.nextDouble() < Config.getInstance().instrumentChance) {
+            if (i == 1 && level.getRandom().nextDouble() < Config.getInstance().instrumentChance) {
                 ImmersiveMelodiesCompat.getInstrument(level).ifPresentOrElse(stack -> {
                     ImmersiveMelodiesCompat.playTrack(level, stack, hordeType);
                     pillager.setItemInHand(InteractionHand.MAIN_HAND, stack);
@@ -111,13 +112,13 @@ public class HordeSpawnUtil {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
             Raider raider;
-            float rand = level.random.nextFloat();
+            float rand = level.getRandom().nextFloat();
             if (rand < 0.2f) {
-                raider = ImmersivePillagersEntities.UNDEAD_EVOKER.get().create(level);
+                raider = ImmersivePillagersEntities.UNDEAD_EVOKER.get().create(level, EntitySpawnReason.EVENT);
             } else if (rand < 0.5f) {
-                raider = ImmersivePillagersEntities.UNDEAD_VINDICATOR.get().create(level);
+                raider = ImmersivePillagersEntities.UNDEAD_VINDICATOR.get().create(level, EntitySpawnReason.EVENT);
             } else {
-                raider = ImmersivePillagersEntities.UNDEAD_PILLAGER.get().create(level);
+                raider = ImmersivePillagersEntities.UNDEAD_PILLAGER.get().create(level, EntitySpawnReason.EVENT);
             }
 
             if (raider == null) {
@@ -153,7 +154,7 @@ public class HordeSpawnUtil {
     public static List<Raider> addVindicatorCrew(ServerLevel level, Entity vehicle, int seats) {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
-            Vindicator vindicator = EntityType.VINDICATOR.create(level);
+            Vindicator vindicator = EntityType.VINDICATOR.create(level, EntitySpawnReason.EVENT);
             if (vindicator == null) {
                 continue;
             }
@@ -167,7 +168,7 @@ public class HordeSpawnUtil {
 
     public static void soundAlarm(ServerLevel level) {
         for (ServerPlayer player : level.players()) {
-            player.playNotifySound(SoundEvents.RAID_HORN.value(), SoundSource.NEUTRAL, 64, 1.0f);
+            player.playSound(SoundEvents.RAID_HORN.value(), 64, 1.0f);
         }
     }
 
@@ -177,7 +178,7 @@ public class HordeSpawnUtil {
 
     public static Camel createSaddledCamel(ServerLevel level) {
         Camel camel = new Camel(EntityType.CAMEL, level);
-        camel.equipSaddle(null, null);
+        camel.setItemSlot(EquipmentSlot.SADDLE, new ItemStack(Items.SADDLE));
         return camel;
     }
 
@@ -186,12 +187,12 @@ public class HordeSpawnUtil {
     }
 
     public static int getVehicleGroupCount(ServerLevel level, int difficulty, double groupFactor) {
-        return (int) Math.ceil((level.random.nextDouble() + 0.5) * difficulty * groupFactor + level.random.nextDouble());
+        return (int) Math.ceil((level.getRandom().nextDouble() + 0.5) * difficulty * groupFactor + level.getRandom().nextDouble());
     }
 
     private static Vec3 randomHorizontalOffset(ServerLevel level) {
-        double angle = level.random.nextDouble() * Math.PI * 2.0;
-        int distance = MIN_DISTANCE + level.random.nextInt(RANGE);
+        double angle = level.getRandom().nextDouble() * Math.PI * 2.0;
+        int distance = MIN_DISTANCE + level.getRandom().nextInt(RANGE);
         return new Vec3(Math.cos(angle) * distance, 0.0, Math.sin(angle) * distance);
     }
 
@@ -200,7 +201,7 @@ public class HordeSpawnUtil {
         raider.addTag(ImmersivePillagers.MOD_ID);
         markTransient(raider);
         level.addFreshEntity(raider);
-        raider.startRiding(vehicle, true);
+        raider.startRiding(vehicle, true, true);
     }
 
     private static boolean canFit(ServerLevel level, Entity entity, Vec3 pos) {
