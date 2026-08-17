@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[${loader_major},)"
+loaderVersion = "${forge_loader_version_range}"
 issueTrackerURL = "https://github.com/Luke100000/ImmersivePillagers/issues"
 license = "GPL-3.0-only"
 
@@ -23,7 +23,7 @@ side = "BOTH"
 [[dependencies.immersive_pillagers]]
 modId = "forge"
 mandatory = true
-versionRange = "[${loader_major},)"
+versionRange = "${forge_loader_version_range}"
 ordering = "NONE"
 side = "BOTH"
 

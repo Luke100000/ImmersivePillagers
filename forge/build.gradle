@@ -1,89 +1,42 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
-}
-loom {
-    forge {
-        mixinConfig "immersive_pillagers-common.mixins.json"
-        mixinConfig "immersive_pillagers.mixins.json"
-    }
-}
-architectury {
-    platformSetupLoomIde()
-    forge()
+    id "multiloader-loader"
+    id "net.neoforged.moddev.legacyforge"
 }
 
-configurations {
-    common
-    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+mixin {
+    add(sourceSets.main, "${mod_id}.refmap.json")
+    config("${mod_id}-common.mixins.json")
+    config("${mod_id}.mixins.json")
+}
+
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+    runs {
+        client { client() }
+        server { server() }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.forge_version}"
-
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
-
-    modRuntimeOnly("net.conczin:immersive_aircraft:${immersive_aircraft_version}+forge")
-    modRuntimeOnly("net.conczin:immersive_melodies:${immersive_melodies_version}+forge")
-
-    forgeRuntimeLibrary 'org.mariuszgromada.math:MathParser.org-mXparser:5.2.1'
-}
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "loader_major", rootProject.forge_version.split("\\.")[0]
-    inputs.property "minecraft_version_range", rootProject.minecraft_version_range
-    inputs.property "immersive_aircraft_version_range", rootProject.immersive_aircraft_version_range
-
-    filesMatching("META-INF/mods.toml") {
-        expand(
-                "version": project.version,
-                "loader_major": rootProject.forge_version.split("\\.")[0],
-                "minecraft_version_range": rootProject.minecraft_version_range,
-                "immersive_aircraft_version_range": rootProject.immersive_aircraft_version_range
-        )
-    }
-}
-
-shadowJar {
-    exclude "fabric.mod.json"
-
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
-}
-
-remapJar {
-    inputFile.set(shadowJar.archiveFile)
-    dependsOn shadowJar
-    archiveClassifier.set(null)
+    compileOnly project(":common")
+    modCompileOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-forge"
+    compileOnly "org.jetbrains:annotations:24.1.0"
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    modRuntimeOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-forge"
+    modRuntimeOnly "maven.modrinth:immersive-melodies:${immersive_melodies_version}-forge"
+    runtimeOnly "org.mariuszgromada.math:MathParser.org-mXparser:5.2.1"
 }
 
 jar {
-    archiveClassifier.set("dev")
-}
-
-sourcesJar {
-    def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
-            groupId = rootProject.group_id
-            version = version + "+forge"
-            from components.java
-        }
-    }
+    finalizedBy("reobfJar")
+    manifest.attributes(["MixinConfigs": "${mod_id}-common.mixins.json,${mod_id}.mixins.json"])
 }

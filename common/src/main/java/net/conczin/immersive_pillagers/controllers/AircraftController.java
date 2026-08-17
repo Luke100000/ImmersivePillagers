@@ -1,10 +1,8 @@
 package net.conczin.immersive_pillagers.controllers;
 
-import immersive_aircraft.entity.GyrodyneEntity;
+import immersive_aircraft.entity.EngineVehicle;
 import immersive_aircraft.entity.InventoryVehicleEntity;
 import immersive_aircraft.entity.VehicleEntity;
-import immersive_aircraft.entity.inventory.VehicleInventoryDescription;
-import immersive_aircraft.entity.inventory.slots.SlotDescription;
 import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -15,22 +13,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
 import java.util.Random;
 
 public class AircraftController {
     private static final Random RANDOM = new Random();
     private static final float INACCURACY = 1.0f;
-    public static final ResourceLocation WEAPON = new ResourceLocation("immersive_aircraft", "rotary_cannon");
+    private static final ResourceLocation WEAPON = new ResourceLocation("immersive_aircraft", "rotary_cannon");
 
     private static float random(float scale) {
         return (RANDOM.nextFloat() - 0.5f) * scale;
     }
 
-    public static void tickPilot(Object vehicleObject) {
-        VehicleEntity vehicle = (VehicleEntity) vehicleObject;
-        if (vehicle instanceof GyrodyneEntity gyrodyne) {
-            gyrodyne.setEngineTarget(1.0f);
+    public static void tickPilot(VehicleEntity vehicle) {
+        if (vehicle instanceof EngineVehicle engineVehicle) {
+            engineVehicle.setEngineTarget(1.0f);
         }
 
         LivingEntity pilot = vehicle.getControllingPassenger();
@@ -48,15 +44,14 @@ public class AircraftController {
 
                 // Shoot
                 if (vehicle instanceof InventoryVehicleEntity weaponizedVehicle && vehicle.level().getGameTime() % 20 == 0) {
-                    ResourceLocation weapon = BuiltInRegistries.ITEM.getKey(vehicle.getSlot(0).get().getItem());
+                    ResourceLocation weapon = BuiltInRegistries.ITEM.getKey(weaponizedVehicle.getInventory().getItem(0).getItem());
                     if (weapon.equals(WEAPON)) {
                         Vec3 aim = player.position().subtract(vehicle.position());
                         float randomness = (float) (INACCURACY * aim.length());
                         aim.add(random(randomness), aim.y * 0.1 + random(randomness), random(randomness));
                         aim = aim.normalize();
 
-                        List<SlotDescription> slots = weaponizedVehicle.getInventoryDescription().getSlots(VehicleInventoryDescription.INVENTORY);
-                        weaponizedVehicle.getInventory().setItem(slots.get(0).index(), new ItemStack(Items.GUNPOWDER, 1));
+                        weaponizedVehicle.getInventory().setItem(5, new ItemStack(Items.GUNPOWDER, 1));
                         weaponizedVehicle.fireWeapon(0, 0, aim.toVector3f());
                     }
                 }
