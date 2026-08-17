@@ -13,6 +13,9 @@
     "frame": "goal"
   },
   "criteria": {
+    "ground": {
+      "trigger": "minecraft:impossible"
+    },
     "camel": {
       "trigger": "minecraft:impossible"
     },
