@@ -7,6 +7,8 @@ import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -36,13 +38,12 @@ public final class HordeRegionData extends SavedData {
 
     public static HordeRegionData get(ServerLevel level) {
         return level.getServer().overworld().getDataStorage().computeIfAbsent(
-                HordeRegionData::load,
-                HordeRegionData::new,
+                new SavedData.Factory<>(HordeRegionData::new, HordeRegionData::load, DataFixTypes.SAVED_DATA_MAP_DATA),
                 DATA_NAME
         );
     }
 
-    public static HordeRegionData load(CompoundTag tag) {
+    public static HordeRegionData load(CompoundTag tag, HolderLookup.Provider provider) {
         return CODEC.parse(NbtOps.INSTANCE, tag)
                 .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not load horde region data: {}", error))
                 .orElseGet(HordeRegionData::new);
@@ -67,7 +68,7 @@ public final class HordeRegionData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         CODEC.encodeStart(NbtOps.INSTANCE, this)
                 .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not save horde region data: {}", error))
                 .filter(CompoundTag.class::isInstance)

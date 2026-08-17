@@ -4,13 +4,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.conczin.immersive_pillagers.network.ClientHandler;
 import net.conczin.immersive_pillagers.network.ClientboundPacket;
-import net.minecraft.network.FriendlyByteBuf;
+import net.conczin.immersive_pillagers.ImmersivePillagers;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.InteractionHand;
 
 import java.util.List;
 import java.util.UUID;
 
 public final class OpenWantedPosterPacket extends ClientboundPacket {
+    public static final CustomPacketPayload.Type<OpenWantedPosterPacket> TYPE = new CustomPacketPayload.Type<>(ImmersivePillagers.locate("open_wanted_poster"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, OpenWantedPosterPacket> STREAM_CODEC = StreamCodec.ofMember(OpenWantedPosterPacket::encode, OpenWantedPosterPacket::new);
     private static final Codec<UUID> UUID_CODEC = Codec.STRING.xmap(UUID::fromString, UUID::toString);
     public static final Codec<Entry> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUID_CODEC.fieldOf("id").forGetter(Entry::id),
@@ -32,7 +37,7 @@ public final class OpenWantedPosterPacket extends ClientboundPacket {
         this.hand = hand;
     }
 
-    public OpenWantedPosterPacket(FriendlyByteBuf buffer) {
+    public OpenWantedPosterPacket(RegistryFriendlyByteBuf buffer) {
         this(decode(buffer, CODEC));
     }
 
@@ -49,13 +54,18 @@ public final class OpenWantedPosterPacket extends ClientboundPacket {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buffer) {
+    public void encode(RegistryFriendlyByteBuf buffer) {
         encode(buffer, CODEC, this);
     }
 
     @Override
     public void receive() {
         ClientHandler.getInstance().openWantedPoster(this);
+    }
+
+    @Override
+    public CustomPacketPayload.Type<OpenWantedPosterPacket> type() {
+        return TYPE;
     }
 
     public record Entry(UUID id, String name, boolean wanted, boolean bountyAllowed) {

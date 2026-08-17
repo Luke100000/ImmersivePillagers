@@ -17,17 +17,13 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
     private final Consumer<OpenWantedPosterPacket.Entry> onPlayerSelected;
     private boolean active = true;
 
-    PlayerListWidget(Font font, int left, int top, int width, int bottom, int screenHeight,
+    PlayerListWidget(Font font, int left, int top, int width, int bottom,
                      Consumer<OpenWantedPosterPacket.Entry> onPlayerSelected) {
-        super(Minecraft.getInstance(), width, screenHeight, top, bottom, 18);
+        super(Minecraft.getInstance(), width, bottom - top, top, 20);
 
         this.font = font;
         this.onPlayerSelected = onPlayerSelected;
-
-        setLeftPos(left);
-        setRenderBackground(false);
-        setRenderTopAndBottom(false);
-        setRenderSelection(false);
+        setX(left);
     }
 
     void setPlayers(List<OpenWantedPosterPacket.Entry> players) {
@@ -39,6 +35,10 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
         this.active = active;
     }
 
+    void clearSelection() {
+        setSelected(null);
+    }
+
     @Override
     public int getRowWidth() {
         return width - 8;
@@ -46,12 +46,15 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
 
     @Override
     protected int getScrollbarPosition() {
-        return x1 - 4;
+        return getRowLeft() + getRowWidth() - 4;
     }
 
     @Override
-    protected int getRowTop(int index) {
-        return this.y0 - (int) this.getScrollAmount() + index * this.itemHeight + this.headerHeight;
+    protected void renderListBackground(GuiGraphics guiGraphics) {
+    }
+
+    @Override
+    protected void renderListSeparators(GuiGraphics guiGraphics) {
     }
 
     @Override
@@ -60,8 +63,8 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        return active && super.mouseScrolled(mouseX, mouseY, delta);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        return active && super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     final class Entry extends ObjectSelectionList.Entry<Entry> {
@@ -75,11 +78,11 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
         public void render(GuiGraphics guiGraphics, int index, int rowTop, int rowLeft, int rowWidth, int rowHeight,
                            int mouseX, int mouseY, boolean hovered, float partialTick) {
             if (hovered) {
-                guiGraphics.fill(rowLeft, rowTop, rowLeft + rowWidth - 3, rowTop + rowHeight + 4, 0x22000000);
+                guiGraphics.fill(rowLeft, rowTop, rowLeft + rowWidth - 3, rowTop + rowHeight + 2, 0x22000000);
             }
             PlayerInfo info = minecraft.getConnection() == null ? null : minecraft.getConnection().getPlayerInfo(player.id());
             if (info != null) {
-                PlayerFaceRenderer.draw(guiGraphics, info.getSkinLocation(), rowLeft + 1, rowTop + 1, 16);
+                PlayerFaceRenderer.draw(guiGraphics, info.getSkin().texture(), rowLeft + 1, rowTop + 1, 16);
             }
             guiGraphics.drawString(font, player.name(), rowLeft + 20, rowTop + 6, 0xFF3B2B1F, false);
         }

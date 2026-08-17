@@ -21,6 +21,6 @@ public class ImmersivePillagers {
     }
 
     public static ResourceLocation locate(String name) {
-        return new ResourceLocation(MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 }

@@ -9,7 +9,7 @@
           "name": "immersive_pillagers:research_note",
           "functions": [
             {
-              "function": "minecraft:set_nbt",
+              "function": "minecraft:set_custom_data",
               "tag": "{ResearchId:\"military\",ScribbleImage:\"immersive_pillagers:textures/gui/scribbles/military.png\",Title:\"document.immersive_pillagers.military.title\",Text:\"document.immersive_pillagers.military.text\"}"
             }
           ]

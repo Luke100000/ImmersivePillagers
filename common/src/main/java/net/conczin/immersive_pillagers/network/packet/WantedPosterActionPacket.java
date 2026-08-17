@@ -3,8 +3,11 @@ package net.conczin.immersive_pillagers.network.packet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.conczin.immersive_pillagers.PillagerManager;
+import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.network.ServerboundPacket;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 
@@ -13,6 +16,8 @@ import java.util.UUID;
 public final class WantedPosterActionPacket extends ServerboundPacket {
     public static final byte BOUNTY = 0;
     public static final byte PARDON = 1;
+    public static final CustomPacketPayload.Type<WantedPosterActionPacket> TYPE = new CustomPacketPayload.Type<>(ImmersivePillagers.locate("wanted_poster_action"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, WantedPosterActionPacket> STREAM_CODEC = StreamCodec.ofMember(WantedPosterActionPacket::encode, WantedPosterActionPacket::new);
 
     private static final Codec<UUID> UUID_CODEC = Codec.STRING.xmap(UUID::fromString, UUID::toString);
     public static final Codec<WantedPosterActionPacket> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -31,7 +36,7 @@ public final class WantedPosterActionPacket extends ServerboundPacket {
         this.hand = hand;
     }
 
-    public WantedPosterActionPacket(FriendlyByteBuf buffer) {
+    public WantedPosterActionPacket(RegistryFriendlyByteBuf buffer) {
         WantedPosterActionPacket packet = decode(buffer, CODEC);
         action = packet.action;
         target = packet.target;
@@ -51,12 +56,17 @@ public final class WantedPosterActionPacket extends ServerboundPacket {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buffer) {
+    public void encode(RegistryFriendlyByteBuf buffer) {
         encode(buffer, CODEC, this);
     }
 
     @Override
     public void receive(ServerPlayer player) {
         PillagerManager.handleWantedPosterAction(player, this);
+    }
+
+    @Override
+    public CustomPacketPayload.Type<WantedPosterActionPacket> type() {
+        return TYPE;
     }
 }

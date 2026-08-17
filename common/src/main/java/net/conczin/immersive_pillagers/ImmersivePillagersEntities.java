@@ -15,18 +15,21 @@ public class ImmersivePillagersEntities {
     public static final Supplier<EntityType<UndeadPillager>> UNDEAD_PILLAGER = Suppliers.memoize(() ->
             EntityType.Builder.of(UndeadPillager::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
+                    .ridingOffset(-0.6F)
                     .clientTrackingRange(8)
                     .build("undead_pillager"));
 
     public static final Supplier<EntityType<UndeadEvoker>> UNDEAD_EVOKER = Suppliers.memoize(() ->
             EntityType.Builder.of(UndeadEvoker::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
+                    .ridingOffset(-0.6F)
                     .clientTrackingRange(8)
                     .build("undead_evoker"));
 
     public static final Supplier<EntityType<UndeadVindicator>> UNDEAD_VINDICATOR = Suppliers.memoize(() ->
             EntityType.Builder.of(UndeadVindicator::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
+                    .ridingOffset(-0.6F)
                     .clientTrackingRange(8)
                     .build("undead_vindicator"));
 

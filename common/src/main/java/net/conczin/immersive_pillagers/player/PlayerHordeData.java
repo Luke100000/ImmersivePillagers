@@ -3,9 +3,11 @@ package net.conczin.immersive_pillagers.player;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,13 +41,12 @@ public final class PlayerHordeData extends SavedData {
 
     public static PlayerHordeData get(ServerPlayer player) {
         return Objects.requireNonNull(player.getServer()).overworld().getDataStorage().computeIfAbsent(
-                PlayerHordeData::load,
-                PlayerHordeData::new,
+                new SavedData.Factory<>(PlayerHordeData::new, PlayerHordeData::load, DataFixTypes.SAVED_DATA_MAP_DATA),
                 DATA_NAME_PREFIX + player.getUUID()
         );
     }
 
-    public static PlayerHordeData load(CompoundTag tag) {
+    public static PlayerHordeData load(CompoundTag tag, HolderLookup.Provider provider) {
         return CODEC.parse(NbtOps.INSTANCE, tag)
                 .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not load player horde data: {}", error))
                 .orElseGet(PlayerHordeData::new);
@@ -112,7 +113,7 @@ public final class PlayerHordeData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         CODEC.encodeStart(NbtOps.INSTANCE, this)
                 .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not save player horde data: {}", error))
                 .filter(CompoundTag.class::isInstance)

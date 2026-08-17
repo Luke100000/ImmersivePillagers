@@ -1,4 +1,4 @@
-package net.conczin.immersive_pillagers.forge;
+package net.conczin.immersive_pillagers.neoforge;
 
 import net.conczin.immersive_pillagers.*;
 import net.conczin.immersive_pillagers.compat.AircraftCompat;
@@ -7,28 +7,32 @@ import net.conczin.immersive_pillagers.entity.UndeadPillager;
 import net.conczin.immersive_pillagers.entity.UndeadVindicator;
 import net.conczin.immersive_pillagers.network.Networking;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import static net.minecraft.core.registries.Registries.*;
 
 @Mod(ImmersivePillagers.MOD_ID)
-public class ImmersivePillagersForge {
-    public ImmersivePillagersForge() {
-        new NetworkingImpl();
+public final class ImmersivePillagersNeoForge {
+    private static final NetworkingImpl NETWORKING = new NetworkingImpl();
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(ImmersivePillagersForge::register);
-        modEventBus.addListener(ImmersivePillagersForge::registerAttributes);
+    public ImmersivePillagersNeoForge(IEventBus modEventBus) {
+        modEventBus.addListener(ImmersivePillagersNeoForge::register);
+        modEventBus.addListener(ImmersivePillagersNeoForge::registerAttributes);
+        modEventBus.addListener(ImmersivePillagersNeoForge::registerPayloadHandlers);
         ImmersivePillagers.init();
         if (ModList.get().isLoaded("immersive_aircraft")) {
             AircraftCompat.register();
         }
         Networking.initialize();
+    }
+
+    private static void registerPayloadHandlers(RegisterPayloadHandlersEvent event) {
+        NETWORKING.register(event);
     }
 
     private static void register(RegisterEvent event) {

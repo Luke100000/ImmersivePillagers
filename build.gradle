@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4.164"
-    id "dev.architectury.loom" version "1.10.455" apply false
+    id "dev.architectury.loom" version "1.14.476" apply false
 }
 
 architectury {
@@ -22,7 +22,7 @@ subprojects {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         mappings loom.layered() {
             officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-${rootProject.minecraft_version}:${rootProject.parchment_version}@zip")
+            parchment("org.parchmentmc.data:parchment-${rootProject.parchment_version}@zip")
         }
     }
 }
@@ -35,7 +35,7 @@ def getAppVersion = { ->
             standardOutput = stdout
         }
         def tag = stdout.toString().trim()
-        if (tag.isEmpty()) {
+        if (tag.isEmpty() || !tag.contains(rootProject.minecraft_version)) {
             return rootProject.minecraft_version + "-SNAPSHOT"
         }
         return tag
@@ -66,7 +66,7 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.release.set(17)
+        options.release.set(21)
     }
 
     java {

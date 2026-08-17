@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -20,7 +21,7 @@ public final class RaidersHornItem extends TooltippedItem {
             if (!PillagerManager.summonWarHorde(serverPlayer)) {
                 return InteractionResultHolder.fail(stack);
             }
-            stack.hurtAndBreak(1, player, holder -> holder.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }

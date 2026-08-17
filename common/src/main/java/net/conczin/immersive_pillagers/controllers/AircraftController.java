@@ -21,7 +21,7 @@ import java.util.Random;
 public class AircraftController {
     private static final Random RANDOM = new Random();
     private static final float INACCURACY = 1.0f;
-    public static final ResourceLocation WEAPON = new ResourceLocation("immersive_aircraft", "rotary_cannon");
+    public static final ResourceLocation WEAPON = ResourceLocation.fromNamespaceAndPath("immersive_aircraft", "rotary_cannon");
 
     private static float random(float scale) {
         return (RANDOM.nextFloat() - 0.5f) * scale;

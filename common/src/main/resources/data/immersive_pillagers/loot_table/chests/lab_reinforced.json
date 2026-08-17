@@ -9,7 +9,7 @@
           "name": "immersive_pillagers:research_note",
           "functions": [
             {
-              "function": "minecraft:set_nbt",
+              "function": "minecraft:set_custom_data",
               "tag": "{ResearchId:\"experimentation\",ScribbleImage:\"immersive_pillagers:textures/gui/scribbles/experimentation.png\",Title:\"document.immersive_pillagers.experimentation.title\",Text:\"document.immersive_pillagers.experimentation.text\"}"
             }
           ]

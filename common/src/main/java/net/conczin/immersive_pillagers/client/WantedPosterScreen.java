@@ -50,7 +50,7 @@ public final class WantedPosterScreen extends Screen {
         searchBox.setResponder(query -> playerList.setPlayers(filteredPlayers()));
 
         playerList = new PlayerListWidget(font, left + 14, top + 35, WIDTH - 36,
-                top + 142, height, player -> {
+                top + 142, player -> {
             selectedPlayer = player;
             updateView();
         });
@@ -66,6 +66,7 @@ public final class WantedPosterScreen extends Screen {
                         onClose();
                     } else {
                         selectedPlayer = null;
+                        playerList.clearSelection();
                         updateView();
                     }
                 })
@@ -105,24 +106,27 @@ public final class WantedPosterScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics);
+        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(POSTER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, TEXTURE_SIZE, TEXTURE_SIZE);
         if (selectedPlayer == null) {
             playerList.render(guiGraphics, mouseX, mouseY, partialTick);
         } else {
             renderPlayerDetails(guiGraphics);
         }
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        searchBox.render(guiGraphics, mouseX, mouseY, partialTick);
+        bountyButton.render(guiGraphics, mouseX, mouseY, partialTick);
+        pardonButton.render(guiGraphics, mouseX, mouseY, partialTick);
+        backButton.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     private void renderPlayerDetails(GuiGraphics guiGraphics) {
-        guiGraphics.drawString(font, selectedPlayer.name(), left + WIDTH / 2 - font.width(selectedPlayer.name()) / 2, top + 28, 0xFF3B2B1F, true);
+        guiGraphics.drawString(font, selectedPlayer.name(), left + WIDTH / 2 - font.width(selectedPlayer.name()) / 2, top + 28, 0xFF3B2B1F, false);
 
         assert minecraft != null;
         PlayerInfo info = minecraft.getConnection() == null ? null : minecraft.getConnection().getPlayerInfo(selectedPlayer.id());
         if (info != null) {
             guiGraphics.fill(left + 42, top + 43, left + 108, top + 109, 0xDD000000);
-            PlayerFaceRenderer.draw(guiGraphics, info.getSkinLocation(), left + 43, top + 44, 64);
+            PlayerFaceRenderer.draw(guiGraphics, info.getSkin().texture(), left + 43, top + 44, 64);
         }
     }
 }

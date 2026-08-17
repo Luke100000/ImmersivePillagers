@@ -9,7 +9,7 @@
           "name": "immersive_pillagers:research_note",
           "functions": [
             {
-              "function": "minecraft:set_nbt",
+              "function": "minecraft:set_custom_data",
               "tag": "{ResearchId:\"undeath\",ScribbleImage:\"immersive_pillagers:textures/gui/scribbles/undeath.png\",Title:\"document.immersive_pillagers.undeath.title\",Text:\"document.immersive_pillagers.undeath.text\"}"
             }
           ]

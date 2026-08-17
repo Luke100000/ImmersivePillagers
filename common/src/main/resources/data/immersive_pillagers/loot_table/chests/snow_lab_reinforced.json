@@ -7,7 +7,7 @@
         "type": "minecraft:item",
         "name": "immersive_pillagers:research_note",
         "functions": [{
-          "function": "minecraft:set_nbt",
+          "function": "minecraft:set_custom_data",
           "tag": "{ResearchId:\"totem\",ScribbleImage:\"immersive_pillagers:textures/gui/scribbles/totem.png\",Title:\"document.immersive_pillagers.totem.title\",Text:\"document.immersive_pillagers.totem.text\"}"
         }]
       }]

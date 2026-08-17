@@ -7,7 +7,7 @@ import net.conczin.immersive_pillagers.network.Handler;
 import net.conczin.immersive_pillagers.network.packet.OpenWantedPosterPacket;
 import net.conczin.immersive_pillagers.network.packet.WantedPosterActionPacket;
 import net.conczin.immersive_pillagers.player.PlayerHordeData;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -239,7 +239,7 @@ public class PillagerManager {
             return;
         }
 
-        Advancement advancement = server.getAdvancements().getAdvancement(HORDE_CONQUEROR_ADVANCEMENT);
+        AdvancementHolder advancement = server.getAdvancements().get(HORDE_CONQUEROR_ADVANCEMENT);
         if (advancement != null) {
             player.getAdvancements().award(advancement, hordeType);
         }
@@ -250,7 +250,7 @@ public class PillagerManager {
         if (server == null) {
             return;
         }
-        Advancement advancement = server.getAdvancements().getAdvancement(CRUDE_TOTEM_AWAKENED_ADVANCEMENT);
+        AdvancementHolder advancement = server.getAdvancements().get(CRUDE_TOTEM_AWAKENED_ADVANCEMENT);
         if (advancement != null) {
             player.getAdvancements().award(advancement, "charged");
         }

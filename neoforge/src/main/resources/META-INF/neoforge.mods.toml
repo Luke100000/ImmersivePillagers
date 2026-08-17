@@ -1,7 +1,13 @@
 modLoader = "javafml"
-loaderVersion = "[${loader_major},)"
+loaderVersion = "[1,)"
 issueTrackerURL = "https://github.com/Luke100000/ImmersivePillagers/issues"
 license = "GPL-3.0-only"
+
+[[mixins]]
+config = "immersive_pillagers.mixins.json"
+
+[[mixins]]
+config = "immersive_pillagers-common.mixins.json"
 
 [[mods]]
 modId = "immersive_pillagers"
@@ -15,28 +21,28 @@ itemIcon = "minecraft:crossbow"
 
 [[dependencies.immersive_pillagers]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.immersive_pillagers]]
-modId = "forge"
-mandatory = true
-versionRange = "[${loader_major},)"
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.immersive_pillagers]]
 modId = "immersive_aircraft"
-mandatory = false
+type = "optional"
 versionRange = "${immersive_aircraft_version_range}"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.immersive_pillagers]]
 modId = "immersive_melodies"
-mandatory = false
+type = "optional"
 versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"

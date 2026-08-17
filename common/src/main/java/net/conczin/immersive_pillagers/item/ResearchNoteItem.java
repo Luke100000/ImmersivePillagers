@@ -3,10 +3,12 @@ package net.conczin.immersive_pillagers.item;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.network.Handler;
 import net.conczin.immersive_pillagers.network.packet.OpenResearchNotePacket;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -54,7 +56,7 @@ public final class ResearchNoteItem extends Item {
     }
 
     public static NoteContents contents(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         return new NoteContents(
                 resourceLocation(tag, SCRIBBLE_IMAGE_TAG),
                 string(tag, TITLE_TAG, DEFAULT_TITLE),
@@ -67,12 +69,12 @@ public final class ResearchNoteItem extends Item {
         if (server == null) {
             return 0;
         }
-        Advancement advancement = server.getAdvancements().getAdvancement(RESEARCH_ADVANCEMENT);
+        AdvancementHolder advancement = server.getAdvancements().get(RESEARCH_ADVANCEMENT);
         if (advancement == null) {
             return 0;
         }
 
-        String researchId = string(stack.getTag(), RESEARCH_ID_TAG, "");
+        String researchId = string(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(), RESEARCH_ID_TAG, "");
         if (RESEARCH_IDS.contains(researchId)) {
             player.getAdvancements().award(advancement, researchId);
         }

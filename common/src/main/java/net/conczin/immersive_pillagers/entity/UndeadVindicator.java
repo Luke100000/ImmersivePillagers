@@ -4,7 +4,6 @@ import net.conczin.immersive_pillagers.ImmersivePillagersSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -17,8 +16,8 @@ public class UndeadVindicator extends Vindicator {
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
+    public boolean isInvertedHealAndHarm() {
+        return true;
     }
 
     public static AttributeSupplier.Builder createAttributes() {

@@ -37,6 +37,7 @@ public final class ResearchNoteScreen extends Screen {
     private int top;
     private List<FormattedCharSequence> unreadableLines = List.of();
     private List<FormattedCharSequence> translatedLines = List.of();
+    private Button backButton;
 
     public ResearchNoteScreen(ResearchNoteItem.NoteContents contents, int translationPercent) {
         super(localized(contents.title()));
@@ -53,12 +54,12 @@ public final class ResearchNoteScreen extends Screen {
         unreadableLines = font.split(Component.literal(translate(text, 0)), WIDTH - 34);
         translatedLines = font.split(Component.literal(translate(text, translationPercent)), WIDTH - 34);
 
-        addRenderableWidget(Button.builder(Component.translatable("gui.immersive_pillagers.back"), button -> onClose()).bounds(left + 38, top + 180, 74, 20).build());
+        backButton = addRenderableWidget(Button.builder(Component.translatable("gui.immersive_pillagers.back"), button -> onClose()).bounds(left + 38, top + 180, 74, 20).build());
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics);
+        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
         guiGraphics.blit(PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
         contents.scribbleImage().ifPresent(image -> {
@@ -79,7 +80,7 @@ public final class ResearchNoteScreen extends Screen {
         if (fadeProgress > 0.0f) renderText(guiGraphics, translatedLines, fadeProgress);
         RenderSystem.disableBlend();
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        backButton.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     private void renderText(GuiGraphics guiGraphics, List<FormattedCharSequence> lines, float opacity) {

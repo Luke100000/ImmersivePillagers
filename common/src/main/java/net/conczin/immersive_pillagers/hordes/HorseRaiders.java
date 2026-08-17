@@ -19,7 +19,7 @@ public class HorseRaiders {
         int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, HordeSpawnUtil.SINGLE_RIDER_GROUP_FACTOR);
         for (int i = 0; i < groupCount; i++) {
             Horse entity = new Horse(EntityType.HORSE, level);
-            entity.equipSaddle(null);
+            entity.equipSaddle(null, null);
             var spawnPos = HordeSpawnUtil.findGroundSpawn(level, pos, entity);
             if (spawnPos.isEmpty()) {
                 continue;

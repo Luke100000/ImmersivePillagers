@@ -2,6 +2,8 @@ package net.conczin.immersive_pillagers.compat;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.Item;
@@ -36,15 +38,17 @@ public class ImmersiveMelodiesCompat {
     }
 
     public static void playTrack(Level level, ItemStack stack, ResourceLocation name) {
-        stack.getOrCreateTag().putString(TAG_MELODY, name.toString());
-        stack.getOrCreateTag().putBoolean(TAG_PLAYING, true);
-        stack.getOrCreateTag().putLong(TAG_START_TIME, level.getGameTime());
-        stack.getOrCreateTag().remove(TAG_TRACKS);
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> {
+            tag.putString(TAG_MELODY, name.toString());
+            tag.putBoolean(TAG_PLAYING, true);
+            tag.putLong(TAG_START_TIME, level.getGameTime());
+            tag.remove(TAG_TRACKS);
+        });
     }
 
     public static List<ResourceLocation> INSTRUMENTS = List.of(
-            new ResourceLocation("immersive_melodies", "trumpet"),
-            new ResourceLocation("immersive_melodies", "lute")
+            ResourceLocation.fromNamespaceAndPath("immersive_melodies", "trumpet"),
+            ResourceLocation.fromNamespaceAndPath("immersive_melodies", "lute")
     );
 
     public static Optional<ItemStack> getInstrument(Level level) {
