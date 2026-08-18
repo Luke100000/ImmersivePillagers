@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.phys.Vec3;
 
 public final class ReinforcedChestRenderer implements BlockEntityRenderer<ReinforcedChestBlockEntity, ReinforcedChestRenderer.State> {
-    private static final Identifier TEXTURE = ImmersivePillagers.locate("textures/entity/reinforced_chest.png");
+    private static final Identifier TEXTURE = ImmersivePillagers.locate("textures/entity/chest/reinforced_chest.png");
     private final ChestModel model;
 
     public ReinforcedChestRenderer(BlockEntityRendererProvider.Context context) {

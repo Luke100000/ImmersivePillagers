@@ -125,7 +125,7 @@ public final class WantedPosterScreen extends Screen {
     }
 
     static void drawFace(GuiGraphicsExtractor graphics, Identifier skin, int x, int y, int size) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 8, 8, size, size, 64, 64);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 40, 8, size, size, 64, 64);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 8, 8, size, size, 8, 8, 64, 64);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 40, 8, size, size, 8, 8, 64, 64);
     }
 }

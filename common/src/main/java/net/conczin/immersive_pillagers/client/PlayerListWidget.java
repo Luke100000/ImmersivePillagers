@@ -76,7 +76,7 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
             int rowWidth = getWidth();
             int rowHeight = getHeight();
             if (hovered) {
-                guiGraphics.fill(rowLeft, rowTop, rowLeft + rowWidth - 3, rowTop + rowHeight + 2, 0x22000000);
+                guiGraphics.fill(rowLeft, rowTop, rowLeft + rowWidth - 3, rowTop + rowHeight - 2, 0x22000000);
             }
             PlayerInfo info = minecraft.getConnection() == null ? null : minecraft.getConnection().getPlayerInfo(player.id());
             if (info != null) {
