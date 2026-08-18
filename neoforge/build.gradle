@@ -5,12 +5,33 @@ plugins {
 
 neoForge {
     version = neoforge_version
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})"
+        }
+        client {
+            client()
+            gameDirectory = this.mkdir(this.file('runs/client'))
+        }
+        data {
+            clientData()
+            gameDirectory = this.mkdir(this.file('runs/data'))
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+        server {
+            server()
+            gameDirectory = this.mkdir(this.file('runs/server'))
+        }
+    }
     mods {
         "${mod_id}" {
             sourceSet sourceSets.main
         }
     }
 }
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 def loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String)
 ["apiElements", "runtimeElements", "sourcesElements"].each { variant ->

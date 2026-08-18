@@ -31,6 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class PillagerManager {
+    public static final double ACTIVE_HORDE_RADIUS = 128.0;
+
     private static final Map<String, HordeSpawner> HORDES = new HashMap<>();
     private static final Map<UUID, ActiveHorde> ACTIVE_HORDES = new HashMap<>();
 
@@ -43,13 +45,14 @@ public class PillagerManager {
     }
 
     public static final String HORDE_GYRODYNE = "gyrodyne";
+    public static final String HORDE_GROUND = registerHorde("ground", GroundRaiders::spawn);
     public static final String HORDE_CAMEL = registerHorde("camel", CamelRaiders::spawn);
     public static final String HORDE_BOAT = registerHorde("boat", BoatRaiders::spawn);
     public static final String HORDE_HORSE = registerHorde("horse", HorseRaiders::spawn);
     public static final String HORDE_SPIDER = registerHorde("spider", SpiderRaiders::spawn);
     public static final String HORDE_UNDEAD = registerHorde("undead", UndeadRaiders::spawn);
 
-    private static final Set<String> BUILTIN_HORDE_TYPES = Set.of(HORDE_CAMEL, HORDE_BOAT, HORDE_HORSE, HORDE_SPIDER, HORDE_UNDEAD);
+    private static final Set<String> BUILTIN_HORDE_TYPES = Set.of(HORDE_GROUND, HORDE_CAMEL, HORDE_BOAT, HORDE_HORSE, HORDE_SPIDER, HORDE_UNDEAD);
 
     public static Optional<ActiveHorde> spawnHorde(String horde, ServerLevel level, BlockPos position, @Nullable ServerPlayer target, int difficulty) {
         HordeSpawner spawner = HORDES.get(horde);
@@ -189,6 +192,10 @@ public class PillagerManager {
 
     public static List<ActiveHorde> getActiveHordes() {
         return List.copyOf(ACTIVE_HORDES.values());
+    }
+
+    public static boolean hasActiveHordeNearby(ServerLevel level, BlockPos position) {
+        return ACTIVE_HORDES.values().stream().anyMatch(horde -> horde.isNearby(level, position, ACTIVE_HORDE_RADIUS));
     }
 
     public static int clearHordes() {

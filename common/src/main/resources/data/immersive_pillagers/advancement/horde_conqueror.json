@@ -2,7 +2,7 @@
   "parent": "minecraft:story/root",
   "display": {
     "icon": {
-      "item": "minecraft:crossbow"
+      "id": "minecraft:crossbow"
     },
     "title": {
       "translate": "advancement.immersive_pillagers.horde_conqueror"
@@ -13,6 +13,9 @@
     "frame": "goal"
   },
   "criteria": {
+    "ground": {
+      "trigger": "minecraft:impossible"
+    },
     "camel": {
       "trigger": "minecraft:impossible"
     },
