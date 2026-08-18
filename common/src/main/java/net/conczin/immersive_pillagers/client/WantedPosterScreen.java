@@ -116,7 +116,7 @@ public final class WantedPosterScreen extends Screen {
     }
 
     private void renderPlayerDetails(GuiGraphics guiGraphics) {
-        guiGraphics.drawString(font, selectedPlayer.name(), left + WIDTH / 2 - font.width(selectedPlayer.name()) / 2, top + 28, 0xFF3B2B1F, true);
+        guiGraphics.drawString(font, selectedPlayer.name(), left + WIDTH / 2 - font.width(selectedPlayer.name()) / 2, top + 28, 0xFF3B2B1F, false);
 
         assert minecraft != null;
         PlayerInfo info = minecraft.getConnection() == null ? null : minecraft.getConnection().getPlayerInfo(selectedPlayer.id());

@@ -1,6 +1,6 @@
 # 0.1.1
 
-* Improvements
+* Improvements and fixes
 * Ground wave
 
 # 0.1.0

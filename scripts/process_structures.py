@@ -59,16 +59,16 @@ RANDOM_ENTITY_SPAWNS = {
     },
     "desert_lab": {
         "interior_air": {
-            "immersive_pillagers:undead_pillager": 5,
+            "immersive_pillagers:undead_pillager": 4,
             "immersive_pillagers:undead_vindicator": 2,
             "immersive_pillagers:undead_evoker": 1,
         },
     },
     "snow_lab": {
         "air": {
-            "immersive_pillagers:undead_pillager": 10,
-            "immersive_pillagers:undead_vindicator": 5,
-            "immersive_pillagers:undead_evoker": 2,
+            "immersive_pillagers:undead_pillager": 4,
+            "immersive_pillagers:undead_vindicator": 3,
+            "immersive_pillagers:undead_evoker": 1,
         },
     },
 }
