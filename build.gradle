@@ -3,8 +3,20 @@ plugins {
     id "net.neoforged.moddev" version "2.0.141" apply false
 }
 
+def getAppVersion = { ->
+    try {
+        def tag = providers.exec {
+            commandLine "git", "tag", "--points-at", "HEAD"
+        }.standardOutput.asText.get().trim()
+        return tag.isEmpty() ? "${minecraft_version}-SNAPSHOT" : tag
+    } catch (Exception exception) {
+        logger.warn("Could not determine the version from Git", exception)
+        return "${minecraft_version}-DEV"
+    }
+}
+
 allprojects {
-    version = rootProject.mod_version
+    version = getAppVersion()
     group = rootProject.group_id
 
     repositories {
