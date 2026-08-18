@@ -7,6 +7,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public class HorseRaiders {
         int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, HordeSpawnUtil.SINGLE_RIDER_GROUP_FACTOR);
         for (int i = 0; i < groupCount; i++) {
             Horse entity = new Horse(EntityType.HORSE, level);
-            entity.equipSaddle(null, null);
+            entity.equipSaddle(new ItemStack(Items.SADDLE), null);
             var spawnPos = HordeSpawnUtil.findGroundSpawn(level, pos, entity);
             if (spawnPos.isEmpty()) {
                 continue;

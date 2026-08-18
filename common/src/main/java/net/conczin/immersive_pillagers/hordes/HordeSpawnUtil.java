@@ -193,7 +193,7 @@ public class HordeSpawnUtil {
 
     public static Camel createSaddledCamel(ServerLevel level) {
         Camel camel = new Camel(EntityType.CAMEL, level);
-        camel.equipSaddle(null, null);
+        camel.equipSaddle(new ItemStack(Items.SADDLE), null);
         return camel;
     }
 
