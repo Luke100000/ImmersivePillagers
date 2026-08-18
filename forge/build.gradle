@@ -26,6 +26,10 @@ legacyForge {
     }
 }
 
+tasks.withType(JavaExec).configureEach {
+    jvmArgs("-Xmx3G")
+}
+
 dependencies {
     compileOnly project(":common")
     modCompileOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-forge"
