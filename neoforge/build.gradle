@@ -51,6 +51,10 @@ sourceSets.configureEach {
     }
 }
 
+tasks.withType(JavaExec).configureEach {
+    jvmArgs("-Xmx3G")
+}
+
 processResources {
     inputs.properties(version: project.version, minecraft_version_range: minecraft_version_range,
             immersive_aircraft_version_range: immersive_aircraft_version_range,

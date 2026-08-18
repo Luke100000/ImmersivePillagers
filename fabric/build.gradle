@@ -50,3 +50,7 @@ processResources {
                 fabric_immersive_aircraft_version_range: fabric_immersive_aircraft_version_range)
     }
 }
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs("-Xmx3G")
+}
