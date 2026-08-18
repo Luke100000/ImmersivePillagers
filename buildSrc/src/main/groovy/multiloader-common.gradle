@@ -1,0 +1,49 @@
+plugins {
+    id "java-library"
+}
+
+base {
+    archivesName = "${archives_base_name}-${project.name}"
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+    exclusiveContent {
+        forRepository {
+            maven { url = uri("https://repo.spongepowered.org/repository/maven-public") }
+        }
+        filter { includeGroupAndSubgroups("org.spongepowered") }
+    }
+    maven { url = uri("https://maven.parchmentmc.org/") }
+}
+
+["apiElements", "runtimeElements", "sourcesElements"].each { variant ->
+    configurations."$variant".outgoing {
+        capability("$group:${project.name}:$version")
+        capability("$group:${base.archivesName.get()}:$version")
+        capability("$group:$mod_id-${project.name}-${minecraft_version}:$version")
+        capability("$group:$mod_id:$version")
+    }
+}
+
+processResources {
+    def expandProps = [
+            version: version,
+            minecraft_version: minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            fabric_loader_version_range: fabric_loader_version_range,
+            fabric_minecraft_version_range: fabric_minecraft_version_range,
+            fabric_immersive_aircraft_version_range: fabric_immersive_aircraft_version_range,
+            neoforge_loader_version_range: neoforge_loader_version_range,
+            immersive_aircraft_version_range: immersive_aircraft_version_range
+    ]
+    filesMatching(["META-INF/mods.toml", "fabric.mod.json"]) {
+        expand(expandProps)
+    }
+    inputs.properties(expandProps)
+}

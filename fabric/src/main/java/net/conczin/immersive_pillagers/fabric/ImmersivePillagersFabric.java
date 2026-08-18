@@ -26,7 +26,7 @@ public class ImmersivePillagersFabric implements ModInitializer {
             AircraftCompat.register();
         }
         Networking.initialize();
-        ImmersivePillagersStats.init();
+        ImmersivePillagersStats.init((id, value) -> Registry.register(BuiltInRegistries.CUSTOM_STAT, id, value));
 
         ImmersivePillagersBlocks.register((id, block) -> Registry.register(BuiltInRegistries.BLOCK, id, block));
         ImmersivePillagersBlockEntities.register(

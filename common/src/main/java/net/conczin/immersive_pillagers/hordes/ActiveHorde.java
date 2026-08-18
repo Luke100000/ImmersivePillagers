@@ -64,6 +64,18 @@ public class ActiveHorde {
         return members.size();
     }
 
+    public boolean isNearby(ServerLevel level, BlockPos position, double radius) {
+        if (this.level != level) {
+            return false;
+        }
+
+        double radiusSquared = radius * radius;
+        return members.stream()
+                .map(level::getEntity)
+                .filter(entity -> entity != null && entity.isAlive() && !entity.isRemoved())
+                .anyMatch(entity -> entity.distanceToSqr(position.getCenter()) <= radiusSquared);
+    }
+
     public void setRegionToLiberate(BlockPos position) {
         regionToLiberate = position.immutable();
     }

@@ -18,11 +18,15 @@ public final class RaidersHornItem extends TooltippedItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            if (!PillagerManager.summonWarHorde(serverPlayer)) {
+            if (PillagerManager.hasActiveHordeNearby(serverPlayer.serverLevel(), serverPlayer.blockPosition())
+                || !PillagerManager.summonWarHorde(serverPlayer)) {
                 return InteractionResultHolder.fail(stack);
             }
             stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+            serverPlayer.getCooldowns().addCooldown(this, 100);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+
+        player.startUsingItem(hand);
+        return InteractionResultHolder.consume(stack);
     }
 }

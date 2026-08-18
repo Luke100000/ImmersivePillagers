@@ -31,11 +31,11 @@ import java.util.Optional;
 
 public class HordeSpawnUtil {
     private static final int ATTEMPTS = 16;
-    private static final int MIN_DISTANCE = 16;
+    private static final int MIN_DISTANCE = 24;
     private static final int RANGE = 24;
 
-    public static final double SINGLE_RIDER_GROUP_FACTOR = 0.2;
-    public static final double TWO_RIDER_GROUP_FACTOR = 0.1;
+    public static final double SINGLE_RIDER_GROUP_FACTOR = 0.5;
+    public static final double TWO_RIDER_GROUP_FACTOR = 0.3;
 
     public static Optional<Vec3> findGroundSpawn(ServerLevel level, BlockPos origin, Entity entity) {
         for (int i = 0; i < ATTEMPTS; i++) {
