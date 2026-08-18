@@ -6,6 +6,7 @@ import net.conczin.immersive_pillagers.compat.ImmersiveMelodiesCompat;
 import net.conczin.immersive_pillagers.config.Config;
 import net.conczin.immersive_pillagers.controllers.PillagerCombat;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -165,9 +166,24 @@ public class HordeSpawnUtil {
         return crew;
     }
 
-    public static void soundAlarm(ServerLevel level) {
+    public static void soundAlarm(ServerLevel level, Entity source) {
+        Vec3 sourcePosition = source.position();
+        long seed = level.getRandom().nextLong();
         for (ServerPlayer player : level.players()) {
-            player.playNotifySound(SoundEvents.RAID_HORN.value(), SoundSource.NEUTRAL, 64, 1.0f);
+            Vec3 playerPosition = player.position();
+            double distance = sourcePosition.distanceTo(playerPosition);
+            if (distance > 128.0) {
+                continue;
+            }
+
+            double soundX = sourcePosition.x;
+            double soundZ = sourcePosition.z;
+            if (distance > 0.0) {
+                soundX = playerPosition.x + 8.0 / distance * (sourcePosition.x - playerPosition.x);
+                soundZ = playerPosition.z + 8.0 / distance * (sourcePosition.z - playerPosition.z);
+            }
+
+            player.connection.send(new ClientboundSoundPacket(SoundEvents.RAID_HORN, SoundSource.MASTER, soundX, player.getY(), soundZ, 128.0F, 1.0F, seed));
         }
     }
 

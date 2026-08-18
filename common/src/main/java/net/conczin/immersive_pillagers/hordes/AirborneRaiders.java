@@ -39,7 +39,7 @@ public class AirborneRaiders {
         if (members.isEmpty()) {
             return Optional.empty();
         }
-        HordeSpawnUtil.soundAlarm(level);
+        HordeSpawnUtil.soundAlarm(level, members.get(0));
         return Optional.of(new ActiveHorde(PillagerManager.HORDE_GYRODYNE, level, members, target));
     }
 }

@@ -38,3 +38,7 @@ loom {
         }
     }
 }
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs("-Xmx3G")
+}

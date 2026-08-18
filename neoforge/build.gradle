@@ -24,6 +24,10 @@ neoForge {
     }
 }
 
+tasks.withType(JavaExec).configureEach {
+    jvmArgs("-Xmx3G")
+}
+
 dependencies {
     implementation project(":common")
     compileOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-neoforge"
