@@ -1,7 +1,5 @@
 package net.conczin.immersive_pillagers;
 
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
@@ -14,16 +12,8 @@ import java.util.function.BiConsumer;
 public final class ImmersivePillagersStats {
     private static final Map<String, ResourceLocation> WAVES_DEFEATED = new HashMap<>();
 
-    public static void init() {
-        init((id, value) -> Registry.register(BuiltInRegistries.CUSTOM_STAT, id, value));
-    }
-
     public static void init(BiConsumer<ResourceLocation, ResourceLocation> registrar) {
         PillagerManager.getHordeNames().forEach(waveType -> registerWave(waveType, registrar));
-    }
-
-    public static void registerWave(String waveType) {
-        registerWave(waveType, (id, value) -> Registry.register(BuiltInRegistries.CUSTOM_STAT, id, value));
     }
 
     private static void registerWave(String waveType, BiConsumer<ResourceLocation, ResourceLocation> registrar) {

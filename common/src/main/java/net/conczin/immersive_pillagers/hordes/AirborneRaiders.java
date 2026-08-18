@@ -10,11 +10,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.Nullable;
 
 import static immersive_aircraft.Items.ROTARY_CANNON;
 
