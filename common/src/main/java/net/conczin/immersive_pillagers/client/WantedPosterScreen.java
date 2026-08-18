@@ -105,18 +105,21 @@ public final class WantedPosterScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+
         guiGraphics.blit(POSTER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, TEXTURE_SIZE, TEXTURE_SIZE);
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+
         if (selectedPlayer == null) {
             playerList.render(guiGraphics, mouseX, mouseY, partialTick);
         } else {
             renderPlayerDetails(guiGraphics);
         }
-        searchBox.render(guiGraphics, mouseX, mouseY, partialTick);
-        bountyButton.render(guiGraphics, mouseX, mouseY, partialTick);
-        pardonButton.render(guiGraphics, mouseX, mouseY, partialTick);
-        backButton.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     private void renderPlayerDetails(GuiGraphics guiGraphics) {

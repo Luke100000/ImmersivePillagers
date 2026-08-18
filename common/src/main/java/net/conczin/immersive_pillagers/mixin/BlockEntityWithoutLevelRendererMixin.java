@@ -23,11 +23,14 @@ public class BlockEntityWithoutLevelRendererMixin {
     @Final
     private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
     @Unique
-    private final ReinforcedChestBlockEntity immersivePillagers$reinforcedChest = new ReinforcedChestBlockEntity(BlockPos.ZERO, ImmersivePillagersBlocks.REINFORCED_CHEST.get().defaultBlockState());
+    private ReinforcedChestBlockEntity immersivePillagers$reinforcedChest;
 
     @Inject(method = "renderByItem", at = @At("HEAD"), cancellable = true)
     private void renderReinforcedChest(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, CallbackInfo callback) {
         if (stack.is(ImmersivePillagersBlocks.REINFORCED_CHEST.get().asItem())) {
+            if (immersivePillagers$reinforcedChest == null) {
+                immersivePillagers$reinforcedChest = new ReinforcedChestBlockEntity(BlockPos.ZERO, ImmersivePillagersBlocks.REINFORCED_CHEST.get().defaultBlockState());
+            }
             blockEntityRenderDispatcher.renderItem(immersivePillagers$reinforcedChest, poseStack, buffer, packedLight, packedOverlay);
             callback.cancel();
         }

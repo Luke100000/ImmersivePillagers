@@ -21,7 +21,7 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "name": "immersive_pillagers:chests/remains_container"
+          "value": "immersive_pillagers:chests/remains_container"
         }
       ]
     }

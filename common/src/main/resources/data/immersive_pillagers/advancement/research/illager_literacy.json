@@ -7,7 +7,7 @@
   },
   "display": {
     "icon": {
-      "item": "immersive_pillagers:research_note"
+      "id": "immersive_pillagers:research_note"
     },
     "title": {
       "translate": "advancement.immersive_pillagers.illager_literacy"

@@ -37,7 +37,6 @@ public final class ResearchNoteScreen extends Screen {
     private int top;
     private List<FormattedCharSequence> unreadableLines = List.of();
     private List<FormattedCharSequence> translatedLines = List.of();
-    private Button backButton;
 
     public ResearchNoteScreen(ResearchNoteItem.NoteContents contents, int translationPercent) {
         super(localized(contents.title()));
@@ -54,14 +53,20 @@ public final class ResearchNoteScreen extends Screen {
         unreadableLines = font.split(Component.literal(translate(text, 0)), WIDTH - 34);
         translatedLines = font.split(Component.literal(translate(text, translationPercent)), WIDTH - 34);
 
-        backButton = addRenderableWidget(Button.builder(Component.translatable("gui.immersive_pillagers.back"), button -> onClose()).bounds(left + 38, top + 180, 74, 20).build());
+        addRenderableWidget(Button.builder(Component.translatable("gui.immersive_pillagers.back"), button -> onClose()).bounds(left + 38, top + 180, 74, 20).build());
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+
+        guiGraphics.blit(PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        guiGraphics.blit(PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
         contents.scribbleImage().ifPresent(image -> {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
@@ -79,8 +84,6 @@ public final class ResearchNoteScreen extends Screen {
         if (fadeProgress < 1.0f) renderText(guiGraphics, unreadableLines, 1.0F - fadeProgress);
         if (fadeProgress > 0.0f) renderText(guiGraphics, translatedLines, fadeProgress);
         RenderSystem.disableBlend();
-
-        backButton.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     private void renderText(GuiGraphics guiGraphics, List<FormattedCharSequence> lines, float opacity) {
@@ -100,7 +103,7 @@ public final class ResearchNoteScreen extends Screen {
     }
 
     private float translationFadeProgress() {
-        return Math.min(1.0f, Math.max(0.0f, (Util.getMillis() - openedAt) / (float) TRANSLATION_FADE_MILLIS));
+        return Math.clamp((Util.getMillis() - openedAt) / (float) TRANSLATION_FADE_MILLIS, 0.0f, 1.0f);
     }
 
     private String translate(String text, int currentTranslationPercent) {

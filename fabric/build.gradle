@@ -16,7 +16,7 @@ dependencies {
 
     modCompileOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-fabric"
     modRuntimeOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-fabric"
-    modRuntimeOnly "maven.modrinth:immersive-melodies:${immersive_melodies_version}-fabric"
+    runtimeOnly "org.mariuszgromada.math:MathParser.org-mXparser:5.2.1"
 }
 
 loom {

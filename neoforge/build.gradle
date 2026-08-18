@@ -29,7 +29,6 @@ dependencies {
     compileOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-neoforge"
     compileOnly "org.jetbrains:annotations:24.1.0"
     runtimeOnly "maven.modrinth:immersive-aircraft:${immersive_aircraft_version}-neoforge"
-    runtimeOnly "maven.modrinth:immersive-melodies:${immersive_melodies_version}-neoforge"
     runtimeOnly "org.mariuszgromada.math:MathParser.org-mXparser:5.2.1"
 }
 
