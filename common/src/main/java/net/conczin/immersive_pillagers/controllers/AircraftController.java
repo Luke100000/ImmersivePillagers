@@ -25,12 +25,12 @@ public class AircraftController {
     }
 
     public static void tickPilot(VehicleEntity vehicle) {
-        if (vehicle instanceof EngineVehicle engineVehicle) {
-            engineVehicle.setEngineTarget(1.0f);
-        }
-
         LivingEntity pilot = vehicle.getControllingPassenger();
         if (pilot instanceof Pillager pillager && !vehicle.level().isClientSide()) {
+            if (vehicle instanceof EngineVehicle engineVehicle) {
+                engineVehicle.setEngineTarget(1.0f);
+            }
+
             PillagerManager.getClosestPlayer(pillager).ifPresent(player -> {
                 Vec3 target = player.position().add(0.0, randomizeHeight(vehicle), 0.0);
                 Vec3 dir = target.subtract(vehicle.position()).normalize();

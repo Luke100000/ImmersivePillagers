@@ -1,3 +1,7 @@
+# 0.1.3
+
+* Fixed Entities hijacking aircraft
+
 # 0.1.2
 
 * Directional horn sound
