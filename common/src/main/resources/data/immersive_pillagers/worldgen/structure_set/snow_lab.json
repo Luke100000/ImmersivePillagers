@@ -1,4 +1,13 @@
 {
   "structures": [{"structure": "immersive_pillagers:snow_lab", "weight": 1}],
-  "placement": {"type": "minecraft:random_spread", "spacing": 48, "separation": 12, "salt": 91427653}
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 10
+    },
+    "spacing": 48,
+    "separation": 12,
+    "salt": 91427653
+  }
 }
