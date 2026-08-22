@@ -28,6 +28,5 @@ allprojects {
         maven { url = uri("https://maven.terraformersmc.com/releases/") }
         maven { url = uri("https://nexus.resourcefulbees.com/repository/maven-public/") }
         maven { url = uri("https://maven.teamresourceful.com/repository/maven-public/") }
-        maven { url = uri("https://dvs1.progwml6.com/files/maven/") }
     }
 }
