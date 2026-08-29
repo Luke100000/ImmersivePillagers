@@ -6,6 +6,7 @@ import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -21,6 +22,11 @@ public class ForgeBusEvents {
         if (event.phase == TickEvent.Phase.END) {
             PillagerManager.tick(event.getServer());
         }
+    }
+
+    @SubscribeEvent
+    public static void onServerStopping(ServerStoppingEvent event) {
+        PillagerManager.clearHordes();
     }
 
     @SubscribeEvent
