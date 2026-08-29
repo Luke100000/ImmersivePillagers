@@ -1,15 +1,9 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "minecraft:black_dye"
-    },
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "minecraft:emerald"
-    }
+    "minecraft:black_dye",
+    "minecraft:paper",
+    "minecraft:emerald"
   ],
   "result": {
     "id": "immersive_pillagers:wanted_poster"

@@ -6,15 +6,9 @@
     "GCG"
   ],
   "key": {
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "C": {
-      "item": "minecraft:copper_ingot"
-    },
-    "E": {
-      "item": "minecraft:emerald"
-    }
+    "G": "minecraft:gold_ingot",
+    "C": "minecraft:copper_ingot",
+    "E": "minecraft:emerald"
   },
   "result": {
     "id": "immersive_pillagers:crude_totem_of_undying"
