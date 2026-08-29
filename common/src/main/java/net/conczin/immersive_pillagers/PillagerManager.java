@@ -88,12 +88,17 @@ public class PillagerManager {
 
     public static boolean canReceiveBounty(ServerPlayer target) {
         return Config.getInstance().allowPlayerBounties
+               && canBeHordeTarget(target)
                && target.level().getDifficulty().getId() > 0
                && !target.level().isVillage(target.blockPosition());
     }
 
+    private static boolean canBeHordeTarget(Player player) {
+        return player.isAlive() && !player.isCreative() && !player.isSpectator();
+    }
+
     public static boolean spawnBounty(ServerPlayer target) {
-        if (!canReceiveBounty(target)) {
+        if (!canReceiveBounty(target) || hasActiveHordeNearby(target.level(), target.blockPosition())) {
             return false;
         }
         ServerLevel level = target.level();
@@ -213,7 +218,9 @@ public class PillagerManager {
     }
 
     public static Optional<? extends Player> getClosestPlayer(Entity entity) {
-        return entity.level().players().stream().min(Comparator.comparingDouble(player -> player.distanceToSqr(entity)));
+        return entity.level().players().stream()
+                .filter(PillagerManager::canBeHordeTarget)
+                .min(Comparator.comparingDouble(player -> player.distanceToSqr(entity)));
     }
 
     public static void onLivingEntityKilled(LivingEntity killed, Entity killer) {
