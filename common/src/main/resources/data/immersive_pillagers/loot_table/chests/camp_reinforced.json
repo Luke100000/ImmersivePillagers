@@ -17,6 +17,15 @@
       ]
     },
     {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "immersive_pillagers:raiders_horn"
+        }
+      ]
+    },
+    {
       "rolls": {"type": "minecraft:uniform", "min": 2, "max": 4},
       "entries": [
         {

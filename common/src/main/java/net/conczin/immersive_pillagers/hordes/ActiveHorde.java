@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.UUID;
 
 public class ActiveHorde {
+    private static final double BOSS_BAR_VISIBILITY_RANGE = 96.0;
+
     private final UUID id = UUID.randomUUID();
     private final String type;
     private final ServerLevel level;
@@ -112,13 +114,24 @@ public class ActiveHorde {
             return false;
         }
 
-        bossEvent.removeAllPlayers();
-        for (var player : level.players()) {
-            bossEvent.addPlayer(player);
-        }
+        updateBossBarPlayers();
+
         bossEvent.setProgress((float) members.size() / initialMembers);
 
         return true;
+    }
+
+    private void updateBossBarPlayers() {
+        for (ServerPlayer player : new HashSet<>(bossEvent.getPlayers())) {
+            if (!isNearby(player.serverLevel(), player.blockPosition(), BOSS_BAR_VISIBILITY_RANGE)) {
+                bossEvent.removePlayer(player);
+            }
+        }
+        for (ServerPlayer player : level.players()) {
+            if (isNearby(level, player.blockPosition(), BOSS_BAR_VISIBILITY_RANGE)) {
+                bossEvent.addPlayer(player);
+            }
+        }
     }
 
     private boolean removeInactiveMember(UUID uuid) {

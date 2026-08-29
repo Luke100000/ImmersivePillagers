@@ -32,6 +32,10 @@ public final class SpawnManager {
         BlockPos position = player.blockPosition();
         long gameTime = level.getGameTime();
 
+        if (PillagerManager.hasActiveHordeNearby(level, position)) {
+            return;
+        }
+
         if (trySpawnScheduledWave(player, level, position, gameTime)) {
             return;
         }
@@ -54,8 +58,11 @@ public final class SpawnManager {
                 continue;
             }
 
-            PillagerManager.spawnHorde(waveType, level, position, player, difficulty)
-                    .ifPresent(PillagerManager::addActiveHorde);
+            var horde = PillagerManager.spawnHorde(waveType, level, position, player, difficulty);
+            if (horde.isPresent()) {
+                PillagerManager.addActiveHorde(horde.get());
+                return;
+            }
         }
     }
 

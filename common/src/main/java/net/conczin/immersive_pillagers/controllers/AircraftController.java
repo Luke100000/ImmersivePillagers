@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class AircraftController {
     private static final Random RANDOM = new Random();
-    private static final float INACCURACY = 1.0f;
+    private static final float INACCURACY = 0.1f;
     public static final ResourceLocation WEAPON = ResourceLocation.fromNamespaceAndPath("immersive_aircraft", "rotary_cannon");
 
     private static float random(float scale) {
@@ -46,9 +46,9 @@ public class AircraftController {
                 if (vehicle instanceof InventoryVehicleEntity weaponizedVehicle && vehicle.level().getGameTime() % 20 == 0) {
                     ResourceLocation weapon = BuiltInRegistries.ITEM.getKey(weaponizedVehicle.getInventory().getItem(0).getItem());
                     if (weapon.equals(WEAPON)) {
-                        Vec3 aim = player.position().subtract(vehicle.position());
+                        Vec3 aim = player.getEyePosition().subtract(vehicle.getEyePosition());
                         float randomness = (float) (INACCURACY * aim.length());
-                        aim.add(random(randomness), aim.y * 0.1 + random(randomness), random(randomness));
+                        aim = aim.add(random(randomness), random(randomness), random(randomness));
                         aim = aim.normalize();
 
                         weaponizedVehicle.getInventory().setItem(5, new ItemStack(Items.GUNPOWDER, 1));

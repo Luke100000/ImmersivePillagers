@@ -1,3 +1,8 @@
+# 0.1.4
+
+* Fixed raider's horn not being present in camp structures
+* Various smaller improvements
+
 # 0.1.3
 
 * Fixed Entities hijacking aircraft
