@@ -8,7 +8,7 @@ def getAppVersion = { ->
         def tag = providers.exec {
             commandLine "git", "tag", "--points-at", "HEAD"
         }.standardOutput.asText.get().trim()
-        return tag.isEmpty() ? "${minecraft_version}-SNAPSHOT" : tag
+        return tag.endsWith("+${minecraft_version}") ? tag : "${minecraft_version}-SNAPSHOT"
     } catch (Exception exception) {
         logger.warn("Could not determine the version from Git", exception)
         return "${minecraft_version}-DEV"

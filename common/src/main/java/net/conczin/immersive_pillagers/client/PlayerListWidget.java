@@ -87,7 +87,7 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
 
         @Override
         public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-            if (event.button() == 0) {
+            if (active && event.button() == 0) {
                 onPlayerSelected.accept(player);
                 return true;
             }
