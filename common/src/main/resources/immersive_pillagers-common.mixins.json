@@ -2,8 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.conczin.immersive_pillagers.mixin",
-  "refmap": "immersive_pillagers.refmap.json",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
     "AbstractHorseMixin", "BoatControllerMixin", "EntityPersistenceMixin", "HorseControllerMixin", "PillagerMixin",
     "SpiderControllerMixin"
