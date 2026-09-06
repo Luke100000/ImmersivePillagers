@@ -5,14 +5,10 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
 import java.util.ArrayList;
 
@@ -38,15 +34,8 @@ public final class HordeRegionData extends SavedData {
 
     public static HordeRegionData get(ServerLevel level) {
         return level.getServer().overworld().getDataStorage().computeIfAbsent(
-                new SavedData.Factory<>(HordeRegionData::new, HordeRegionData::load, DataFixTypes.SAVED_DATA_MAP_DATA),
-                DATA_NAME
+                new SavedDataType<>(DATA_NAME, HordeRegionData::new, CODEC, null)
         );
-    }
-
-    public static HordeRegionData load(CompoundTag tag, HolderLookup.Provider provider) {
-        return CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not load horde region data: {}", error))
-                .orElseGet(HordeRegionData::new);
     }
 
     public static long spawnRegionKey(BlockPos position) {
@@ -65,15 +54,5 @@ public final class HordeRegionData extends SavedData {
 
     public LongSet enabledSpawnRegions() {
         return new LongOpenHashSet(enabledSpawnRegions);
-    }
-
-    @Override
-    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-        CODEC.encodeStart(NbtOps.INSTANCE, this)
-                .resultOrPartial(error -> ImmersivePillagers.LOGGER.warn("Could not save horde region data: {}", error))
-                .filter(CompoundTag.class::isInstance)
-                .map(CompoundTag.class::cast)
-                .ifPresent(tag::merge);
-        return tag;
     }
 }

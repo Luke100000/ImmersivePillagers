@@ -3,8 +3,8 @@ package net.conczin.immersive_pillagers.controllers;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.phys.Vec3;
 
 public class BoatController {
@@ -12,7 +12,7 @@ public class BoatController {
     private static final double STOP_DISTANCE = 1.0;
     private static final float TURN_SPEED = 2.5f;
 
-    public static void tick(Boat boat) {
+    public static void tick(AbstractBoat boat) {
         if (boat.level().isClientSide() || !boat.getTags().contains(ImmersivePillagers.HORDE_ENTITY_TAG) || !(boat.getControllingPassenger() instanceof Pillager pillager)) {
             return;
         }

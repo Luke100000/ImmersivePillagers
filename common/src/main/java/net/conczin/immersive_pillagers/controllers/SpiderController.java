@@ -2,8 +2,8 @@ package net.conczin.immersive_pillagers.controllers;
 
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.PillagerManager;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.raid.Raider;
 
 public class SpiderController {

@@ -1,15 +1,15 @@
 package net.conczin.immersive_pillagers.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.item.ResearchNoteItem;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class ResearchNoteScreen extends Screen {
-    private static final ResourceLocation PAPER_TEXTURE = ImmersivePillagers.locate("textures/gui/poster.png");
+    private static final Identifier PAPER_TEXTURE = ImmersivePillagers.locate("textures/gui/poster.png");
 
     private static final Pattern WORD_PATTERN = Pattern.compile("[\\p{L}\\p{N}]+");
     private static final String LATIN_ALPHABET = "abcdefghijklmnopqrstuvwxyz";
@@ -60,7 +60,7 @@ public final class ResearchNoteScreen extends Screen {
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
-        guiGraphics.blit(PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, PAPER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, 256, 256);
     }
 
     @Override
@@ -68,22 +68,16 @@ public final class ResearchNoteScreen extends Screen {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
         contents.scribbleImage().ifPresent(image -> {
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            guiGraphics.blit(image, left + 11, top + 25, 0, 0, 128, 128, 128, 128);
-            RenderSystem.disableBlend();
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, image, left + 11, top + 25, 0, 0, 128, 128, 128, 128);
         });
 
         // Title
         Component title = localized(contents.title()).copy().withStyle(ChatFormatting.BOLD);
         guiGraphics.drawString(font, title, left + WIDTH / 2 - font.width(title) / 2, top + 15, 0xFF38291F, false);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
         float fadeProgress = translationFadeProgress();
         if (fadeProgress < 1.0f) renderText(guiGraphics, unreadableLines, 1.0F - fadeProgress);
         if (fadeProgress > 0.0f) renderText(guiGraphics, translatedLines, fadeProgress);
-        RenderSystem.disableBlend();
     }
 
     private void renderText(GuiGraphics guiGraphics, List<FormattedCharSequence> lines, float opacity) {
@@ -99,7 +93,6 @@ public final class ResearchNoteScreen extends Screen {
         for (int line = 0; line < lines.size(); line++) {
             guiGraphics.drawString(font, lines.get(line), left + 18, y + line * 9, color, false);
         }
-        guiGraphics.flush();
     }
 
     private float translationFadeProgress() {

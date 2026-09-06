@@ -14,11 +14,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.camel.Camel;
-import net.minecraft.world.entity.animal.horse.SkeletonHorse;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.animal.equine.SkeletonHorse;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.illager.Vindicator;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -87,7 +89,7 @@ public class HordeSpawnUtil {
     public static List<Raider> addPillagerCrew(ServerLevel level, Entity vehicle, int seats, String hordeType) {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
-            Pillager pillager = EntityType.PILLAGER.create(level);
+            Pillager pillager = EntityType.PILLAGER.create(level, EntitySpawnReason.EVENT);
             if (pillager == null) {
                 continue;
             }
@@ -114,11 +116,11 @@ public class HordeSpawnUtil {
             Raider raider;
             float rand = level.random.nextFloat();
             if (rand < 0.2f) {
-                raider = ImmersivePillagersEntities.UNDEAD_EVOKER.get().create(level);
+                raider = ImmersivePillagersEntities.UNDEAD_EVOKER.get().create(level, EntitySpawnReason.EVENT);
             } else if (rand < 0.5f) {
-                raider = ImmersivePillagersEntities.UNDEAD_VINDICATOR.get().create(level);
+                raider = ImmersivePillagersEntities.UNDEAD_VINDICATOR.get().create(level, EntitySpawnReason.EVENT);
             } else {
-                raider = ImmersivePillagersEntities.UNDEAD_PILLAGER.get().create(level);
+                raider = ImmersivePillagersEntities.UNDEAD_PILLAGER.get().create(level, EntitySpawnReason.EVENT);
             }
 
             if (raider == null) {
@@ -154,7 +156,7 @@ public class HordeSpawnUtil {
     public static List<Raider> addVindicatorCrew(ServerLevel level, Entity vehicle, int seats) {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
-            Vindicator vindicator = EntityType.VINDICATOR.create(level);
+            Vindicator vindicator = EntityType.VINDICATOR.create(level, EntitySpawnReason.EVENT);
             if (vindicator == null) {
                 continue;
             }
@@ -193,7 +195,7 @@ public class HordeSpawnUtil {
 
     public static Camel createSaddledCamel(ServerLevel level) {
         Camel camel = new Camel(EntityType.CAMEL, level);
-        camel.equipSaddle(new ItemStack(Items.SADDLE), null);
+        camel.setItemSlot(EquipmentSlot.SADDLE, new ItemStack(Items.SADDLE));
         return camel;
     }
 
@@ -216,7 +218,7 @@ public class HordeSpawnUtil {
         raider.addTag(ImmersivePillagers.MOD_ID);
         markTransient(raider);
         level.addFreshEntity(raider);
-        raider.startRiding(vehicle, true);
+        raider.startRiding(vehicle, true, false);
     }
 
     private static boolean canFit(ServerLevel level, Entity entity, Vec3 pos) {

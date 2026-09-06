@@ -5,6 +5,8 @@ import net.conczin.immersive_pillagers.ImmersivePillagersStats;
 import net.conczin.immersive_pillagers.PillagerManager;
 import net.conczin.immersive_pillagers.player.HordeRegionData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerBossEvent;
@@ -123,7 +125,7 @@ public class ActiveHorde {
 
     private void updateBossBarPlayers() {
         for (ServerPlayer player : new HashSet<>(bossEvent.getPlayers())) {
-            if (!isNearby(player.serverLevel(), player.blockPosition(), BOSS_BAR_VISIBILITY_RANGE)) {
+            if (!isNearby(player.level(), player.blockPosition(), BOSS_BAR_VISIBILITY_RANGE)) {
                 bossEvent.removePlayer(player);
             }
         }
@@ -176,7 +178,8 @@ public class ActiveHorde {
         if (target != null) {
             ImmersivePillagersStats.awardWaveDefeated(target, type);
             PillagerManager.awardHordeConquerorProgress(target, type);
-            target.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.MASTER, 1.0f, 1.0f);
+            target.connection.send(new ClientboundSoundPacket(Holder.direct(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE),
+                    SoundSource.MASTER, target.getX(), target.getY(), target.getZ(), 1.0f, 1.0f, level.random.nextLong()));
         }
 
         if (regionToLiberate != null) {

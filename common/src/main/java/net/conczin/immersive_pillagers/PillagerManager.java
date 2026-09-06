@@ -11,7 +11,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +22,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -36,8 +36,8 @@ public class PillagerManager {
     private static final Map<String, HordeSpawner> HORDES = new HashMap<>();
     private static final Map<UUID, ActiveHorde> ACTIVE_HORDES = new HashMap<>();
 
-    private static final ResourceLocation CRUDE_TOTEM_AWAKENED_ADVANCEMENT = ImmersivePillagers.locate("research/crude_totem_awakened");
-    private static final ResourceLocation HORDE_CONQUEROR_ADVANCEMENT = ImmersivePillagers.locate("horde_conqueror");
+    private static final Identifier CRUDE_TOTEM_AWAKENED_ADVANCEMENT = ImmersivePillagers.locate("research/crude_totem_awakened");
+    private static final Identifier HORDE_CONQUEROR_ADVANCEMENT = ImmersivePillagers.locate("horde_conqueror");
 
     public static String registerHorde(String name, HordeSpawner horde) {
         HORDES.put(name, horde);
@@ -89,8 +89,8 @@ public class PillagerManager {
     public static boolean canReceiveBounty(ServerPlayer target) {
         return Config.getInstance().allowPlayerBounties
                && canBeHordeTarget(target)
-               && target.serverLevel().getDifficulty().getId() > 0
-               && !target.serverLevel().isVillage(target.blockPosition());
+               && target.level().getDifficulty().getId() > 0
+               && !target.level().isVillage(target.blockPosition());
     }
 
     private static boolean canBeHordeTarget(Player player) {
@@ -98,10 +98,10 @@ public class PillagerManager {
     }
 
     public static boolean spawnBounty(ServerPlayer target) {
-        if (!canReceiveBounty(target) || hasActiveHordeNearby(target.serverLevel(), target.blockPosition())) {
+        if (!canReceiveBounty(target) || hasActiveHordeNearby(target.level(), target.blockPosition())) {
             return false;
         }
-        ServerLevel level = target.serverLevel();
+        ServerLevel level = target.level();
         BlockPos position = target.blockPosition();
         return spawnRandomHorde(level, position, target, 10).map(horde -> {
             addActiveHorde(horde);
@@ -114,11 +114,11 @@ public class PillagerManager {
         if (data.markPillagerKilled()) {
             player.displayClientMessage(Component.translatable("message.immersive_pillagers.player_wanted"), true);
         }
-        data.scheduleRaid(player.serverLevel().getGameTime() + 20L * 60L);
+        data.scheduleRaid(player.level().getGameTime() + 20L * 60L);
     }
 
     public static boolean summonWarHorde(ServerPlayer player) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (level.getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         }
@@ -133,17 +133,17 @@ public class PillagerManager {
     }
 
     public static void openWantedPoster(ServerPlayer viewer, InteractionHand hand) {
-        MinecraftServer server = viewer.getServer();
+        MinecraftServer server = viewer.level().getServer();
         if (server == null) {
             return;
         }
         List<OpenWantedPosterPacket.Entry> players = server.getPlayerList().getPlayers().stream()
                 .sorted(Comparator
                         .comparing((ServerPlayer player) -> !player.getUUID().equals(viewer.getUUID()))
-                        .thenComparing(player -> player.getGameProfile().getName(), String.CASE_INSENSITIVE_ORDER))
+                        .thenComparing(player -> player.getGameProfile().name(), String.CASE_INSENSITIVE_ORDER))
                 .map(player -> new OpenWantedPosterPacket.Entry(
                         player.getUUID(),
-                        player.getGameProfile().getName(),
+                        player.getGameProfile().name(),
                         PlayerHordeData.get(player).hasKilledPillager(),
                         canReceiveBounty(player)
                 ))
@@ -152,7 +152,7 @@ public class PillagerManager {
     }
 
     public static void handleWantedPosterAction(ServerPlayer sender, WantedPosterActionPacket packet) {
-        MinecraftServer server = sender.getServer();
+        MinecraftServer server = sender.level().getServer();
         if (server == null || !sender.getItemInHand(packet.hand()).is(ImmersivePillagersItems.WANTED_POSTER.get())) {
             return;
         }
@@ -185,7 +185,7 @@ public class PillagerManager {
         }
 
         consumeWantedPoster(sender, packet.hand());
-        sender.displayClientMessage(Component.translatable("message.immersive_pillagers.bounty_sent", target.getGameProfile().getName()), true);
+        sender.displayClientMessage(Component.translatable("message.immersive_pillagers.bounty_sent", target.getGameProfile().name()), true);
     }
 
     private static void consumeWantedPoster(ServerPlayer player, InteractionHand hand) {
@@ -248,7 +248,7 @@ public class PillagerManager {
             return;
         }
 
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.level().getServer();
         if (server == null) {
             return;
         }
@@ -260,7 +260,7 @@ public class PillagerManager {
     }
 
     private static void awardCrudeTotemAwakened(ServerPlayer player) {
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.level().getServer();
         if (server == null) {
             return;
         }

@@ -43,7 +43,7 @@ public final class ImmersivePillagersNeoForge {
         } else if (event.getRegistryKey().equals(BLOCK_ENTITY_TYPE)) {
             event.register(BLOCK_ENTITY_TYPE, helper -> ImmersivePillagersBlockEntities.register(
                     helper::register,
-                    (factory, blocks) -> BlockEntityType.Builder.of(factory::create, blocks).build(null)
+                    (factory, blocks) -> new BlockEntityType<>(factory::create, blocks)
             ));
         } else if (event.getRegistryKey().equals(ITEM)) {
             event.register(ITEM, helper -> ImmersivePillagersItems.register(helper::register));

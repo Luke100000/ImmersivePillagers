@@ -6,15 +6,14 @@ import net.conczin.immersive_pillagers.network.packet.OpenResearchNotePacket;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +28,7 @@ public final class ResearchNoteItem extends Item {
     public static final String TEXT_TAG = "Text";
     public static final String RESEARCH_ID_TAG = "ResearchId";
 
-    private static final ResourceLocation RESEARCH_ADVANCEMENT = ImmersivePillagers.locate("research/illager_literacy");
+    private static final Identifier RESEARCH_ADVANCEMENT = ImmersivePillagers.locate("research/illager_literacy");
     private static final Set<String> RESEARCH_IDS = Set.of(
             "death", "military", "experimentation", "undeath", "totem"
     );
@@ -42,12 +41,12 @@ public final class ResearchNoteItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             Handler.sendToPlayer(new OpenResearchNotePacket(contents(stack), getAndCheckTranslationPercentage(serverPlayer, stack)), serverPlayer);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -65,7 +64,7 @@ public final class ResearchNoteItem extends Item {
     }
 
     private static int getAndCheckTranslationPercentage(ServerPlayer player, ItemStack stack) {
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.level().getServer();
         if (server == null) {
             return 0;
         }
@@ -90,20 +89,20 @@ public final class ResearchNoteItem extends Item {
     }
 
     private static String string(CompoundTag tag, String key, String fallback) {
-        if (tag == null || !tag.contains(key, Tag.TAG_STRING)) {
+        if (tag == null) {
             return fallback;
         }
-        String value = tag.getString(key);
+        String value = tag.getStringOr(key, fallback);
         return value.isBlank() ? fallback : value;
     }
 
-    private static Optional<ResourceLocation> resourceLocation(CompoundTag tag, String key) {
-        if (tag == null || !tag.contains(key, Tag.TAG_STRING)) {
+    private static Optional<Identifier> resourceLocation(CompoundTag tag, String key) {
+        if (tag == null) {
             return Optional.empty();
         }
-        return Optional.ofNullable(ResourceLocation.tryParse(tag.getString(key)));
+        return tag.getString(key).map(Identifier::tryParse);
     }
 
-    public record NoteContents(Optional<ResourceLocation> scribbleImage, String title, String text) {
+    public record NoteContents(Optional<Identifier> scribbleImage, String title, String text) {
     }
 }

@@ -1,0 +1,9 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "immersive_pillagers:entity/reinforced_chest",
+      "sprite": "immersive_pillagers:entity/chest/reinforced_chest"
+    }
+  ]
+}

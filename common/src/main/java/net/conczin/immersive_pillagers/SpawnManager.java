@@ -24,11 +24,11 @@ public final class SpawnManager {
     }
 
     private static boolean isSpawnCheckTick(ServerPlayer player) {
-        return Math.floorMod(player.getUUID().hashCode() + player.serverLevel().getGameTime(), SPAWN_CHECK_INTERVAL) == 0;
+        return Math.floorMod(player.getUUID().hashCode() + player.level().getGameTime(), SPAWN_CHECK_INTERVAL) == 0;
     }
 
     private static void trySpawnWaves(ServerPlayer player) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         BlockPos position = player.blockPosition();
         long gameTime = level.getGameTime();
 

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "immersive_pillagers:item/reinforced_chest",
+    "model": {
+      "type": "minecraft:chest",
+      "texture": "immersive_pillagers:reinforced_chest"
+    }
+  }
+}

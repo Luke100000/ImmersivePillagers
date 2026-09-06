@@ -5,20 +5,21 @@ import net.conczin.immersive_pillagers.network.Handler;
 import net.conczin.immersive_pillagers.network.packet.OpenWantedPosterPacket;
 import net.conczin.immersive_pillagers.network.packet.WantedPosterActionPacket;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.PlayerFaceRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 
 import java.util.List;
 import java.util.Locale;
 
 public final class WantedPosterScreen extends Screen {
-    private static final ResourceLocation POSTER_TEXTURE = ImmersivePillagers.locate("textures/gui/poster.png");
+    private static final Identifier POSTER_TEXTURE = ImmersivePillagers.locate("textures/gui/poster.png");
     private static final int WIDTH = 150;
     private static final int HEIGHT = 180;
     private static final int TEXTURE_SIZE = 256;
@@ -108,7 +109,7 @@ public final class WantedPosterScreen extends Screen {
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
-        guiGraphics.blit(POSTER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, TEXTURE_SIZE, TEXTURE_SIZE);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, POSTER_TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, TEXTURE_SIZE, TEXTURE_SIZE);
     }
 
     @Override
@@ -129,7 +130,7 @@ public final class WantedPosterScreen extends Screen {
         PlayerInfo info = minecraft.getConnection() == null ? null : minecraft.getConnection().getPlayerInfo(selectedPlayer.id());
         if (info != null) {
             guiGraphics.fill(left + 42, top + 43, left + 108, top + 109, 0xDD000000);
-            PlayerFaceRenderer.draw(guiGraphics, info.getSkin().texture(), left + 43, top + 44, 64);
+            PlayerFaceRenderer.draw(guiGraphics, info.getSkin(), left + 43, top + 44, 64);
         }
     }
 }

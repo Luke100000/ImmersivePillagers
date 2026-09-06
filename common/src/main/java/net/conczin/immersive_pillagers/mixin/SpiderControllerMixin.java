@@ -2,7 +2,7 @@ package net.conczin.immersive_pillagers.mixin;
 
 import net.conczin.immersive_pillagers.controllers.SpiderController;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.spider.Spider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

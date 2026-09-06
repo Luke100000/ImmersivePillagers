@@ -3,8 +3,8 @@ package net.conczin.immersive_pillagers.controllers;
 import net.conczin.immersive_pillagers.ImmersivePillagers;
 import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.entity.monster.illager.Pillager;
 
 public class HorseController {
     private static final double MAX_SPEED = 0.36;

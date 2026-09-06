@@ -1,6 +1,6 @@
 package net.conczin.immersive_pillagers;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
@@ -10,14 +10,14 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 public final class ImmersivePillagersStats {
-    private static final Map<String, ResourceLocation> WAVES_DEFEATED = new HashMap<>();
+    private static final Map<String, Identifier> WAVES_DEFEATED = new HashMap<>();
 
-    public static void init(BiConsumer<ResourceLocation, ResourceLocation> registrar) {
+    public static void init(BiConsumer<Identifier, Identifier> registrar) {
         PillagerManager.getHordeNames().forEach(waveType -> registerWave(waveType, registrar));
     }
 
-    private static void registerWave(String waveType, BiConsumer<ResourceLocation, ResourceLocation> registrar) {
-        ResourceLocation id = ImmersivePillagers.locate("waves_defeated/" + waveType);
+    private static void registerWave(String waveType, BiConsumer<Identifier, Identifier> registrar) {
+        Identifier id = ImmersivePillagers.locate("waves_defeated/" + waveType);
         WAVES_DEFEATED.put(waveType, id);
         registrar.accept(id, id);
     }
@@ -26,8 +26,8 @@ public final class ImmersivePillagersStats {
         player.awardStat(getWaveDefeatedStat(waveType));
     }
 
-    public static Stat<ResourceLocation> getWaveDefeatedStat(String waveType) {
-        ResourceLocation id = WAVES_DEFEATED.get(waveType);
+    public static Stat<Identifier> getWaveDefeatedStat(String waveType) {
+        Identifier id = WAVES_DEFEATED.get(waveType);
         if (id == null) {
             throw new IllegalArgumentException("Unknown horde wave type: " + waveType);
         }

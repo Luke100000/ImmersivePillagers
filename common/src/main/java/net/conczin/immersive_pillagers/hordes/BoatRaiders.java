@@ -5,7 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -23,7 +25,10 @@ public class BoatRaiders {
                 continue;
             }
 
-            Boat entity = new Boat(level, spawnPos.get().x, spawnPos.get().y, spawnPos.get().z);
+            AbstractBoat entity = EntityType.OAK_BOAT.create(level, EntitySpawnReason.EVENT);
+            if (entity == null) {
+                continue;
+            }
             members.addAll(HordeSpawnUtil.spawnPillagerVehicleGroup(level, entity, spawnPos.get(), 2, target, PillagerManager.HORDE_BOAT));
         }
         if (members.isEmpty()) {

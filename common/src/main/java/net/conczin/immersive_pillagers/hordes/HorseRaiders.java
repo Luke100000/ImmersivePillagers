@@ -5,8 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.equine.Horse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +22,7 @@ public class HorseRaiders {
         int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, HordeSpawnUtil.SINGLE_RIDER_GROUP_FACTOR);
         for (int i = 0; i < groupCount; i++) {
             Horse entity = new Horse(EntityType.HORSE, level);
-            entity.equipSaddle(new ItemStack(Items.SADDLE), null);
+            entity.setItemSlot(EquipmentSlot.SADDLE, new ItemStack(Items.SADDLE));
             var spawnPos = HordeSpawnUtil.findGroundSpawn(level, pos, entity);
             if (spawnPos.isEmpty()) {
                 continue;

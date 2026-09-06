@@ -3,7 +3,7 @@ package net.conczin.immersive_pillagers.mixin;
 import immersive_aircraft.entity.VehicleEntity;
 import net.conczin.immersive_pillagers.controllers.AircraftController;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.illager.Pillager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;

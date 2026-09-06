@@ -67,7 +67,7 @@ jobs:
           game-versions: |
             ${{steps.split.outputs._1}}
           java: |
-            Java 17
+            Java 21
           dependencies: |
             fabric-api | required | *
 

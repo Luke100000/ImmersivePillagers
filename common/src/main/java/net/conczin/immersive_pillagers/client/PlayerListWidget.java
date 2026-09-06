@@ -4,6 +4,7 @@ import net.conczin.immersive_pillagers.network.packet.OpenWantedPosterPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.components.PlayerFaceRenderer;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -45,7 +46,7 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
     }
 
     @Override
-    protected int getScrollbarPosition() {
+    protected int scrollBarX() {
         return getRowLeft() + getRowWidth() - 4;
     }
 
@@ -75,21 +76,24 @@ final class PlayerListWidget extends ObjectSelectionList<PlayerListWidget.Entry>
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, int index, int rowTop, int rowLeft, int rowWidth, int rowHeight,
-                           int mouseX, int mouseY, boolean hovered, float partialTick) {
+        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTick) {
+            int rowLeft = getX();
+            int rowTop = getY();
+            int rowWidth = getWidth();
+            int rowHeight = getHeight();
             if (hovered) {
                 guiGraphics.fill(rowLeft, rowTop, rowLeft + rowWidth - 3, rowTop + rowHeight + 2, 0x22000000);
             }
             PlayerInfo info = minecraft.getConnection() == null ? null : minecraft.getConnection().getPlayerInfo(player.id());
             if (info != null) {
-                PlayerFaceRenderer.draw(guiGraphics, info.getSkin().texture(), rowLeft + 1, rowTop + 1, 16);
+                PlayerFaceRenderer.draw(guiGraphics, info.getSkin(), rowLeft + 1, rowTop + 1, 16);
             }
             guiGraphics.drawString(font, player.name(), rowLeft + 20, rowTop + 6, 0xFF3B2B1F, false);
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            if (button == 0) {
+        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+            if (active && event.button() == 0) {
                 onPlayerSelected.accept(player);
                 return true;
             }

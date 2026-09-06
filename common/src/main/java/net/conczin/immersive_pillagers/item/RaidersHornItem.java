@@ -3,7 +3,7 @@ package net.conczin.immersive_pillagers.item;
 import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -15,18 +15,18 @@ public final class RaidersHornItem extends TooltippedItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            if (PillagerManager.hasActiveHordeNearby(serverPlayer.serverLevel(), serverPlayer.blockPosition())
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            if (PillagerManager.hasActiveHordeNearby(serverPlayer.level(), serverPlayer.blockPosition())
                 || !PillagerManager.summonWarHorde(serverPlayer)) {
-                return InteractionResultHolder.fail(stack);
+                return InteractionResult.FAIL;
             }
             stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-            serverPlayer.getCooldowns().addCooldown(this, 100);
+            serverPlayer.getCooldowns().addCooldown(stack, 100);
         }
 
         player.startUsingItem(hand);
-        return InteractionResultHolder.consume(stack);
+        return InteractionResult.CONSUME;
     }
 }

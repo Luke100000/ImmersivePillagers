@@ -5,10 +5,10 @@ import immersive_aircraft.entity.InventoryVehicleEntity;
 import immersive_aircraft.entity.VehicleEntity;
 import net.conczin.immersive_pillagers.PillagerManager;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -18,7 +18,7 @@ import java.util.Random;
 public class AircraftController {
     private static final Random RANDOM = new Random();
     private static final float INACCURACY = 0.1f;
-    public static final ResourceLocation WEAPON = ResourceLocation.fromNamespaceAndPath("immersive_aircraft", "rotary_cannon");
+    public static final Identifier WEAPON = Identifier.fromNamespaceAndPath("immersive_aircraft", "rotary_cannon");
 
     private static float random(float scale) {
         return (RANDOM.nextFloat() - 0.5f) * scale;
@@ -44,7 +44,7 @@ public class AircraftController {
 
                 // Shoot
                 if (vehicle instanceof InventoryVehicleEntity weaponizedVehicle && vehicle.level().getGameTime() % 20 == 0) {
-                    ResourceLocation weapon = BuiltInRegistries.ITEM.getKey(weaponizedVehicle.getInventory().getItem(0).getItem());
+                    Identifier weapon = BuiltInRegistries.ITEM.getKey(weaponizedVehicle.getInventory().getItem(0).getItem());
                     if (weapon.equals(WEAPON)) {
                         Vec3 aim = player.getEyePosition().subtract(vehicle.getEyePosition());
                         float randomness = (float) (INACCURACY * aim.length());
