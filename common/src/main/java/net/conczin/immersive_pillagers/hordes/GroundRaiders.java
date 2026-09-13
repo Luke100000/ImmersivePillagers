@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.entity.monster.illager.Vindicator;
 import net.minecraft.world.entity.raid.Raider;
@@ -60,11 +60,11 @@ public class GroundRaiders {
         Raider raider;
         double roll = level.getRandom().nextDouble();
         if (roll < EVOKER_CHANCE) {
-            raider = EntityType.EVOKER.create(level, EntitySpawnReason.EVENT);
+            raider = EntityTypes.EVOKER.create(level, EntitySpawnReason.EVENT);
         } else if (roll < EVOKER_CHANCE + VINDICATOR_CHANCE) {
-            raider = EntityType.VINDICATOR.create(level, EntitySpawnReason.EVENT);
+            raider = EntityTypes.VINDICATOR.create(level, EntitySpawnReason.EVENT);
         } else {
-            raider = EntityType.PILLAGER.create(level, EntitySpawnReason.EVENT);
+            raider = EntityTypes.PILLAGER.create(level, EntitySpawnReason.EVENT);
         }
 
         if (raider instanceof Pillager pillager) {

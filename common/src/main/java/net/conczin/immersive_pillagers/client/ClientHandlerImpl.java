@@ -8,11 +8,11 @@ import net.minecraft.client.Minecraft;
 public final class ClientHandlerImpl implements ClientHandler {
     @Override
     public void openWantedPoster(OpenWantedPosterPacket packet) {
-        Minecraft.getInstance().setScreen(new WantedPosterScreen(packet.players(), packet.hand()));
+        Minecraft.getInstance().gui.setScreen(new WantedPosterScreen(packet.players(), packet.hand()));
     }
 
     @Override
     public void openResearchNote(OpenResearchNotePacket packet) {
-        Minecraft.getInstance().setScreen(new ResearchNoteScreen(packet.contents(), packet.translationPercent()));
+        Minecraft.getInstance().gui.setScreen(new ResearchNoteScreen(packet.contents(), packet.translationPercent()));
     }
 }

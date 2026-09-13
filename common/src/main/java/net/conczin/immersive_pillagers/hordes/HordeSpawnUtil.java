@@ -15,7 +15,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.animal.equine.SkeletonHorse;
@@ -89,7 +89,7 @@ public class HordeSpawnUtil {
     public static List<Raider> addPillagerCrew(ServerLevel level, Entity vehicle, int seats, String hordeType) {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
-            Pillager pillager = EntityType.PILLAGER.create(level, EntitySpawnReason.EVENT);
+            Pillager pillager = EntityTypes.PILLAGER.create(level, EntitySpawnReason.EVENT);
             if (pillager == null) {
                 continue;
             }
@@ -156,7 +156,7 @@ public class HordeSpawnUtil {
     public static List<Raider> addVindicatorCrew(ServerLevel level, Entity vehicle, int seats) {
         List<Raider> crew = new ArrayList<>();
         for (int i = 0; i < seats; i++) {
-            Vindicator vindicator = EntityType.VINDICATOR.create(level, EntitySpawnReason.EVENT);
+            Vindicator vindicator = EntityTypes.VINDICATOR.create(level, EntitySpawnReason.EVENT);
             if (vindicator == null) {
                 continue;
             }
@@ -194,13 +194,13 @@ public class HordeSpawnUtil {
     }
 
     public static Camel createSaddledCamel(ServerLevel level) {
-        Camel camel = new Camel(EntityType.CAMEL, level);
+        Camel camel = new Camel(EntityTypes.CAMEL, level);
         camel.setItemSlot(EquipmentSlot.SADDLE, new ItemStack(Items.SADDLE));
         return camel;
     }
 
     public static SkeletonHorse createSkeletonHorse(ServerLevel level) {
-        return new SkeletonHorse(EntityType.SKELETON_HORSE, level);
+        return new SkeletonHorse(EntityTypes.SKELETON_HORSE, level);
     }
 
     public static int getVehicleGroupCount(ServerLevel level, int difficulty, double groupFactor) {

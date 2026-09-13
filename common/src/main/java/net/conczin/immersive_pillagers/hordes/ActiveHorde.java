@@ -74,7 +74,7 @@ public class ActiveHorde {
         return members.stream()
                 .map(level::getEntity)
                 .filter(entity -> entity != null && entity.isAlive() && !entity.isRemoved())
-                .anyMatch(entity -> entity.distanceToSqr(position.getCenter()) <= radiusSquared);
+                .anyMatch(entity -> entity.distanceToSqr(Vec3.atCenterOf(position)) <= radiusSquared);
     }
 
     public void setRegionToLiberate(BlockPos position) {
@@ -181,7 +181,7 @@ public class ActiveHorde {
         if (regionToLiberate != null) {
             HordeRegionData.get(level).enableSpawningAt(regionToLiberate);
             Component message = Component.translatable("message.immersive_pillagers.region_liberated");
-            Vec3 center = regionToLiberate.getCenter();
+            Vec3 center = Vec3.atCenterOf(regionToLiberate);
             double range = 128.0 * 128.0;
             level.players().stream()
                     .filter(player -> player.distanceToSqr(center) <= range)

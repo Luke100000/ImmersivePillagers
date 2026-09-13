@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.raid.Raider;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +19,7 @@ public class SpiderRaiders {
         List<Entity> members = new ArrayList<>();
         int groupCount = HordeSpawnUtil.getVehicleGroupCount(level, difficulty, HordeSpawnUtil.SINGLE_RIDER_GROUP_FACTOR);
         for (int i = 0; i < groupCount; i++) {
-            Spider entity = new Spider(EntityType.SPIDER, level);
+            Spider entity = new Spider(EntityTypes.SPIDER, level);
             var spawnPos = HordeSpawnUtil.findGroundSpawn(level, pos, entity);
             if (spawnPos.isEmpty()) {
                 continue;
