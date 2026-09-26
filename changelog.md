@@ -1,7 +1,7 @@
 # 0.1.5
 
 * Fixed enchanted books
-* Bumped immersive aircraft to 0.1.5
+* Updated Immersive Aircraft to 1.5.0
 
 # 0.1.4
 
