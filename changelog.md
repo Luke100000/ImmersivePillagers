@@ -1,3 +1,8 @@
+# 0.1.5
+
+* Fixed enchanted books
+* Require Immersive Aircraft 1.4.1 or newer when installed
+
 # 0.1.4
 
 * Fixed raider's horn not being present in camp structures
