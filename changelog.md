@@ -1,3 +1,8 @@
+# 0.1.5
+
+* Fixed enchanted books
+* Updated Immersive Aircraft to 1.5.0
+
 # 0.1.4
 
 * Fixed raider's horn not being present in camp structures
